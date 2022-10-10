@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/promociones",
+      "handler": "promociones.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promociones/count",
+      "handler": "promociones.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/promociones/:id",
+      "handler": "promociones.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/promociones",
+      "handler": "promociones.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/promociones/:id",
+      "handler": "promociones.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/promociones/:id",
+      "handler": "promociones.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

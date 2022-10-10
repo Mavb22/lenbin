@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/rutas",
+      "handler": "rutas.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rutas/count",
+      "handler": "rutas.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/rutas/:id",
+      "handler": "rutas.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/rutas",
+      "handler": "rutas.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/rutas/:id",
+      "handler": "rutas.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/rutas/:id",
+      "handler": "rutas.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

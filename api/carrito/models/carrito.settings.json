@@ -1,0 +1,33 @@
+{
+  "kind": "collectionType",
+  "collectionName": "carritos",
+  "info": {
+    "name": "Carrito",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "cantidad": {
+      "type": "decimal",
+      "required": false
+    },
+    "productos": {
+      "via": "carritos",
+      "collection": "productos",
+      "dominant": true
+    },
+    "usuario": {
+      "via": "carritos",
+      "model": "usuarios"
+    },
+    "venta": {
+      "via": "carritos",
+      "model": "ventas"
+    }
+  }
+}

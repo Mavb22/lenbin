@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "historials",
+  "info": {
+    "name": "Historial",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "fecha": {
+      "type": "date",
+      "required": true
+    },
+    "hora_inicio": {
+      "type": "time",
+      "required": true
+    },
+    "hora_fin": {
+      "type": "time",
+      "required": true
+    },
+    "status": {
+      "type": "boolean",
+      "default": false
+    },
+    "status2": {
+      "type": "string",
+      "required": true
+    },
+    "camiones": {
+      "via": "historial",
+      "collection": "camiones"
+    },
+    "usuario": {
+      "via": "historiales",
+      "model": "usuarios"
+    }
+  }
+}

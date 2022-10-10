@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/ventas",
+      "handler": "ventas.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ventas/count",
+      "handler": "ventas.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/ventas/:id",
+      "handler": "ventas.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/ventas",
+      "handler": "ventas.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/ventas/:id",
+      "handler": "ventas.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/ventas/:id",
+      "handler": "ventas.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

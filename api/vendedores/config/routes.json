@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/vendedores",
+      "handler": "vendedores.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendedores/count",
+      "handler": "vendedores.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/vendedores/:id",
+      "handler": "vendedores.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/vendedores",
+      "handler": "vendedores.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/vendedores/:id",
+      "handler": "vendedores.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/vendedores/:id",
+      "handler": "vendedores.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

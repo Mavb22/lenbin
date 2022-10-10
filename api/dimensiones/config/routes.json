@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/dimensiones",
+      "handler": "dimensiones.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dimensiones/count",
+      "handler": "dimensiones.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/dimensiones/:id",
+      "handler": "dimensiones.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/dimensiones",
+      "handler": "dimensiones.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/dimensiones/:id",
+      "handler": "dimensiones.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/dimensiones/:id",
+      "handler": "dimensiones.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

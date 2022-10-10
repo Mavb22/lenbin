@@ -1,0 +1,67 @@
+{
+  "kind": "collectionType",
+  "collectionName": "proveedors",
+  "info": {
+    "name": "Proveedor"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string"
+    },
+    "razon_social": {
+      "type": "string"
+    },
+    "rfc": {
+      "type": "string",
+      "required": true,
+      "maxLength": 13
+    },
+    "fecha_alta": {
+      "type": "date"
+    },
+    "calle": {
+      "type": "string"
+    },
+    "numero": {
+      "type": "string"
+    },
+    "colonia": {
+      "type": "string"
+    },
+    "cp": {
+      "type": "biginteger"
+    },
+    "municipio": {
+      "type": "string"
+    },
+    "ciudad": {
+      "type": "string"
+    },
+    "pais": {
+      "type": "string"
+    },
+    "visita_programada": {
+      "type": "datetime"
+    },
+    "status": {
+      "type": "boolean"
+    },
+    "status2": {
+      "type": "string"
+    },
+    "compras": {
+      "via": "proveedor",
+      "collection": "compras"
+    },
+    "productos": {
+      "via": "proveedor",
+      "collection": "productos"
+    }
+  }
+}

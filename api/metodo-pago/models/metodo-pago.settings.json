@@ -1,0 +1,65 @@
+{
+  "kind": "collectionType",
+  "collectionName": "metodo_pagos",
+  "info": {
+    "name": "MetodoPago",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "numero_tarjeta": {
+      "type": "biginteger"
+    },
+    "mes": {
+      "type": "string"
+    },
+    "anio": {
+      "type": "biginteger"
+    },
+    "cvc": {
+      "type": "integer"
+    },
+    "titular": {
+      "type": "string"
+    },
+    "folio": {
+      "type": "biginteger"
+    },
+    "fecha_expedicion": {
+      "type": "date"
+    },
+    "fecha_ingreso": {
+      "type": "date"
+    },
+    "descripcion": {
+      "type": "richtext"
+    },
+    "referencia": {
+      "type": "string"
+    },
+    "tipo": {
+      "type": "string"
+    },
+    "compras": {
+      "via": "metodo_pago",
+      "collection": "compras"
+    },
+    "creditos": {
+      "via": "metodo_pago",
+      "collection": "credito"
+    },
+    "usuario": {
+      "via": "metodo_pagos",
+      "model": "usuarios"
+    },
+    "venta": {
+      "via": "metodo_pagos",
+      "model": "ventas"
+    }
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "kind": "collectionType",
+  "collectionName": "creditos",
+  "info": {
+    "name": "Creditos",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "limite": {
+      "type": "biginteger",
+      "required": false
+    },
+    "fecha_alta": {
+      "type": "date",
+      "required": false
+    },
+    "fecha_baja": {
+      "type": "date",
+      "required": false
+    },
+    "vigencia": {
+      "type": "date",
+      "required": false
+    },
+    "intereses": {
+      "type": "decimal",
+      "required": false
+    },
+    "status": {
+      "type": "boolean",
+      "default": false
+    },
+    "status2": {
+      "type": "string"
+    },
+    "mostrar": {
+      "type": "boolean",
+      "default": true
+    },
+    "abonos": {
+      "via": "credito",
+      "collection": "abonos"
+    },
+    "metodo_pago": {
+      "via": "creditos",
+      "model": "metodo-pago"
+    },
+    "usuario": {
+      "via": "creditos",
+      "model": "usuarios"
+    }
+  }
+}

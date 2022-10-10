@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/camiones",
+      "handler": "camiones.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/camiones/count",
+      "handler": "camiones.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/camiones/:id",
+      "handler": "camiones.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/camiones",
+      "handler": "camiones.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/camiones/:id",
+      "handler": "camiones.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/camiones/:id",
+      "handler": "camiones.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

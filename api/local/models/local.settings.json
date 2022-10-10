@@ -1,0 +1,91 @@
+{
+  "kind": "collectionType",
+  "collectionName": "locals",
+  "info": {
+    "name": "Local",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string"
+    },
+    "alias": {
+      "type": "string"
+    },
+    "razon_social": {
+      "type": "string"
+    },
+    "rfc": {
+      "type": "string",
+      "maxLength": 13
+    },
+    "fecha_alta": {
+      "type": "date"
+    },
+    "calle": {
+      "type": "string"
+    },
+    "colonia": {
+      "type": "string"
+    },
+    "numero_ext": {
+      "type": "biginteger"
+    },
+    "municipio": {
+      "type": "string"
+    },
+    "numero_int": {
+      "type": "biginteger"
+    },
+    "ciudad": {
+      "type": "string"
+    },
+    "cp": {
+      "type": "biginteger"
+    },
+    "latitud": {
+      "type": "float"
+    },
+    "longitud": {
+      "type": "float"
+    },
+    "telefono": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "telefono2": {
+      "type": "biginteger"
+    },
+    "telefono_cel": {
+      "type": "string",
+      "maxLength": 10
+    },
+    "telefono_cel2": {
+      "type": "biginteger"
+    },
+    "giro": {
+      "type": "string"
+    },
+    "status": {
+      "type": "boolean"
+    },
+    "status2": {
+      "type": "string"
+    },
+    "usuarios": {
+      "via": "locals",
+      "collection": "usuarios",
+      "dominant": true
+    },
+    "ventas": {
+      "via": "local",
+      "collection": "ventas"
+    }
+  }
+}

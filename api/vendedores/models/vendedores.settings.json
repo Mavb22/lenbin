@@ -1,0 +1,22 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vendedores",
+  "info": {
+    "name": "Vendedores"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string"
+    },
+    "ventas": {
+      "via": "vendedores",
+      "collection": "ventas"
+    }
+  }
+}

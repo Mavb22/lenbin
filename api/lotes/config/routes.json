@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/lotes",
+      "handler": "lotes.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lotes/count",
+      "handler": "lotes.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/lotes/:id",
+      "handler": "lotes.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/lotes",
+      "handler": "lotes.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/lotes/:id",
+      "handler": "lotes.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/lotes/:id",
+      "handler": "lotes.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

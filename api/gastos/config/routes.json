@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/gastos",
+      "handler": "gastos.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gastos/count",
+      "handler": "gastos.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/gastos/:id",
+      "handler": "gastos.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/gastos",
+      "handler": "gastos.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/gastos/:id",
+      "handler": "gastos.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/gastos/:id",
+      "handler": "gastos.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

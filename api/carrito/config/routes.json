@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/carritos",
+      "handler": "carrito.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carritos/count",
+      "handler": "carrito.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/carritos/:id",
+      "handler": "carrito.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/carritos",
+      "handler": "carrito.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/carritos/:id",
+      "handler": "carrito.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/carritos/:id",
+      "handler": "carrito.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

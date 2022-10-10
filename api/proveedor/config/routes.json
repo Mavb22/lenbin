@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/proveedors",
+      "handler": "proveedor.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/proveedors/count",
+      "handler": "proveedor.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/proveedors/:id",
+      "handler": "proveedor.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/proveedors",
+      "handler": "proveedor.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/proveedors/:id",
+      "handler": "proveedor.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/proveedors/:id",
+      "handler": "proveedor.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

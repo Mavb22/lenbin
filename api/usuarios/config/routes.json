@@ -1,0 +1,85 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/usuarios",
+      "handler": "usuarios.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+
+    {
+      "method": "GET",
+      "path": "/usuarios/:id",
+      "handler": "usuarios.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios/count",
+      "handler": "usuarios.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/usuarios",
+      "handler": "usuarios.create",
+      "config": {
+        "policies": ["global::create-user"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/usuarios/:id",
+      "handler": "usuarios.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/usuarios/:id",
+      "handler": "usuarios.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios/email_validator/:token",
+      "handler": "usuarios.email_validate",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/usuarios/loggin",
+      "handler": "usuarios.loggin",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/usuarios/password_recover",
+      "handler": "usuarios.password_recover",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/usuarios/password_change/:token",
+      "handler": "usuarios.password_change",
+      "config": {
+        "policies": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/abonos",
+      "handler": "abonos.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/abonos/count",
+      "handler": "abonos.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/abonos/:id",
+      "handler": "abonos.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/abonos",
+      "handler": "abonos.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/abonos/:id",
+      "handler": "abonos.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/abonos/:id",
+      "handler": "abonos.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

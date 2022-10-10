@@ -1,0 +1,52 @@
+{
+  "routes": [
+    {
+      "method": "GET",
+      "path": "/tipo-rols",
+      "handler": "tipo-rol.find",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tipo-rols/count",
+      "handler": "tipo-rol.count",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/tipo-rols/:id",
+      "handler": "tipo-rol.findOne",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/tipo-rols",
+      "handler": "tipo-rol.create",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/tipo-rols/:id",
+      "handler": "tipo-rol.update",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/tipo-rols/:id",
+      "handler": "tipo-rol.delete",
+      "config": {
+        "policies": ["global::permissions"]
+      }
+    }
+  ]
+}

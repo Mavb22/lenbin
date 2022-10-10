@@ -1,0 +1,92 @@
+{
+  "kind": "collectionType",
+  "collectionName": "productos",
+  "info": {
+    "name": "Productos",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string"
+    },
+    "peso_neto": {
+      "type": "decimal"
+    },
+    "presentacion": {
+      "type": "string"
+    },
+    "marca": {
+      "type": "string"
+    },
+    "descripcion_generica": {
+      "type": "string"
+    },
+    "precio": {
+      "type": "decimal"
+    },
+    "costo": {
+      "type": "decimal"
+    },
+    "inventario_disp": {
+      "type": "biginteger"
+    },
+    "value_min": {
+      "type": "integer"
+    },
+    "imagen": {
+      "collection": "file",
+      "via": "related",
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "plugin": "upload",
+      "required": false,
+      "pluginOptions": {}
+    },
+    "codigo_barras": {
+      "type": "biginteger"
+    },
+    "codigo_interno": {
+      "type": "biginteger"
+    },
+    "venta_gramos": {
+      "type": "decimal"
+    },
+    "status": {
+      "type": "boolean",
+      "default": false
+    },
+    "status2": {
+      "type": "string"
+    },
+    "carritos": {
+      "via": "productos",
+      "collection": "carrito"
+    },
+    "dimension": {
+      "via": "productos",
+      "model": "dimensiones"
+    },
+    "lote": {
+      "via": "productos",
+      "model": "lotes"
+    },
+    "promociones": {
+      "collection": "promociones",
+      "via": "productos",
+      "dominant": true
+    },
+    "proveedor": {
+      "model": "proveedor",
+      "via": "productos"
+    }
+  }
+}

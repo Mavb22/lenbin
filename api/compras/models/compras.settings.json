@@ -1,0 +1,57 @@
+{
+  "kind": "collectionType",
+  "collectionName": "compras",
+  "info": {
+    "name": "Compras",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "costo": {
+      "type": "decimal",
+      "required": false
+    },
+    "fecha_pedido": {
+      "type": "date",
+      "required": false
+    },
+    "referencia": {
+      "type": "string",
+      "required": false
+    },
+    "fecha_llegada": {
+      "type": "date",
+      "required": false
+    },
+    "status": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "status2": {
+      "type": "string",
+      "required": false
+    },
+    "lote": {
+      "via": "compras",
+      "model": "lotes"
+    },
+    "metodo_pago": {
+      "via": "compras",
+      "model": "metodo-pago"
+    },
+    "proveedor": {
+      "via": "compras",
+      "model": "proveedor"
+    },
+    "usuarios": {
+      "via": "compras",
+      "collection": "usuarios"
+    }
+  }
+}

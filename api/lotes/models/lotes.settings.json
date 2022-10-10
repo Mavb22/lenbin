@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "lotes",
+  "info": {
+    "name": "Lotes",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "codigo_interno": {
+      "type": "biginteger"
+    },
+    "fecha_arrivo": {
+      "type": "date",
+      "required": true
+    },
+    "fecha_caducidad": {
+      "type": "date",
+      "required": true
+    },
+    "fecha_adquisicion": {
+      "type": "date",
+      "required": true
+    },
+    "costo": {
+      "type": "decimal",
+      "required": true
+    },
+    "compras": {
+      "via": "lote",
+      "collection": "compras"
+    },
+    "productos": {
+      "via": "lote",
+      "collection": "productos"
+    }
+  }
+}

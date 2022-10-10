@@ -1,0 +1,34 @@
+{
+  "kind": "collectionType",
+  "collectionName": "promociones",
+  "info": {
+    "name": "Promociones"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "fecha_creacion": {
+      "type": "date"
+    },
+    "fecha_vigencia": {
+      "type": "date"
+    },
+    "valor_descuento": {
+      "type": "decimal"
+    },
+    "codigo_ref": {
+      "type": "biginteger"
+    },
+    "condicion": {
+      "type": "string"
+    },
+    "productos": {
+      "via": "promociones",
+      "collection": "productos"
+    }
+  }
+}

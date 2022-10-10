@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "abonos",
+  "info": {
+    "name": "Abonos",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "cantidad_abono": {
+      "type": "decimal",
+      "required": false
+    },
+    "fecha_abono": {
+      "type": "datetime",
+      "required": false
+    },
+    "mostrar": {
+      "type": "boolean",
+      "default": true
+    },
+    "estado_abono": {
+      "type": "string",
+      "required": false
+    },
+    "credito": {
+      "via": "abonos",
+      "model": "credito"
+    },
+    "usuario": {
+      "via": "abonos",
+      "model": "usuarios"
+    }
+  }
+}

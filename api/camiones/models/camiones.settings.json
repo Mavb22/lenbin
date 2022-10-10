@@ -1,0 +1,45 @@
+{
+  "kind": "collectionType",
+  "collectionName": "camiones",
+  "info": {
+    "name": "Camiones",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "placas": {
+      "type": "json",
+      "required": false
+    },
+    "num_serie": {
+      "type": "string",
+      "required": false
+    },
+    "niv": {
+      "type": "string",
+      "required": false
+    },
+    "historial": {
+      "via": "camiones",
+      "model": "historial"
+    },
+    "rutas": {
+      "via": "camiones",
+      "collection": "rutas"
+    },
+    "usuarios": {
+      "via": "camiones",
+      "collection": "usuarios",
+      "dominant": true
+    },
+    "gastos": {
+      "collection": "gastos",
+      "via": "camion"
+    }
+  }
+}

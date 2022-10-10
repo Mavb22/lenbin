@@ -1,0 +1,74 @@
+{
+  "kind": "collectionType",
+  "collectionName": "ventas",
+  "info": {
+    "name": "Ventas"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "monto": {
+      "type": "decimal"
+    },
+    "monto_total": {
+      "type": "decimal"
+    },
+    "fecha": {
+      "type": "date"
+    },
+    "factura": {
+      "type": "json"
+    },
+    "clasificacion": {
+      "type": "string"
+    },
+    "fecha_entrega": {
+      "type": "date"
+    },
+    "entrega_pendiente": {
+      "type": "boolean",
+      "default": false
+    },
+    "pagada": {
+      "type": "boolean",
+      "default": false
+    },
+    "status": {
+      "type": "boolean",
+      "default": false
+    },
+    "status2": {
+      "type": "string"
+    },
+    "carritos": {
+      "via": "venta",
+      "collection": "carrito"
+    },
+    "local": {
+      "model": "local",
+      "via": "ventas"
+    },
+    "metodo_pagos": {
+      "collection": "metodo-pago",
+      "via": "venta"
+    },
+    "rutas": {
+      "collection": "rutas",
+      "via": "ventas",
+      "dominant": true
+    },
+    "usuario": {
+      "via": "ventas",
+      "model": "usuarios"
+    },
+    "vendedores": {
+      "collection": "vendedores",
+      "via": "ventas",
+      "dominant": true
+    }
+  }
+}

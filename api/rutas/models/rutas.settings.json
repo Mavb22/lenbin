@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "rutas",
+  "info": {
+    "name": "Rutas"
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "descripcion": {
+      "type": "richtext"
+    },
+    "lugar_origen": {
+      "type": "string"
+    },
+    "destino": {
+      "type": "string"
+    },
+    "fecha_salida": {
+      "type": "date"
+    },
+    "fecha_llegada": {
+      "type": "date"
+    },
+    "referencia": {
+      "type": "string"
+    },
+    "nombre_mercancia_recibida": {
+      "type": "string"
+    },
+    "comentarios": {
+      "type": "richtext"
+    },
+    "estado": {
+      "type": "string"
+    },
+    "ruta_ciclica": {
+      "type": "boolean",
+      "default": false
+    },
+    "camiones": {
+      "via": "rutas",
+      "collection": "camiones",
+      "dominant": true
+    },
+    "ventas": {
+      "via": "rutas",
+      "collection": "ventas"
+    }
+  }
+}

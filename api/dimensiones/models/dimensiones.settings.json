@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "dimensiones",
+  "info": {
+    "name": "Dimensiones",
+    "description": ""
+  },
+  "options": {
+    "increments": true,
+    "timestamps": true,
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nombre": {
+      "type": "string",
+      "required": true
+    },
+    "ancho": {
+      "type": "decimal",
+      "required": true
+    },
+    "alto": {
+      "type": "decimal",
+      "required": true
+    },
+    "largo": {
+      "type": "decimal",
+      "required": true
+    },
+    "productos": {
+      "via": "dimension",
+      "collection": "productos"
+    }
+  }
+}
