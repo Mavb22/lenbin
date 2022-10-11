@@ -117,7 +117,7 @@ module.exports = {
       subject: `Forgot password for ${email}`, // Subject line
       // text: "Hello world?", // plain text body
       html: `<b>Pleace clcick  on the following link, or paste this into your browser to complete the process: </b>
-        <a href="http://localhost:1337/usuarios/email_validator/${token}">Forgot password</a>
+        <a href="http://localhost:4200/auth/email-validator/${token}">Forgot password</a>
         ` // html body
     });
     if (info) {
@@ -182,7 +182,7 @@ module.exports = {
     if(!password_changed){
        ctx.throw(400, 'Failed to change password');
     }
-    ctx.send({ 
+    ctx.send({
       msj:'Updated password'
     })
   },
