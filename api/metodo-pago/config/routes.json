@@ -5,7 +5,7 @@
       "path": "/metodo-pagos",
       "handler": "metodo-pago.find",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -13,7 +13,7 @@
       "path": "/metodo-pagos/count",
       "handler": "metodo-pago.count",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -21,7 +21,7 @@
       "path": "/metodo-pagos/:id",
       "handler": "metodo-pago.findOne",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -29,7 +29,7 @@
       "path": "/metodo-pagos",
       "handler": "metodo-pago.create",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -37,7 +37,7 @@
       "path": "/metodo-pagos/:id",
       "handler": "metodo-pago.update",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -45,7 +45,7 @@
       "path": "/metodo-pagos/:id",
       "handler": "metodo-pago.delete",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     }
   ]

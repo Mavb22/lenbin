@@ -5,7 +5,7 @@
       "path": "/compras",
       "handler": "compras.find",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -13,7 +13,7 @@
       "path": "/compras/count",
       "handler": "compras.count",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -21,7 +21,7 @@
       "path": "/compras/:id",
       "handler": "compras.findOne",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -29,7 +29,7 @@
       "path": "/compras",
       "handler": "compras.create",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -37,7 +37,7 @@
       "path": "/compras/:id",
       "handler": "compras.update",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -45,7 +45,7 @@
       "path": "/compras/:id",
       "handler": "compras.delete",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     }
   ]

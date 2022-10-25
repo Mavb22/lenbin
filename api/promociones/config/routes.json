@@ -5,7 +5,7 @@
       "path": "/promociones",
       "handler": "promociones.find",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -13,7 +13,7 @@
       "path": "/promociones/count",
       "handler": "promociones.count",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -21,7 +21,7 @@
       "path": "/promociones/:id",
       "handler": "promociones.findOne",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -29,7 +29,7 @@
       "path": "/promociones",
       "handler": "promociones.create",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -37,7 +37,7 @@
       "path": "/promociones/:id",
       "handler": "promociones.update",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -45,7 +45,7 @@
       "path": "/promociones/:id",
       "handler": "promociones.delete",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     }
   ]

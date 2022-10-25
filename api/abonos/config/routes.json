@@ -5,7 +5,7 @@
       "path": "/abonos",
       "handler": "abonos.find",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -13,7 +13,7 @@
       "path": "/abonos/count",
       "handler": "abonos.count",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -21,7 +21,7 @@
       "path": "/abonos/:id",
       "handler": "abonos.findOne",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -29,7 +29,7 @@
       "path": "/abonos",
       "handler": "abonos.create",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -37,7 +37,7 @@
       "path": "/abonos/:id",
       "handler": "abonos.update",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -45,7 +45,7 @@
       "path": "/abonos/:id",
       "handler": "abonos.delete",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     }
   ]

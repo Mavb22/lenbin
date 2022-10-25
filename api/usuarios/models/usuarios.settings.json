@@ -142,8 +142,8 @@
       "collection": "metodo-pago"
     },
     "tipo_rol": {
-      "via": "usuarios",
-      "model": "tipo-rol"
+      "model": "tipo-rol",
+      "via": "usuarios"
     },
     "ventas": {
       "via": "usuario",
@@ -152,6 +152,10 @@
     "camiones": {
       "via": "usuarios",
       "collection": "camiones"
+    },
+    "access": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

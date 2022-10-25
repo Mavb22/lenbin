@@ -5,7 +5,7 @@
       "path": "/locals",
       "handler": "local.find",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Manager","global::Access"]
       }
     },
     {
@@ -13,7 +13,7 @@
       "path": "/locals/count",
       "handler": "local.count",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Manager","global::Access"]
       }
     },
     {
@@ -21,7 +21,7 @@
       "path": "/locals/:id",
       "handler": "local.findOne",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Manager","global::Access"]
       }
     },
     {
@@ -29,7 +29,7 @@
       "path": "/locals",
       "handler": "local.create",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Manager","global::Access"]
       }
     },
     {
@@ -37,7 +37,7 @@
       "path": "/locals/:id",
       "handler": "local.update",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Manager","global::Access"]
       }
     },
     {
@@ -45,7 +45,7 @@
       "path": "/locals/:id",
       "handler": "local.delete",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Manager","global::Access"]
       }
     }
   ]

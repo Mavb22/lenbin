@@ -5,7 +5,7 @@
       "path": "/proveedors",
       "handler": "proveedor.find",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -13,7 +13,7 @@
       "path": "/proveedors/count",
       "handler": "proveedor.count",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -21,7 +21,7 @@
       "path": "/proveedors/:id",
       "handler": "proveedor.findOne",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -29,7 +29,7 @@
       "path": "/proveedors",
       "handler": "proveedor.create",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -37,7 +37,7 @@
       "path": "/proveedors/:id",
       "handler": "proveedor.update",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -45,7 +45,7 @@
       "path": "/proveedors/:id",
       "handler": "proveedor.delete",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     }
   ]

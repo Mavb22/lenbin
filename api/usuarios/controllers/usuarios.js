@@ -2,6 +2,7 @@
 const bcrypt = require('bcryptjs'); // Importar bcryptjs
 const jwt = require('jsonwebtoken'); // Importar jsonwebtoken
 const nodemailer = require('nodemailer');
+const CryptoJS = require("crypto-js")
 let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 465,
@@ -14,90 +15,83 @@ let transporter = nodemailer.createTransport({
 transporter.verify().then(() => {
   console.log("Ready for send emails")
 })
-module.exports = {
+module.exports ={
   async loggin(ctx) {
     const date = new Date();
     const {
       email,
       password
     } = ctx.request.body; // Obtener los datos del usuario
-    if (email && password) {
-      const user = await strapi.services.usuarios.findOne({
-        email
-      }); // Buscar el usuario por email
-      // Validar si el usuario existe
-      if (user) {
-        const hashed = await bcrypt.compare(password, user.password); // Comparar la contraseña
+    //  Iniciar la llave secreta
+    let key = process.env.KEY;
+    //Iniciar el VI (vector inicial)
+    let iv = key.slice(0,16);
+    //Create Key
+    key = CryptoJS.enc.Utf8.parse(key);
+    //Get Iv
+    iv = CryptoJS.enc.Utf8.parse(iv);
+    if(!email || !password){
+      return ctx.throw(400, 'Email and password are required');
+    }
+    const user = await strapi.services.usuarios.findOne({
+      email
+    }); // Buscar el usuario por email
+    if(!user){
+      return ctx.unauthorized('User not found');
+    }
+    const hashed = await bcrypt.compare(password, user.password);
+    if(!hashed){
+      return ctx.badRequest(null, 'Invalid email or password');
+    }
+    if (user.last_login == null) {
+      // Obtener la fecha actual
+      await strapi.services.usuarios.update({
+        id: user.id
+      }, {
+        last_login: date
+      }); // Actualizar la fecha de ultimo login
 
-        // Validar si la contraseña es correcta
-        if (hashed) {
-          //Validar si el usuario tiene algun loggin antiguo
-          if (user.last_login == null) {
-            // Obtener la fecha actual
-            await strapi.services.usuarios.update({
-              id: user.id
-            }, {
-              last_login: date
-            }); // Actualizar la fecha de ultimo login
-            // Crear el token
-            const token = jwt.sign({
-              nombre: user.nombre,
-              role: user.tipo_rol.rol,
-              last_login: date.toString()
-            }, process.env.SECRET_KEY, {
-              expiresIn: '7d'
-            });
+      // Crear el token
+      const token = jwt.sign({
+        email: CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
+        role: user.tipo_rol.rol,
+      }, process.env.SECRET_KEY, {
+        expiresIn: '7d'
+      });
 
-            console.log('primera vez date:', date);
-            // Enviar el token
-            ctx.send({
-              // jwt: newjwt,
-              token: token,
-              user: {
-                email: user.email,
-                tipo_rol: user.tipo_rol.rol,
-                last_login: date.toString()
-              }
-            });
-          } else {
-            // actualizar la fecha de ultimo login
-            await strapi.services.usuarios.update({
-              id: user.id
-            }, {
-              last_login: new Date()
-            });
-            const token = jwt.sign({
-              nombre: user.nombre,
-              email: user.email,
-              role: user.tipo_rol.rol,
-              last_login: date.toString()
-            }, process.env.SECRET_KEY, {
-              expiresIn: '7d'
-            });
-            // Enviar el token
-            ctx.send({
-              token: token,
-              user: {
-                email: user.email,
-                tipo_rol: user.tipo_rol.rol,
-                last_login: user.last_login.toString()
-              }
-            });
-          }
-        } else {
-          // Enviar un error
-          ctx.badRequest(null, 'Invalid email or password');
+      console.log('primera vez date:', date.toString);
+      // Enviar el token
+      ctx.send({
+        token: token,
+        user: {
+          // email:  CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
+          tipo_rol: user.tipo_rol.rol,
+          last_login: date.toString()
         }
-      } else {
-        // Enviar un error
-        return ctx.unauthorized('User not found');
-      }
+      });
     } else {
-      // Enviar un error
-      ctx.throw(400, 'Email and password are required');
+      await strapi.services.usuarios.update({
+        id: user.id
+      }, {
+        last_login: new Date()
+      });
+      const token = jwt.sign({
+        email: CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
+        role: user.tipo_rol.rol,
+      }, process.env.SECRET_KEY, {
+        expiresIn: '7d'
+      });
+      // Enviar el token
+      ctx.send({
+        token: token,
+        user: {
+          // email:  CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
+          tipo_rol: user.tipo_rol.rol,
+          last_login: user.last_login.toString()
+        }
+      });
     }
   },
-
   async password_recover(ctx) {
     const {email} = ctx.request.body;
     const {nombre} = await strapi.services.usuarios.findOne({
@@ -120,11 +114,11 @@ module.exports = {
         <a href="http://localhost:4200/auth/email-validator/${token}">Forgot password</a>
         ` // html body
     });
-    if (info) {
-      ctx.send({msj: "Esta listo",})
+    if (!info) {
+      ctx.throw(400, 'No se envio el email');
     }
+    ctx.send({msj: "Esta listo",})
   },
-
   async email_validate(ctx) {
     const {
       token
@@ -144,8 +138,12 @@ module.exports = {
     const {token} =  ctx.params;
     const decoded = jwt.verify(token,process.env.SECRET_KEY);
     const {id, password, nombre,ap_paterno,ap_materno } = await strapi.services.usuarios.findOne({email:decoded.email});
+    const extpassword = /^(?=.*[A-Z].*[A-Z])(?=.*\d{1,3})(?=.*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040])(?=.*[a-z].*[a-z])\S{8,10}$/g;
+    if(!extpassword){
+      ctx.throw(400, 'The password does not meet the corresponding characters');
+    }
     if(!new_password && !confirm_password){
-      ctx.throw(400, 'new_password and confirm_password are required');
+      ctx.throw(400, 'New password and confirm_password are required');
     }
     if(new_password.length < 8 && confirm_password.length < 8){
       ctx.throw(400,'The new_password and confirm_password must have more than 8 characters');
@@ -155,7 +153,7 @@ module.exports = {
     }
     const hashed = await bcrypt.compare(new_password, password);
 
-    if(hashed){
+    if(!hashed){
       ctx.throw(400, 'This password cannot be');
     }
     let password_lower = new_password.toLowerCase();
@@ -173,6 +171,9 @@ module.exports = {
     if(password_lower.includes(ap_materno_lower)){
       ctx.throw(400, 'The password should not contain your last name');
     }
+    if(!extpassword.test(password)){
+      ctx.throw(400, 'The password does not meet the required parameters');
+    }
     const hash = await bcrypt.hash(new_password, 10);
     const password_changed = await strapi.services.usuarios.update({
       id
@@ -186,4 +187,4 @@ module.exports = {
       msj:'Updated password'
     })
   },
-};
+}

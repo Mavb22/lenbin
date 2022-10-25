@@ -5,7 +5,7 @@
       "path": "/usuarios",
       "handler": "usuarios.find",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
 
@@ -14,7 +14,7 @@
       "path": "/usuarios/:id",
       "handler": "usuarios.findOne",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -22,7 +22,23 @@
       "path": "/usuarios/count",
       "handler": "usuarios.count",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": ["global::Administrator","global::Access"]
+      }
+    },
+    {
+      "method": "PUT",
+      "path": "/usuarios/:id",
+      "handler": "usuarios.update",
+      "config": {
+        "policies": ["global::Administrator","global::Access"]
+      }
+    },
+    {
+      "method": "DELETE",
+      "path": "/usuarios/:id",
+      "handler": "usuarios.delete",
+      "config": {
+        "policies": ["global::Administrator","global::Access"]
       }
     },
     {
@@ -34,20 +50,13 @@
       }
     },
     {
-      "method": "PUT",
-      "path": "/usuarios/:id",
-      "handler": "usuarios.update",
+      "method": "POST",
+      "path": "/usuarios/loggin",
+      "handler": "usuarios.loggin",
       "config": {
-        "policies": ["global::permissions"]
+        "policies": []
       }
-    },
-    {
-      "method": "DELETE",
-      "path": "/usuarios/:id",
-      "handler": "usuarios.delete",
-      "config": {
-        "policies": ["global::permissions"]
-      }
+
     },
     {
       "method": "GET",
@@ -56,15 +65,6 @@
       "config": {
         "policies": []
       }
-    },
-    {
-      "method": "POST",
-      "path": "/usuarios/loggin",
-      "handler": "usuarios.loggin",
-      "config": {
-        "policies": []
-      }
-
     },
     {
       "method": "POST",

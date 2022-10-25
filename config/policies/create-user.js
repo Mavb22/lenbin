@@ -16,28 +16,38 @@ module.exports = async (ctx, next) => {
     }
   }
   //Hashear la contraseña
-  const hash = await bcrypt.hash(password, 10);
+  const extpassword = /^(?=.*[A-Z].*[A-Z])(?=.*\d{1,3})(?=.*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040])(?=.*[a-z].*[a-z])\S{8,10}$/g;
   //Iniciar la llave secreta
-  let key = process.env.KEY;
+  // let key = process.env.KEY;
   //Iniciar el VI (vector inicial)
-  let iv = key.slice(0, 16);
+  // let iv = "H98zM6i/55yNJfkFs"
+  // let iv = key.slice(0,16);
   //Create Key
-  key = CryptoJS.enc.Utf8.parse(key);
+  // key = CryptoJS.enc.Utf8.parse(key);
   //Get Iv
-  iv = CryptoJS.enc.Utf8.parse(iv);
+  // iv = CryptoJS.enc.Utf8.parse(iv);
   // const obt = ctx.request.body;
-  //Encriptar los datos del body
+  // Encriptar los datos del body
   // for (const llave in obt) {
-  //   if (llave !=='email') {
-  //     let encrypted = CryptoJS.AES.encrypt(obt[llave], key,{ iv: iv}).toString();
-  //     ctx.request.body[llave] = encrypted;
-  //     const decrypted = CryptoJS.AES.decrypt(encrypted, key,{ iv: iv}).toString(CryptoJS.enc.Utf8)
-  //     console.log('decrypted',decrypted);
-  //   }
-  // }
-  //Enviar los datos al siguiente middleware
+    //   if (llave !=='email') {
+      //     let encrypted = CryptoJS.AES.encrypt(obt[llave], key,{ iv: iv}).toString();
+      //     ctx.request.body[llave] = encrypted;
+      //     const decrypted = CryptoJS.AES.decrypt(encrypted, key,{ iv: iv}).toString(CryptoJS.enc.Utf8)
+      //     console.log(encrypted)
+      //   }
+      // }
+      // Enviar los datos al siguiente middleware
+  if(!extpassword.test(password)){
+    return ctx.send({msj:'La contraseña no cumpre con los criterios'})
+  }
+  const hash = await bcrypt.hash(password, 10);
   ctx.request.body.password = hash;
-  // ctx.request.body.email = obt.email;
-  //Enviar el request al next
   return await next();
+  // ctx.request.body.email = obt.email;
+  // ctx.send({
+  //   msj: "Esta listo",
+  //   body:ctx.request.body
+  // })
+  //Enviar el request al next
+
 }
