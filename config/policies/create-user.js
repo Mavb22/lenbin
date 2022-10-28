@@ -16,7 +16,8 @@ module.exports = async (ctx, next) => {
     }
   }
   //Hashear la contraseña
-  const extpassword = /^(?=.*[A-Z].*[A-Z])(?=.*\d{1,3})(?=.*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040])(?=.*[a-z].*[a-z])\S{8,10}$/g;
+  // const extpassword = /^(?=.*[A-Z].*[A-Z])(?=.*\d{1,3})(?=.*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040])(?=.*[a-z].*[a-z])\S{8,10}$/g;
+  const extpassword = /^(?=.*[a-z].*[a-z])(?=.*[A-Z].*[A-Z])(?=.*\d)(?=.*[/$@$!%*?&].*[/$@$!%*?&].*[/$@$!%*?&])[A-Za-z\d/$@$!%*?&]{8,15}/g;
   //Iniciar la llave secreta
   // let key = process.env.KEY;
   //Iniciar el VI (vector inicial)

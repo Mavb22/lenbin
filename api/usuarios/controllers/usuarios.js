@@ -18,6 +18,7 @@ transporter.verify().then(() => {
 module.exports ={
   async loggin(ctx) {
     const date = new Date();
+
     const {
       email,
       password
@@ -96,7 +97,8 @@ module.exports ={
     const {email} = ctx.request.body;
     const {nombre} = await strapi.services.usuarios.findOne({
       email
-    })
+    });
+    const url = 'http://localhost:4200/auth/email-validator/';
     const token = jwt.sign({
       email
     },process.env.SECRET_KEY,{
@@ -111,7 +113,7 @@ module.exports ={
       subject: `Forgot password for ${email}`, // Subject line
       // text: "Hello world?", // plain text body
       html: `<b>Pleace clcick  on the following link, or paste this into your browser to complete the process: </b>
-        <a href="http://localhost:4200/auth/email-validator/${token}">Forgot password</a>
+        <a href="${url}${token}">Forgot password</a>
         ` // html body
     });
     if (!info) {
@@ -138,10 +140,10 @@ module.exports ={
     const {token} =  ctx.params;
     const decoded = jwt.verify(token,process.env.SECRET_KEY);
     const {id, password, nombre,ap_paterno,ap_materno } = await strapi.services.usuarios.findOne({email:decoded.email});
-    const extpassword = /^(?=.*[A-Z].*[A-Z])(?=.*\d{1,3})(?=.*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040])(?=.*[a-z].*[a-z])\S{8,10}$/g;
-    if(!extpassword){
-      ctx.throw(400, 'The password does not meet the corresponding characters');
-    }
+
+    /* This is a regular expression that validates the password. 2 Letras mayusculas, de 1 a 3 numero 3 caracteres espaciales 2 letras minusculas y minimo de 8 a 10 caracteres*/
+    // const extpassword = /^(?=.*[A-Z].*[A-Z])(?=.*\d{1,3})(?=.*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040].*[\u0021-\u002b\u003c-\u0040])(?=.*[a-z].*[a-z])\S{8,10}$/g;
+    const extpassword = /^(?=.*[a-z].*[a-z])(?=.*[A-Z].*[A-Z])(?=.*\d)(?=.*[/$@$!%*?&].*[/$@$!%*?&].*[/$@$!%*?&])[A-Za-z\d/$@$!%*?&]{8,15}$/g;
     if(!new_password && !confirm_password){
       ctx.throw(400, 'New password and confirm_password are required');
     }
@@ -151,11 +153,17 @@ module.exports ={
     if(new_password !== confirm_password){
       ctx.throw(400, 'The new password and the password confirmation are different');
     }
+    if(!extpassword.test(new_password)){
+      ctx.throw(400, 'The password does not meet the corresponding characters');
+    }
     const hashed = await bcrypt.compare(new_password, password);
 
-    if(!hashed){
+    if(hashed){
       ctx.throw(400, 'This password cannot be');
     }
+    // ctx.send({
+    //   hashed
+    // })
     let password_lower = new_password.toLowerCase();
     let nombre_split = nombre.split(' ');
     let ap_paterno_lower = ap_paterno.toLowerCase();
@@ -170,9 +178,6 @@ module.exports ={
     }
     if(password_lower.includes(ap_materno_lower)){
       ctx.throw(400, 'The password should not contain your last name');
-    }
-    if(!extpassword.test(password)){
-      ctx.throw(400, 'The password does not meet the required parameters');
     }
     const hash = await bcrypt.hash(new_password, 10);
     const password_changed = await strapi.services.usuarios.update({
