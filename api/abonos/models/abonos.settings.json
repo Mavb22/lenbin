@@ -1,4 +1,3 @@
-
 {
   "kind": "collectionType",
   "collectionName": "abonos",
@@ -18,7 +17,7 @@
       "required": false
     },
     "fecha_abono": {
-      "type": "datetime",
+      "type": "date",
       "required": false
     },
     "mostrar": {
