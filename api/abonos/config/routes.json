@@ -7,6 +7,12 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+
+    },
+    {
+      "method": "GET",
+      "path": "/abonos/buscar",
+      "handler": "abonos.buscarAbonos"
     },
     {
       "method": "GET",

@@ -1,9 +1,16 @@
 const jwt = require('jsonwebtoken');
 const CryptoJS = require("crypto-js")
 module.exports = async (ctx, next) => {
+  /* This is a middleware that is used to verify the token and decrypt the email. */
   if(ctx.request.headers.authenticated){
     const token = ctx.request.header.authenticated.split(' ')[1];
-    let decoded = jwt.verify(token,process.env.SECRET_KEY);
+    const decoded = jwt.verify(token,process.env.SECRET_KEY, (err, decode)=>{
+      if(err){
+        if(err.expiredAt)
+        return ctx.throw(401, 'Token expired');
+      }
+      return decode
+    });
     let key = process.env.KEY;
     //Iniciar el VI (vector inicial)
     let iv = key.slice(0,16);

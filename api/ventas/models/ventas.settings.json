@@ -49,8 +49,8 @@
       "collection": "carrito"
     },
     "local": {
-      "model": "local",
-      "via": "ventas"
+      "via": "ventas",
+      "model": "local"
     },
     "metodo_pagos": {
       "collection": "metodo-pago",

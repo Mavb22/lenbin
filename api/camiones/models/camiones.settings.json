@@ -32,14 +32,14 @@
       "via": "camiones",
       "collection": "rutas"
     },
-    "usuarios": {
+    "usuario": {
       "via": "camiones",
-      "collection": "usuarios",
-      "dominant": true
+      "model": "usuarios"
     },
     "gastos": {
       "collection": "gastos",
-      "via": "camion"
+      "via": "camions",
+      "dominant": true
     }
   }
 }

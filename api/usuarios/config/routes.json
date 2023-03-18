@@ -2,13 +2,20 @@
   "routes": [
     {
       "method": "GET",
+      "path": "/usuarios/refresh_token",
+      "handler": "usuarios.token_refresh",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
       "path": "/usuarios",
       "handler": "usuarios.find",
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
     },
-
     {
       "method": "GET",
       "path": "/usuarios/:id",
@@ -80,6 +87,14 @@
       "handler": "usuarios.password_change",
       "config": {
         "policies": []
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/usuarios/decrypt",
+      "handler": "usuarios.decrypt",
+      "config": {
+        "policies": ["global::Administrator","global::Access"]
       }
     }
   ]

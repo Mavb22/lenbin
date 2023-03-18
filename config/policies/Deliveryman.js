@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const CryptoJS = require("crypto-js")
 module.exports = async (ctx, next) => {
+  /* This is a middleware that is used to verify the token and decrypt the email. */
   if(ctx.request.headers.authenticated){
     const token = ctx.request.header.authenticated.split(' ')[1];
     const decoded = jwt.verify(token,process.env.SECRET_KEY);

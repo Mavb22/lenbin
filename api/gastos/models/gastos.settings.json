@@ -36,9 +36,9 @@
       "via": "gastos",
       "model": "usuarios"
     },
-    "camion": {
+    "camions": {
       "via": "gastos",
-      "model": "camiones"
+      "collection": "camiones"
     }
   }
 }

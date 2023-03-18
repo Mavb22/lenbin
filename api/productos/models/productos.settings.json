@@ -75,10 +75,6 @@
       "via": "productos",
       "model": "dimensiones"
     },
-    "lote": {
-      "via": "productos",
-      "model": "lotes"
-    },
     "promociones": {
       "collection": "promociones",
       "via": "productos",
@@ -87,6 +83,11 @@
     "proveedor": {
       "model": "proveedor",
       "via": "productos"
+    },
+    "lotes": {
+      "via": "products",
+      "collection": "lotes",
+      "dominant": true
     }
   }
 }

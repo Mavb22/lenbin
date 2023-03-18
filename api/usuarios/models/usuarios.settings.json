@@ -35,7 +35,7 @@
     },
     "rfc": {
       "type": "string",
-      "maxLength": 13
+      "maxLength": 14
     },
     "curp": {
       "type": "string"
@@ -149,13 +149,13 @@
       "via": "usuario",
       "collection": "ventas"
     },
-    "camiones": {
-      "via": "usuarios",
-      "collection": "camiones"
-    },
     "access": {
       "type": "boolean",
       "default": false
+    },
+    "camiones": {
+      "via": "usuario",
+      "collection": "camiones"
     }
   }
 }

@@ -35,8 +35,8 @@
       "via": "lote",
       "collection": "compras"
     },
-    "productos": {
-      "via": "lote",
+    "products": {
+      "via": "lotes",
       "collection": "productos"
     }
   }

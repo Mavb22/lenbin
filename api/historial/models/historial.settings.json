@@ -30,7 +30,7 @@
     },
     "status2": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "camiones": {
       "via": "historial",

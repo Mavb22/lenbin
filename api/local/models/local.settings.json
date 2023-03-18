@@ -23,7 +23,7 @@
     },
     "rfc": {
       "type": "string",
-      "maxLength": 13
+      "maxLength": 14
     },
     "fecha_alta": {
       "type": "date"
@@ -56,24 +56,17 @@
       "type": "float"
     },
     "telefono": {
-      "type": "string",
-      "maxLength": 10
-    },
-    "telefono2": {
       "type": "biginteger"
     },
     "telefono_cel": {
-      "type": "string",
-      "maxLength": 10
-    },
-    "telefono_cel2": {
       "type": "biginteger"
     },
     "giro": {
       "type": "string"
     },
     "status": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "status2": {
       "type": "string"
@@ -86,6 +79,9 @@
     "ventas": {
       "via": "local",
       "collection": "ventas"
+    },
+    "cuentas": {
+      "type": "json"
     }
   }
 }
