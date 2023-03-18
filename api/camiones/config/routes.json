@@ -10,6 +10,13 @@
     },
     {
       "method": "GET",
+      "path":"/camiones/busqueda",
+      "handler": "camiones.busqueda"
+
+    },
+
+    {
+      "method": "GET",
       "path": "/camiones/count",
       "handler": "camiones.count",
       "config": {

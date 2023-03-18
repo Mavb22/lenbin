@@ -38,6 +38,8 @@ module.exports = async (ctx, next) => {
       //   }
       // }
       // Enviar los datos al siguiente middleware
+
+
   if(!extpassword.test(password)){
     return ctx.send({msj:'La contraseña no cumpre con los criterios'})
   }
@@ -50,5 +52,4 @@ module.exports = async (ctx, next) => {
   //   body:ctx.request.body
   // })
   //Enviar el request al next
-
 }

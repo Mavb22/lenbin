@@ -113,7 +113,7 @@ module.exports ={
           // role: user.tipo_rol.rol,
           role:roleEncrypt,
           last_login: user.last_login.toString()
-        }, process.env.SECRET_KEY, {expiresIn: '1mins'})
+        }, process.env.SECRET_KEY, {expiresIn: '8h'})
         ctx.send({
           token: token,
           // user: {

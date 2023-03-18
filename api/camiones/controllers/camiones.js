@@ -5,4 +5,9 @@
  * to customize this controller
  */
 
-module.exports = {};
+module.exports = {
+  async  busqueda(ctx){
+    const { placas } = ctx.query;
+    console.log(placas);
+  }
+};
