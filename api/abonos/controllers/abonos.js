@@ -1,5 +1,6 @@
 'use strict';
-
+const { sanitizeEntity } = require('strapi-utils');
+const { convertRestQueryParams, buildQuery } = require('strapi-utils');
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
  * to customize this controller
@@ -91,7 +92,167 @@ module.exports = {
     // let abonos = await strapi.query('abonos').find(query);
 
     // return abonos;
+  },
+  async abonosConnection(ctx) {
+    // Extraer los argumentos de la consulta GraphQL
+    const { start = 0, limit = 10 } = ctx.request.query;
+
+    // Obtener la colección "abonos" paginados
+    const abonos = await strapi.services.abonos.find({
+      _start: start,
+      _limit: limit,
+    });
+
+    // Obtener el número total de "abonos" en la colección
+    const totalAbonos = await strapi.services.abonos.count();
+
+    // Crear una lista de "abonoEdges" con su cursor y node
+    const abonoEdges = abonos.map((abono) => ({
+      cursor: abono.id,
+      node: sanitizeEntity(abono, { model: strapi.models.abonos }),
+    }));
+
+    // Crear el objeto "pageInfo" con la información de paginación
+    const hasNextPage = start + limit < totalAbonos;
+    const hasPreviousPage = start > 0;
+    const startCursor = abonoEdges.length > 0 ? abonoEdges[0].cursor : null;
+    const endCursor = abonoEdges.length > 0 ? abonoEdges[abonoEdges.length - 1].cursor : null;
+    const pageInfo = {
+      hasNextPage,
+      hasPreviousPage,
+      startCursor,
+      endCursor,
+    };
+
+    // Devolver la conexión paginada de "abonos"
+    return { edges: abonoEdges, pageInfo };
+  },
+  async findWithPagination(ctx) {
+    const { start, limit } = ctx.request.query;
+    const data = await strapi.query('abonos').find({
+      _start: start,
+      _limit: limit,
+    });
+
+    const edges = data.map(item => ({
+      node: item,
+      cursor: item.id // utilizando el ID de la base de datos como cursor
+    }));
+
+    const totalCount = await strapi.query('abonos').count();
+
+    const hasNextPage = start + limit < totalCount;
+    const hasPreviousPage = start > 0;
+
+    const pageInfo = {
+      startCursor: edges.length > 0 ? edges[0].cursor : null,
+      endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+      hasNextPage,
+      hasPreviousPage,
+    };
+
+    return {
+      totalCount,
+      edges,
+      pageInfo,
+    };
+  },
+  // async findAbonos(ctx){
+
+  // },
+  async findAbonos(ctx) {
+    // const { start = 1, limit = 10 } = ctx.query;
+    // console.log(typeof start, typeof limit);
+    // const startIndex = (start - 1) * limit;
+    // const endIndex = start * limit;
+
+    // const entities = await strapi.services.abonos.find();
+
+    // const results = {};
+
+    // if (endIndex < entities.length) {
+    //   results.next = {
+    //     page: start + 1,
+    //     pageSize: limit
+    //   };
+    // }
+
+    // if (startIndex > 0) {
+    //   results.previous = {
+    //     page: start - 1,
+    //     pageSize: limit
+    //   };
+    // }
+
+    // results.results = entities.slice(startIndex, endIndex);
+
+    // return results;
+    const { start = 1, limit = 10 } = ctx.query;
+    const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
+    // const startIndex = (start - 1) * limit;
+    console.log(startIndex, typeof limit);
+    const abonos = await strapi.services.abonos.find(
+    );
+    console.log(startIndex, startIndex + parseInt(limit));
+    const edges = abonos
+        .slice(startIndex, startIndex + parseInt(limit))
+        .map((abono) => ({ node: abono, cursor: abono.id }));
+    // return {edges}
+    const pageInfo = {
+      startCursor: edges.length > 0 ? edges[0].cursor : null,
+      endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+      hasNextPage:  startIndex + parseInt(limit) < abonos.length,
+      hasPreviousPage: startIndex > 0,
+    };
+    return {
+      totalCount: abonos.length,
+      edges,
+      pageInfo,
+    };
+    // return {edges};
   }
+
+  // async findAbonos(ctx) {
+  //   const { start = 0, limit = 10 } = ctx.query;
+  //   // const query = convertRestQueryParams(ctx.query);
+
+  //   // Convertir el valor de `start` en un número entero positivo
+  //   const startIndex = parseInt(start, 10) >= 0 ? parseInt(start, 10) : 0;
+  //   const abonos = await strapi.services.abonos.find({
+  //     _start:start,
+  //     _limit:limit
+  //   }
+  //   //   , [
+  //   //   'cliente',
+  //   //   'orden',
+  //   //   'tipoPago',
+  //   // ]
+  //   );
+
+  //   const edges = abonos
+  //     .slice(startIndex, startIndex + limit)
+  //     .map((abono) => ({ node: abono, cursor: abono.id }));
+
+  //   const pageInfo = {
+  //     startCursor: edges.length > 0 ? edges[0].cursor : null,
+  //     endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+  //     hasNextPage: abonos.length > startIndex + limit,
+  //     hasPreviousPage: startIndex > 0,
+  //   };
+
+  //   return {
+  //     totalCount: abonos.length,
+  //     edges,
+  //     pageInfo,
+  //   };
+  // }
 
 };
 
+
+
+// module.exports = {
+//   async buscarAbonos(ctx) {
+
+//   },
+// };

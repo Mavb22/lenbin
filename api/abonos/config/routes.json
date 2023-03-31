@@ -11,6 +11,15 @@
     },
     {
       "method": "GET",
+      "path": "/abonos/pagination",
+      "handler": "abonos.findAbonos",
+      "config": {
+        "policies": []
+      }
+
+    },
+    {
+      "method": "GET",
       "path": "/abonos/buscar",
       "handler": "abonos.buscarAbonos"
     },
