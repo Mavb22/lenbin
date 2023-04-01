@@ -210,10 +210,10 @@ module.exports = {
   resolver: {
     Query: {
       paginationAbonos:
-         async (obj, { start, limit, estado_abono,  cantidad_abono, fechaInicio, fechaFin  }, ctx) => {
-          const usuario = new RegExp('g', 'i');
+        async (obj, { start, limit, estado_abono,  cantidad_abono, fechaInicio, fechaFin  }, ctx) => {
+          const usuario = new RegExp('a', 'i');
           let abonos_usuario = await strapi.query('abonos').find({"usuario.nombre": {$regex: usuario}});
-          console.log(abonos_usuario);
+          // console.log(abonos_usuario);
           const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
           const query = { mostrar:true }
           if(estado_abono){
@@ -241,7 +241,6 @@ module.exports = {
                 }
               }
             }
-
           }
           if(estado){
             query_camiones['placas'] ={
@@ -268,7 +267,7 @@ module.exports = {
           // }
           // console.log(query_camiones);
           const camiones = await strapi.query('camiones').find(query_camiones);
-          // console.log(camiones);
+          console.log(camiones);
           const edges = abonos
             .slice(startIndex, startIndex + parseInt(limit))
             .map((abono) => ({ node: abono, cursor: abono.id }));
