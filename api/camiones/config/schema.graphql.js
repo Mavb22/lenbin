@@ -11,12 +11,10 @@ module.exports = {
         cursor: ID!
     }
     type CamionConnection{
-        toltalCount: Int!
+        totalCount: Int!
         edges: [CamionEdge!]!
         pageInfo: PageInfo!
     }
-    
-    
     `,
     query:`
      paginationCamiones(
@@ -77,13 +75,13 @@ module.exports = {
                 if(niv){
                     const regex = new RegExp(niv, 'i');
                     query.niv = { $regex: regex };
-                } 
+                }
                 if(destino){
-                    const regex = new RegExp(conductor, 'i'); 
+                    const regex = new RegExp(conductor, 'i');
                     query["rutas.destino"] = { $regex: regex };
                 }
                 if(conductor){
-                    const regex = new RegExp(conductor, 'i'); 
+                    const regex = new RegExp(conductor, 'i');
                     query["usuario.nombre"] = { $regex: regex };
                 }
                 if(gastos){
@@ -101,7 +99,7 @@ module.exports = {
                 hasPreviousPage: startIndex > 0,
               };
               return {
-                totalCount: parseInt(camiones.length),
+                totalCount: camiones.length,
                 edges,
                 pageInfo,
               };
@@ -109,7 +107,7 @@ module.exports = {
               }
         }
     }
-    
-    
-    
+
+
+
 }
