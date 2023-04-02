@@ -11,7 +11,7 @@ module.exports = {
         cursor: ID!
     }
     type CamionConnection{
-        toltalCount: Int!
+        totalCount: Int!
         edges: [CamionEdge!]!
         pageInfo: PageInfo!
     }
@@ -79,7 +79,7 @@ module.exports = {
                     query.niv = { $regex: regex };
                 } 
                 if(destino){
-                    const regex = new RegExp(conductor, 'i'); 
+                    const regex = new RegExp(destino, 'i'); 
                     query["rutas.destino"] = { $regex: regex };
                 }
                 if(conductor){
@@ -93,7 +93,7 @@ module.exports = {
                 const camiones = await strapi.query('camiones').find(query);
                 const edges = camiones
                 .slice(startIndex, startIndex + parseInt(limit))
-                .map((abono) => ({ node: abono, cursor: abono.id }));
+                .map((camion) => ({ node: camion, cursor: camion.id }));
               const pageInfo = {
                 startCursor: edges.length > 0 ? edges[0].cursor : null,
                 endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
@@ -101,7 +101,7 @@ module.exports = {
                 hasPreviousPage: startIndex > 0,
               };
               return {
-                totalCount: parseInt(camiones.length),
+                totalCount: camiones.length,
                 edges,
                 pageInfo,
               };
