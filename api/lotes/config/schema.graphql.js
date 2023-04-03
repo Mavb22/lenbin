@@ -1,5 +1,3 @@
-const { parse } = require("dotenv");
-
 module.exports = {
   definition: `
     type LoteEdge{
