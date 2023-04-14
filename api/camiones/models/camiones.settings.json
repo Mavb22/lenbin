@@ -37,8 +37,8 @@
       "model": "usuarios"
     },
     "gastos": {
-      "collection": "gastos",
       "via": "camions",
+      "collection": "gastos",
       "dominant": true
     }
   }

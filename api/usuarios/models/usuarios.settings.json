@@ -22,16 +22,16 @@
       "type": "string"
     },
     "fecha_nacimiento": {
-      "type": "date"
+      "type": "datetime"
     },
     "genero": {
       "type": "string"
     },
     "fecha_inscripcion": {
-      "type": "date"
+      "type": "datetime"
     },
     "fecha_alta": {
-      "type": "date"
+      "type": "datetime"
     },
     "rfc": {
       "type": "string",

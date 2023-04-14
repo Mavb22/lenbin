@@ -1,58 +1,67 @@
 module.exports = {
   definition: `
-    type LoteEdge{
+    type LotEdge{
         node: Lotes
         cursor: ID!
     }
-    type LoteConnection{
+    type LotConnection{
         totalCount: Int!
-        edges: [LoteEdge!]!
+        edges: [LotEdge!]!
         pageInfo: PageInfo!
     }
   `,
   query:`
-     paginationLotes(
+     paginationLot(
         start: Int!,
         limit: Int!,
-        codigo_interno: Int,
-        fecha_arrivo: Date,
-        fecha_caducidad: Date,
-        fecha_adquisicion: Date,
-        costo: Float,
-        compras_costo:Int,
-        producto_nombre:String
-     ): LoteConnection
+        internal_code: Int,
+        arrival_date: DateTime,
+        expiration_date: DateTime,
+        acquisition_date: DateTime,
+        cost: Float,
+        shopping_cost:Int,
+        product_name:String
+     ): LotConnection
   `,
   resolver: {
     Query: {
-      paginationLotes: async (obj, {start,limit,codigo_interno, fecha_arrivo,fecha_caducidad,fecha_adquisicion, costo, compras_costo,producto_nombre}) => {
+      paginationLot: async (obj, {start,limit,internal_code, arrival_date,expiration_date,acquisition_date, cost, shopping_cost,product_name}) => {
         const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
-        const query = {}
-        if(codigo_interno && !isNaN(parseInt(codigo_interno))){
-          query.codigo_interno = parseInt(codigo_interno);
+        const query = {
+          ...(internal_code && !isNaN(parseInt(internal_code))) && {
+            codigo_interno: parseInt(internal_code)
+          },
+          ...(arrival_date&& {
+            fecha_arrivo: arrival_date
+          }),
+          ...(expiration_date && {
+            fecha_caducidad: expiration_date
+          }),
+          ...(acquisition_date && {
+            fecha_adquisicion:acquisition_date
+          }),
+          ...(cost && !isNaN(parseFloat(cost)))&& {
+            costo: parseFloat(cost)
+          },
+          ...(shopping_cost && !isNaN(parseInt(shopping_cost))) && {
+            "compras.costo": parseInt(shopping_cost)
+          },
+          ...(product_name && {
+            "products.nombre": new RegExp(product_name,'i')
+          }),
         }
-        if(costo && !isNaN(parseFloat(costo))){
-          query.costo = parseFloat(costo);
-        }
-        if(compras_costo){
-            query["compras.costo"] = parseFloat(compras_costo);
-        }
-        if(producto_nombre){
-          const regex = new RegExp(producto_nombre, 'i');
-          query["products.nombre"] = {$regex: regex}
-        }
-        const lotes = await strapi.query('lotes').find(query);
-        const edges = lotes
+        const lots = await strapi.query('lots').find(query);
+        const edges = lots
         .slice(startIndex, startIndex + parseInt(limit))
-        .map((lote) => ({ node: lote, cursor:lote.id }));
+        .map((lot) => ({ node: lot, cursor:lot.id }));
         const pageInfo = {
           startCursor: edges.length > 0 ? edges[0].cursor : null,
           endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-          hasNextPage:  startIndex + parseInt(limit) < lotes.length,
+          hasNextPage:  startIndex + parseInt(limit) < lots.length,
           hasPreviousPage: startIndex > 0,
         };
         return {
-          totalCount: lotes.length,
+          totalCount: lots.length,
           edges,
           pageInfo,
         };

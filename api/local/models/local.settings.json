@@ -26,7 +26,7 @@
       "maxLength": 14
     },
     "fecha_alta": {
-      "type": "date"
+      "type": "datetime"
     },
     "calle": {
       "type": "string"

@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "proveedors",
   "info": {
-    "name": "Proveedor"
+    "name": "Proveedor",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -23,7 +24,7 @@
       "maxLength": 13
     },
     "fecha_alta": {
-      "type": "date"
+      "type": "datetime"
     },
     "calle": {
       "type": "string"

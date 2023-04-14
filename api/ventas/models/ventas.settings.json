@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "ventas",
   "info": {
-    "name": "Ventas"
+    "name": "Ventas",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -18,7 +19,7 @@
       "type": "decimal"
     },
     "fecha": {
-      "type": "date"
+      "type": "datetime"
     },
     "factura": {
       "type": "json"
@@ -27,7 +28,7 @@
       "type": "string"
     },
     "fecha_entrega": {
-      "type": "date"
+      "type": "datetime"
     },
     "entrega_pendiente": {
       "type": "boolean",
@@ -53,12 +54,12 @@
       "model": "local"
     },
     "metodo_pagos": {
-      "collection": "metodo-pago",
-      "via": "venta"
+      "via": "venta",
+      "collection": "metodo-pago"
     },
     "rutas": {
-      "collection": "rutas",
       "via": "ventas",
+      "collection": "rutas",
       "dominant": true
     },
     "usuario": {

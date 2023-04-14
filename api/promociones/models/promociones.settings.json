@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "promociones",
   "info": {
-    "name": "Promociones"
+    "name": "Promociones",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -12,10 +13,10 @@
   "pluginOptions": {},
   "attributes": {
     "fecha_creacion": {
-      "type": "date"
+      "type": "datetime"
     },
     "fecha_vigencia": {
-      "type": "date"
+      "type": "datetime"
     },
     "valor_descuento": {
       "type": "decimal"

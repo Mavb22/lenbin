@@ -17,7 +17,7 @@
       "required": true
     },
     "fecha": {
-      "type": "date",
+      "type": "datetime",
       "required": true
     },
     "monto": {

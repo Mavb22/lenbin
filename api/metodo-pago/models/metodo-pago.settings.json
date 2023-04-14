@@ -31,10 +31,10 @@
       "type": "biginteger"
     },
     "fecha_expedicion": {
-      "type": "date"
+      "type": "datetime"
     },
     "fecha_ingreso": {
-      "type": "date"
+      "type": "datetime"
     },
     "descripcion": {
       "type": "richtext"
