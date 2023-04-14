@@ -9,7 +9,7 @@ module.exports = {
             edges: [CrediEdge!]!
             pageInfo: PageInfo!
         }
-    
+
     `,
     query:`
         paginationCredito(
@@ -26,7 +26,7 @@ module.exports = {
             abonos: String,
             metodo_pago: String,
             usuario: String
-        ):CrediConnection 
+        ):CrediConnection
     `,
     resolver:{
         Query: {
@@ -38,9 +38,6 @@ module.exports = {
                         query["limite"] = parseFloat(limite);
                     }
                 }
-
-
-                
         }
     }
 }
