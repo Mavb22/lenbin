@@ -17,7 +17,7 @@
       "required": false
     },
     "fecha_pedido": {
-      "type": "date",
+      "type": "datetime",
       "required": false
     },
     "referencia": {
@@ -25,7 +25,7 @@
       "required": false
     },
     "fecha_llegada": {
-      "type": "date",
+      "type": "datetime",
       "required": false
     },
     "status": {

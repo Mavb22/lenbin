@@ -16,15 +16,15 @@
       "type": "biginteger"
     },
     "fecha_arrivo": {
-      "type": "date",
+      "type": "datetime",
       "required": true
     },
     "fecha_caducidad": {
-      "type": "date",
+      "type": "datetime",
       "required": true
     },
     "fecha_adquisicion": {
-      "type": "date",
+      "type": "datetime",
       "required": true
     },
     "costo": {

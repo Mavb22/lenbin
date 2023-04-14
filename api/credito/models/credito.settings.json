@@ -17,15 +17,15 @@
       "required": false
     },
     "fecha_alta": {
-      "type": "date",
+      "type": "datetime",
       "required": false
     },
     "fecha_baja": {
-      "type": "date",
+      "type": "datetime",
       "required": false
     },
     "vigencia": {
-      "type": "date",
+      "type": "datetime",
       "required": false
     },
     "intereses": {

@@ -2,7 +2,8 @@
   "kind": "collectionType",
   "collectionName": "rutas",
   "info": {
-    "name": "Rutas"
+    "name": "Rutas",
+    "description": ""
   },
   "options": {
     "increments": true,
@@ -21,10 +22,10 @@
       "type": "string"
     },
     "fecha_salida": {
-      "type": "date"
+      "type": "datetime"
     },
     "fecha_llegada": {
-      "type": "date"
+      "type": "datetime"
     },
     "referencia": {
       "type": "string"
