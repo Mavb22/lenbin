@@ -1,62 +1,63 @@
-
-
 module.exports ={
     definition:`
-        type CarroEdge{
+        type cartEdge{
             node: Carrito
             cursor: ID!
         }
-        type CarroConnection{
+        type cartConnection{
             totalCount: Int!
-            edges: [CarroEdge!]!
+            edges: [cartEdge!]!
             pageInfo: PageInfo!
         }
 
     `,
     query:`
-        paginationCarrito(
+        paginationcarts(
             start: Int,
             limit: Int,
-            cantidad: Int,
-            productos: String,
-            usuario: String,
-            venta: Float
-        ):CarroConnection
+            amount: Int,
+            products: String,
+            user: String,
+            sale: Float
+        ):cartConnection
     
     
     `,
+    //cantidad  = amount
+    //productos = products
+    //usuario = user
     resolver: {
         Query: {
-            paginationCarrito:
-                async(obj,{start,limit,cantidad,productos,usuario,venta}) =>{
+            paginationcarts:
+                async(obj,{start,limit,amount,products,user,sale}) =>{
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
-                    const query={}
-                    if(cantidad && !isNaN(parseInt(cantidad))){
-                        query.cantidad = parseInt(cantidad);
+                    const query={
+                        ...(amount && !isNaN(parseInt(amount))) && {
+                            cantidad: parseInt(amount)
+                          },
+                          ...(products && {
+                            "productos.nombre": new RegExp(product_name,'i')
+                          }),
+                          ...(user && {
+                            "usuario.nombre": new RegExp(user, 'i')
+                          }),
+                          ...(sale && {
+                            "venta.monto": new RegExp(sale, 'i')
+                          }),
+
                     }
-                    if(productos){
-                        const regex = new RegExp(productos, 'i'); 
-                        query["productos.nombre"] = { $regex: regex };
-                    }
-                    if(usuario){
-                        const regex = new RegExp(usuario, 'i'); 
-                        query["usuario.nombre"] = { $regex: regex };
-                    }
-                    if(venta && !isNaN(parseFloat(venta))){
-                        query["venta.monto"] = parseFloat(venta);
-                    }
-                    const carrito = await strapi.query('carrito').find(query);
-                    const edges = carrito
+                    const carts = await strapi.query('carrito').find(query);
+                    const edges = carts
                     .slice(startIndex, startIndex + parseInt(limit))
-                    .map((carro) => ({ node: carro, cursor: carro.id }));
+                    .map((cart) => ({ node: cart, cursor: cart.id }));
                     const pageInfo = {
                      startCursor: edges.length > 0 ? edges[0].cursor : null,
                      endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                     hasNextPage:  startIndex + parseInt(limit) < carrito.length,
+                     hasNextPage:  startIndex + parseInt(limit) < carts.length,
                      hasPreviousPage: startIndex > 0,
                     };
                     return {
-                        totalCount: carrito.length,
+                        totalCount: carts.length,
                         edges,
                         pageInfo,
                       };
@@ -64,6 +65,5 @@ module.exports ={
 
         }
     }
-
 
 }
