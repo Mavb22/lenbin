@@ -1,113 +1,104 @@
-// type PageInfoc{
-//     startCursor: ID
-//     endCursor: ID
-//     hasNextPage: Boolean!
-//     hasPreviousPage: Boolean!
-// }
 module.exports = {
-    definition: `
-    type CamionEdge{
-        node: Camiones
-        cursor: ID!
-    }
-    type CamionConnection{
-        totalCount: Int!
-        edges: [CamionEdge!]!
-        pageInfo: PageInfo!
-    }
-    `,
-    query:`
-     paginationCamiones(
-        start: Int,
-        limit: Int,
-        placa: String,
-        estado: String,
-        placa_activa: Boolean,
-        num_serie: String,
-        niv: String,
-        fecha_inicio: Date,
-        fecha_fin: Date,
-        destino: String,
-        conductor: String,
-        gastos: String
-     ): CamionConnection
-    `,
-    resolver: {
-        Query: {
-            paginationCamiones:
-              async (obj, {start,limit,placa,estado,placa_activa,num_serie,niv,fecha_inicio,fecha_fin,destino,conductor,gastos}) => {
-                const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
-                const query = {}
-                if(placa){
-                    const regex = new RegExp(placa, 'i')
-                    query['placas'] = {
-                      $elemMatch:{
-                        placa:{
-                          $regex: regex
-                        }
+  definition: `
+  type truckEdge{
+      node: Camiones
+      cursor: ID!
+  }
+  type truckConnection{
+      totalCount: Int!
+      edges: [truckEdge!]!
+      pageInfo: PageInfo!
+  }
+  `,
+  query:`
+   paginationtrucks(
+      start: Int,
+      limit: Int,
+      plaque: String,
+      state: String,
+      plaque_active: Boolean,
+      num_serial: String,
+      niv: String,
+      date_start: DateTime,
+      date_end: DateTime,
+      destination: String,
+      driver: String,
+      spent: String
+   ): truckConnection
+  `,
+  resolver: {
+      Query: {
+          paginationtrucks:
+            async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,date_start,date_end, destination,driver, spent}) => {
+              const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
+              const query = {
+                ...( plaque && {
+                  // "placas.placa": new RegExp( plaque,'i')
+                  placas:{
+                    $elemMatch:{
+                      placa:{
+                        $regex: new RegExp(plaque, 'i')
                       }
                     }
                   }
-                if(estado){
-                    const regex = new RegExp(estado, 'i')
-                    query['placas'] = {
-                      $elemMatch:{
-                        estado:{
-                          $regex: regex
-                        }
+                }),
+                ...( state && {
+                  // "placas.estado": new RegExp( state,'i')
+                  placas:{
+                    $elemMatch:{
+                      estado:{
+                        $regex: new RegExp(state, 'i')
                       }
                     }
                   }
-                if(placa_activa){
-                    const regex = new RegExp(placa_activa, 'i')
-                    query['placas'] = {
-                      $elemMatch:{
-                        activa:{
-                          $regex: regex
-                        }
+                }),
+                ...( plaque_active && {
+                  // "placas.activa": new RegExp( plaque_active,'i')
+                  placas:{
+                    $elemMatch:{
+                      activa:{
+                        $regex: new RegExp(plaque_active, 'i')
                       }
                     }
-                }
-                if(num_serie){
-                    const regex = new RegExp(num_serie, 'i');
-                    query.num_serie = { $regex: regex };
-                }
-                if(niv){
-                    const regex = new RegExp(niv, 'i');
-                    query.niv = { $regex: regex };
-                }
-                if(destino){
-                    const regex = new RegExp(destino, 'i');
-                    query["rutas.destino"] = { $regex: regex };
-                }
-                if(conductor){
-                    const regex = new RegExp(conductor, 'i');
-                    query["usuario.nombre"] = { $regex: regex };
-                }
-                if(gastos){
-                    const regex = new RegExp(gastos, 'i');
-                    query["gastos.categoria"] = { $regex: regex };
-                }
-                const camiones = await strapi.query('camiones').find(query);
-                const edges = camiones
-                .slice(startIndex, startIndex + parseInt(limit))
-                .map((camion) => ({ node: camion, cursor: camion.id }));
-              const pageInfo = {
-                startCursor: edges.length > 0 ? edges[0].cursor : null,
-                endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                hasNextPage:  startIndex + parseInt(limit) < camiones.length,
-                hasPreviousPage: startIndex > 0,
-              };
-              return {
-                totalCount: camiones.length,
-                edges,
-                pageInfo,
-              };
-
+                  }
+                }),
+                ...( num_serial && {
+                  num_serie: new RegExp( num_serial,'i')
+                }),
+                ...( niv && {
+                  niv: new RegExp( niv,'i')
+                }),
+                ...( destination && {
+                  "ruta.destino": new RegExp( destination,'i')
+                }),
+                ...( driver && {
+                  "usuario.nombre": new RegExp( driver,'i')
+                }),
+                ...( spent && {
+                  "gastos.categoria": new RegExp( spent,'i')
+                }),
+                
               }
-        }
-    }
+              const trucks = await strapi.query('camiones').find(query);
+              const edges = trucks
+              .slice(startIndex, startIndex + parseInt(limit))
+              .map((truck) => ({ node: truck, cursor: truck.id }));
+            const pageInfo = {
+              startCursor: edges.length > 0 ? edges[0].cursor : null,
+              endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+              hasNextPage:  startIndex + parseInt(limit) < trucks.length,
+              hasPreviousPage: startIndex > 0,
+            };
+            return {
+              totalCount: trucks.length,
+              edges,
+              pageInfo,
+            };
 
+            }
+      }
+  }
 
 
 }
+
