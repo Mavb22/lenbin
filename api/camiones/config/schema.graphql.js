@@ -9,6 +9,7 @@ module.exports = {
       edges: [truckEdge!]!
       pageInfo: PageInfo!
   }
+  
   `,
   query:`
    paginationtrucks(
