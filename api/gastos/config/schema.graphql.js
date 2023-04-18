@@ -43,6 +43,9 @@ module.exports ={
                         ...(categoria && {
                             categoria: new RegExp(categoria,'i')
                         }),
+                        ...(status !== undefined && {
+                            status: status
+                        }),
                         ...(usuario && !isNaN(parseInt(usuario))) && {
                             "usuario.nombre": parseInt(usuario)
                         },

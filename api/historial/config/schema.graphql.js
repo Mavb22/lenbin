@@ -32,6 +32,15 @@ module.exports = {
                         ...(fecha && {
                             fecha: fecha
                         }),
+                        ...(hora_inicio && {
+                            hora_inicio: hora_inicio
+                        }),
+                        ...(hora_fin && {
+                            hora_fin: hora_fin
+                        }),
+                        ...(status !== undefined && {
+                            status: status
+                        }),
                         ...(status2 && {
                             status2: new RegExp(status2,'i')
                         }),

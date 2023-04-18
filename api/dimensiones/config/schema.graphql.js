@@ -42,7 +42,7 @@ module.exports ={
                          largo: parseFloat( largo)
                     },
                     ...( productos && {
-                         productos: new RegExp( productos,'i')
+                        "productos.nombre": new RegExp( productos,'i')
                     }),
                 }
                 const Deimenciones= await strapi.query('Deimenciones').find(query);

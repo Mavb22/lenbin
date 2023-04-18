@@ -47,6 +47,9 @@ module.exports ={
                         ...(fecha_llegada && {
                             fecha_llegada: fecha_llegada
                         }),
+                        ...(status !== undefined && {
+                            status: status
+                        }),
                         ...(status2 && {
                             status2: new RegExp(status2,'i')
                         }),

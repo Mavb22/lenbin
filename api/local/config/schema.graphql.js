@@ -67,15 +67,61 @@ module.exports ={
                     ...(numero_ext && !isNaN(parseInt(numero_ext))) && {
                         numero_ext: parseInt(numero_ext)
                     },
-                    ...(municipio && !isNaN(parseInt(municipio))) && {
-                        municipio: parseInt(municipio)
+                    ...(municipio && {
+                        municipio: new RegExp(municipio,'i')
+                    }),
+                    ...(numero_int && !isNaN(parseInt(numero_int))) && {
+                        numero_int: parseInt(numero_int)
                     },
+                    ...(ciudad && {
+                        ciudad: new RegExp(ciudad,'i')
+                    }),
+                    ...(cp && !isNaN(parseInt(cp))) && {
+                        cp: parseInt(cp)
+                    },
+                    ...(latitud && !isNaN(parseFloat(latitud))) && {
+                        latitud: parseFloat(latitud)
+                    },
+                    ...( longitud && !isNaN(parseFloat( longitud))) && {
+                         longitud: parseFloat( longitud)
+                    },
+                    ...(telefono && !isNaN(parseInt(telefono))) && {
+                        telefono: parseInt(telefono)
+                    },
+                    ...(telefono_cel && !isNaN(parseInt(telefono_cel))) && {
+                        telefono_cel: parseInt(telefono_cel)
+                    },
+                    ...( giro && {
+                         giro: new RegExp(  giro,'i')
+                    }),
                     ...(status !== undefined && {
                         status: status
                     }),
-
-
+                    ...(status2 && {
+                        status2: new RegExp(status2,'i')
+                    }),
+                    ...(usuario && !isNaN(parseInt(usuario))) && {
+                        "usuario.nombre": parseInt(usuario)
+                    },
+                    ...(ventas && !isNaN(parseInt(ventas))) && {
+                        "ventas.monto": parseInt(ventas)
+                    },
                 }
+                const Local = await strapi.query('Local').find(query);
+                const edges = Local
+                  .slice(startIndex, startIndex + parseInt(limit))
+                  .map((Loc) => ({ node: Loc, cursor: Loc.id }));
+                const pageInfo = {
+                  startCursor: edges.length > 0 ? edges[0].cursor : null,
+                  endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+                  hasNextPage:  startIndex + parseInt(limit) < Local.length,
+                  hasPreviousPage: startIndex > 0,
+                };
+                return {
+                  totalCount: Local.length,
+                  edges,
+                  pageInfo,
+                };
             }
         }
     }

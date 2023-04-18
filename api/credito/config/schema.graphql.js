@@ -49,6 +49,9 @@ module.exports = {
                         ...(intereses && !isNaN(parseFloat(intereses)))&& {
                             intereses: parseFloat(intereses)
                         },
+                        ...(status !== undefined && {
+                            status: status
+                        }),
                         ...(status2 && {
                             status2: new RegExp(status2,'i')
                         }),
