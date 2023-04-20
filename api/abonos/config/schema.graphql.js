@@ -54,12 +54,12 @@ module.exports = {
                 $regex: new RegExp(quantity_payment, 'i')
               }
             }),
-            ...(credit && !isNaN(parseInt(credit))) && {
-              "credito.interes": parseInt(credit)
+            ...(credit && !isNaN(parseFloat(credit))) && {
+              "credito.interes": parseFloat(credit)
             },
-            ...(user && !isNaN(parseInt(user))) && {
-              "usuario.nombre": parseInt(user)
-            },
+            ...(user && {
+              "usuario.nombre": new RegExp(user, 'i')
+            }),
           }
           const payments = await strapi.query('abonos').find(query);
           const edges = payments

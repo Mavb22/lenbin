@@ -1,42 +1,48 @@
 module.exports = {
     definition:`
-    type HistoriEdge{
+    type recordEdge{
         node: Historial
         cursor: ID!
     }
-    type HistoriConnection{
+    type recordConnection{
         totalCount: Int!
-        edges: [HistoriEdge!]!
+        edges: [recordEdge!]!
         pageInfo: PageInfo!
     }
     `,
     query:`
-        paginationHistorial(
+        paginationrecords(
             start: Int,
             limit: Int,
-            fecha: DateTime,
-            hora_inicio: Time,
-            hora_fin: Time,
+            date: DateTime,
+            start_time: Time,
+            end_time: Time,
             status: Boolean,
             status2: String,
-            camiones: String,
-            usuario: String
-        ):HistoriConnection
+            trucks: String,
+            user: String
+        ):recordConnection
     `,
+    //records
+    // fecha = date
+    // hora_inicio = start_time
+    // hora_fin = end_time
+    // camiones = trucks
+    // usuario = user
     resolver:{
         Query:{
-            paginationHistorial:
-                async(obj,{start,limit,fecha,hora_inicio,hora_fin,status,status2,usuario,camiones} ) =>{
+            paginationrecords:
+                async(obj,{start,limit,date,start_time,end_time,status,status2,user,trucks} ) =>{
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query={
-                        ...(fecha && {
-                            fecha: fecha
+                        ...(date && {
+                            fecha: date
                         }),
-                        ...(hora_inicio && {
-                            hora_inicio: hora_inicio
+                        ...(start_time && {
+                            hora_inicio: start_time
                         }),
-                        ...(hora_fin && {
-                            hora_fin: hora_fin
+                        ...(end_time && {
+                            hora_fin: end_time
                         }),
                         ...(status !== undefined && {
                             status: status
@@ -44,25 +50,26 @@ module.exports = {
                         ...(status2 && {
                             status2: new RegExp(status2,'i')
                         }),
-                        ...(camiones && !isNaN(parseInt(camiones))) && {
-                            "camiones.num_serie": parseInt(camiones)
+                        ...(user && {
+                            "usuario.nombre": new RegExp(user, 'i')
+                        }),
+                        ...(trucks && !isNaN(parseInt(trucks))) && {
+                            "camiones.num_serie": parseInt(trucks)
                         },
-                        ...(usuario && !isNaN(parseInt(usuario))) && {
-                            "usuario.nombre": parseInt(usuario)
-                        },
+                        
                     }
-                    const historial = await strapi.query('historial').find(query);
-                    const edges = historial
+                    const records = await strapi.query('historial').find(query);
+                    const edges = records
                     .slice(startIndex, startIndex + parseInt(limit))
-                    .map((histori) => ({ node: histori, cursor: histori.id }));
+                    .map((record) => ({ node: record, cursor: record.id }));
                     const pageInfo = {
                      startCursor: edges.length > 0 ? edges[0].cursor : null,
                      endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                     hasNextPage:  startIndex + parseInt(limit) < historial.length,
+                     hasNextPage:  startIndex + parseInt(limit) < records.length,
                      hasPreviousPage: startIndex > 0,
                     };
                     return {
-                        totalCount: historial.length,
+                        totalCount: records.length,
                         edges,
                         pageInfo,
                       };

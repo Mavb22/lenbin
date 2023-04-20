@@ -14,85 +14,101 @@ module.exports ={
         paginationLocal(
             start: Int,
             limit: Int,
-            nombre: String,
+            name: String,
             alias: String,
-            razon_social: String,
+            social_reason: String,
             rfc: String,
-            fecha_alta: DateTime,
-            calle: String,
-            colonia: String,
-            numero_ext: Long,
-            municipio: String,
-            numero_int: Long,
-            ciudad: String,
+            high_date: DateTime,
+            street: String,
+            cologne: String,
+            street_number: Long,
+            municipality: String,
+            internal_number: Long,
+            city: String,
             cp: Long,
-            latitud: Float,
-            longitud: Float,
-            telefono: Long,
-            telefono_cel: Long,
-            giro: String,
+            latitude: Float,
+            length: Float,
+            phone: Long,
+            cell_phone: Long,
+            turn: String,
             status: Boolean,
             status2: String,
-            usuarios: String,
-            ventas: Int
+            user: String,
+            sales: Int
         ):LocConnection
     `,
+    // nombre = name
+    // razon_social = social_reason
+    // fecha_alta =high_date
+    // calle = street
+    // colonia = cologne
+    // numero_ext = street_number
+    // municipio = municipality
+    // numero_int = internal_number
+    // ciudad = city
+    // latitud = latilatitude
+    // longitud = length
+    // telefono = phone
+    // telefono_cel =cell_phone
+    // giro = turn
+    // usuarios = user
+    // ventas = sales
     resolver:{
         Query:{
             paginationLocal:
-            async(obj,{start,limit,nombre,alias,razon_social,rfc,fecha_alta,calle,colonia,numero_ext,municipio,numero_int,ciudad,cp,latitud,longitud,telefono,telefono_cel,giro,status,status2,usuarios,ventas}) =>{
+            async(obj,{start,limit,name,alias,social_reason,rfc,high_date,street,cologne,street_number,municipality,internal_number,city,cp,latitude,length,phone,cell_phone,turn,status,status2,user,sales}) =>{
                 const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                 const query={
-                    ...( nombre && {
-                         nombre: new RegExp( nombre,'i')
+                    ...( name && {
+                         nombre: new RegExp( name,'i')
                     }),
                     ...(alias && {
                         alias: new RegExp( alias,'i')
                     }),
-                    ...(razon_social && {
-                        razon_social: new RegExp( razon_social,'i')
+                    ...(social_reason && {
+                        razon_social: new RegExp( social_reason,'i')
                     }),
                     ...(rfc && {
                         rfc: new RegExp( rfc,'i')
                     }),
-                    ...(fecha_alta && {
-                        fecha_alta: fecha_alta
+                    ...(high_date && {
+                        fecha_alta: high_date
                     }),
-                    ...(calle && {
-                        calle: new RegExp(calle,'i')
+                    ...(street && {
+                        calle: new RegExp(street,'i')
                     }),
-                    ...(colonia && {
-                        colonia: new RegExp(colonia,'i')
+                    ...(cologne && {
+                        colonia: new RegExp(cologne,'i')
                     }),
-                    ...(numero_ext && !isNaN(parseInt(numero_ext))) && {
-                        numero_ext: parseInt(numero_ext)
+                    ...(street_number && !isNaN(parseInt(street_number))) && {
+                        numero_ext: parseInt(street_number)
                     },
-                    ...(municipio && {
-                        municipio: new RegExp(municipio,'i')
+                    ...(municipality && {
+                        municipio: new RegExp(municipality,'i')
                     }),
-                    ...(numero_int && !isNaN(parseInt(numero_int))) && {
-                        numero_int: parseInt(numero_int)
+                    ...(internal_number && !isNaN(parseInt(internal_number))) && {
+                        numero_int: parseInt(internal_number)
                     },
-                    ...(ciudad && {
-                        ciudad: new RegExp(ciudad,'i')
+                    ...(city && {
+                        ciudad: new RegExp(city,'i')
                     }),
                     ...(cp && !isNaN(parseInt(cp))) && {
                         cp: parseInt(cp)
                     },
-                    ...(latitud && !isNaN(parseFloat(latitud))) && {
-                        latitud: parseFloat(latitud)
+                    ...(latitude && !isNaN(parseFloat(latitude))) && {
+                        latitud: parseFloat(latitude)
                     },
-                    ...( longitud && !isNaN(parseFloat( longitud))) && {
-                         longitud: parseFloat( longitud)
+                    ...( length && !isNaN(parseFloat( length))) && {
+                         longitud: parseFloat(length)
                     },
-                    ...(telefono && !isNaN(parseInt(telefono))) && {
-                        telefono: parseInt(telefono)
+                    ...(phone && !isNaN(parseInt(phone))) && {
+                        telefono: parseInt(phone)
                     },
-                    ...(telefono_cel && !isNaN(parseInt(telefono_cel))) && {
-                        telefono_cel: parseInt(telefono_cel)
+                    ...(cell_phone && !isNaN(parseInt(cell_phone))) && {
+                        telefono_cel: parseInt(cell_phone)
                     },
-                    ...( giro && {
-                         giro: new RegExp(  giro,'i')
+                    ...( turn && {
+                         giro: new RegExp(turn,'i')
                     }),
                     ...(status !== undefined && {
                         status: status
@@ -100,11 +116,11 @@ module.exports ={
                     ...(status2 && {
                         status2: new RegExp(status2,'i')
                     }),
-                    ...(usuario && !isNaN(parseInt(usuario))) && {
-                        "usuario.nombre": parseInt(usuario)
-                    },
-                    ...(ventas && !isNaN(parseInt(ventas))) && {
-                        "ventas.monto": parseInt(ventas)
+                    ...(user && {
+                        "usuario.nombre": new RegExp(user, 'i')
+                      }),
+                    ...(sales && !isNaN(parseInt(sales))) && {
+                        "ventas.monto": parseInt(sales)
                     },
                 }
                 const Local = await strapi.query('Local').find(query);

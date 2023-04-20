@@ -1,44 +1,50 @@
 module.exports ={
     definition:`
-        type GastoEdge{
+        type spentEdge{
             node: Gastos
             cursor: ID!
         }
-        type GastoConnection{
+        type spentConnection{
             totalCount: Int!
-            edges: [GastoEdge!]!
+            edges: [spentEdge!]!
             pageInfo: PageInfo!
         }
 
 
     `,
     query:`
-        paginationGastos(
+        paginationspents(
             start: Int,
             limit: Int,
-            descripcion: String,
-            fecha: DateTime,
-            monto: Float,
+            description: String,
+            date: DateTime,
+            amount: Float,
             categoria: String,
             status: Boolean,
-            usuario: String,
-            camions: String
-        ):GastoConnection
+            user: String,
+            trucks : String
+        ):spentConnection
     `,
+    // descripcion = description
+    // fecha = date
+    // monto = amount
+    // categoria = category
+    // usuario = user
+    // camions =  trucks 
     resolver:{
         Query:{
-            paginationGastos:
-                async(obj,{start,limit,descripcion,fecha,monto,categoria,status,usuario,camions}) => {
+            paginationspents:
+                async(obj,{start,limit,description,date,amount,categoria,status,user,trucks }) => {
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query = {
-                        ...(descripcion && {
-                            descripcion: new RegExp(descripcion,'i')
+                        ...(description && {
+                            descripcion: new RegExp(description,'i')
                         }),
-                        ...(fecha && {
-                            fecha: fecha
+                        ...(date && {
+                            fecha: date
                         }),
-                        ...(monto && !isNaN(parseFloat(monto)))&& {
-                            monto: parseFloat(monto)
+                        ...(amount && !isNaN(parseFloat(amount)))&& {
+                            monto: parseFloat(amount)
                         },
                         ...(categoria && {
                             categoria: new RegExp(categoria,'i')
@@ -46,25 +52,25 @@ module.exports ={
                         ...(status !== undefined && {
                             status: status
                         }),
-                        ...(usuario && !isNaN(parseInt(usuario))) && {
-                            "usuario.nombre": parseInt(usuario)
-                        },
-                        ...(camions && !isNaN(parseInt(camions))) && {
-                            "camions.num_serie": parseInt(camions)
+                        ...(user && {
+                            "usuario.nombre": new RegExp(user, 'i')
+                        }),
+                        ...(trucks  && !isNaN(parseInt(trucks))) && {
+                            "camions.num_serie": parseInt(trucks)
                         },
                     } 
-                    const Gastos = await strapi.query('Gastos').find(query);
-                    const edges = Gastos
+                    const spents = await strapi.query('Gastos').find(query);
+                    const edges = spents
                     .slice(startIndex, startIndex + parseInt(limit))
-                    .map((Gasto) => ({node: Gasto, Gasto: Gasto.id }));
+                    .map((spent) => ({node: spent, cursor: spent.id }));
                     const pageInfo = {
                      startCursor: edges.length > 0 ? edges[0].cursor : null,
                      endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                     hasNextPage:  startIndex + parseInt(limit) < Gastos.length,
+                     hasNextPage:  startIndex + parseInt(limit) < spents.length,
                      hasPreviousPage: startIndex > 0,
                     };
                     return {
-                        totalCount: Gastos.length,
+                        totalCount: spents.length,
                         edges,
                         pageInfo,
                       };

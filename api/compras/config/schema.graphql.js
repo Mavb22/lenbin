@@ -1,51 +1,59 @@
 module.exports ={
     definition:`
-        type CompraEdge{
+        type purchaseEdge{
             node: Compras
             cursor: ID!
         }
-        type CompraConnection{
+        type purchaseConnection{
             totalCount: Int!
-            edges: [CompraEdge!]!
+            edges: [purchaseEdge!]!
             pageInfo: PageInfo!
         }
 
 
     `,
     query:`
-        paginationCompras(
+        paginationshopping(
             start: Int,
             limit: Int,
-            costo: Float,
-            fecha_pedido: DateTime,
-            referencia: String,
-            fecha_llegada: DateTime,
+            cost: Float,
+            order_date: DateTime,
+            reference: String,
+            arrival_date: DateTime,
             status: Boolean,
             status2: String,
-            lote: Int,
-            metodo_pago: String,
-            proveedor: String,
-            usuarios: String
-        ):CompraConnection 
-
+            lot: Int,
+            payment_method: String,
+            provider: String,
+            usuer: String
+        ):purchaseConnection 
+        
     `,
+    // costo = cost
+    // fecha_pedido = order_date 
+    // referencia = reference
+    // fecha_llegada = arrival_date
+    // lote = lot 
+    // metodo_pago = payment_method 
+    // proveedor = provider
+    // usuarios = user
     resolver:{
         Query:{
-            paginationCompras:
-                async(obj,{start,limit,costo,fecha_pedido, referencia, fecha_llegada, status, status2,lote, metodo_pago, proveedor, usuario}) => {
+            paginationshopping:
+                async(obj,{start,limit,cost,order_date, reference, arrival_date, status, status2,lot, payment_method, provider, user}) => {
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query={
-                        ...(costo && !isNaN(parseFloat(costo)))&& {
-                            costo: parseFloat(costo)
+                        ...(cost && !isNaN(parseFloat(cost)))&& {
+                            costo: parseFloat(cost)
                         },
-                        ...(fecha_pedido && {
-                            fecha_pedido: fecha_pedido
+                        ...(order_date && {
+                            fecha_pedido: order_date
                           }),
-                        ...(referencia && {
-                            referencia: new RegExp( referencia,'i')
+                        ...(reference && {
+                            referencia: new RegExp(reference,'i')
                         }),
-                        ...(fecha_llegada && {
-                            fecha_llegada: fecha_llegada
+                        ...(arrival_date && {
+                            fecha_llegada: arrival_date
                         }),
                         ...(status !== undefined && {
                             status: status
@@ -53,72 +61,33 @@ module.exports ={
                         ...(status2 && {
                             status2: new RegExp(status2,'i')
                         }),
-                        ...(lote && !isNaN(parseInt(lote))) && {
-                            "lote.codigo_interno": parseInt(lote)
+                        ...(lot && !isNaN(parseInt(lot))) && {
+                            "lote.codigo_interno": parseInt(lot)
                         },
-                        ...(user && !isNaN(parseInt(user))) && {
-                            "usuario.nombre": parseInt(user)
-                          },
-                        ...(proveedor && !isNaN(parseInt(proveedor))) && {
-                            "proveedor.usuario": parseInt(proveedor)
+                        ...(payment_method && !isNaN(parseInt(payment_method))) && {
+                            "metodo_pago.numero_tarjeta": parseInt(payment_method)
                         },
-                        ...(usuario && !isNaN(parseInt(usuario))) && {
-                            "usuario.nombre": parseInt(usuario)
+                        
+                        ...(provider && !isNaN(parseInt(provider))) && {
+                            "proveedor.usuario": parseInt(provider )
                         },
-
+                        ...(user && {
+                            "usuario.nombre": new RegExp(user, 'i')
+                        }),
                         
                     }
-                    // if(costo && !isNaN(parseInt(costo))){
-                    //     query.costo = parseInt(costo);
-                    // }
-                    // if(referencia){
-                    //     const regex = new RegExp(referencia, 'i');
-                    //     query.referencia = { $regex: regex };
-                    // }
-                    // if(status){
-                    //     const regex = new RegExp(status, 'i')
-                    //     query['costo'] = {
-                    //       $elemMatch:{
-                    //         activa:{
-                    //           $regex: regex
-                    //         }
-                    //       }
-                    //     }
-                    // }
-                    // if(status2 && !isNaN(parseInt(status2))){
-                    //     query.status2 = parseInt(status2);
-                    // }
-                    // if(lote){
-                    //     const regex = new RegExp(lote, 'i');
-                    //     query["lote.codigo_interno"] = { $regex: regex };
-                    // }
-                    // if(metodo_pago){
-                    //     const regex = new RegExp(metodo_pago, 'i'); 
-                    //     query["metodo_pago.titular"] = { $regex: regex };
-                    // }
-
-                    // if(proveedor){
-                    //     const regex = new RegExp(proveedor, 'i'); 
-                    //     query["proveedor.nombre"] = { $regex: regex };
-                    // }
-
-
-                    // if(usuario){
-                    //     const regex = new RegExp(usuario, 'i'); 
-                    //     query["usuario.nombre"] = { $regex: regex };
-                    // }
-                    const compras = await strapi.query('compras').find(query);
-                    const edges = compras
+                    const shopping = await strapi.query('compras').find(query);
+                    const edges = shopping
                     .slice(startIndex, startIndex + parseInt(limit))
-                    .map((compra) => ({ node: compra, cursor: compra.id }));
+                    .map((purchase) => ({ node: purchase, cursor: purchase.id }));
                     const pageInfo = {
                      startCursor: edges.length > 0 ? edges[0].cursor : null,
                      endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                     hasNextPage:  startIndex + parseInt(limit) < compras.length,
+                     hasNextPage:  startIndex + parseInt(limit) < shopping.length,
                      hasPreviousPage: startIndex > 0,
                     };
                     return {
-                        totalCount: compras.length,
+                        totalCount: shopping.length,
                         edges,
                         pageInfo,
                       };

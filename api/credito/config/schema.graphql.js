@@ -1,53 +1,61 @@
 module.exports = {
     definition:`
-        type CrediEdge{
+        type credenceEdge{
             node: Credito
             cursor: ID!
         }
-        type CrediConnection{
+        type credenceConnection{
             totalCount: Int!
-            edges: [CrediEdge!]!
+            edges: [credenceEdge!]!
             pageInfo: PageInfo!
         }
 
     `,
     query:`
-        paginationCredito(
+        paginationcredit(
             start: Int,
             limit: Int,
-            limite: Float,
-            fecha_alta: DateTime,
-            fecha_baja: DateTime,
-            vigencia: DateTime,
-            intereses: Float,
+            end: Float,
+            high_date: DateTime,
+            low_date: DateTime,
+            validity: DateTime,
+            interests: Float,
             status: Boolean,
             statud2: String,
-            abonos: Float,
-            metodo_pago: Float,
-            usuario: String
-        ):CrediConnection
+            payments: Float,
+            payment_method : Float,
+            user: String
+        ):credenceConnection
     `,
+    // limite = end
+    // fecha_alta =high_date
+    // fecha_baja =low_date
+    // vigencia = validity
+    // intereses = interests
+    // abonos = payments
+    // metodo_pago = payment_method 
+    // usuario = user
     resolver:{
         Query: {
-            paginationCredito:
-                async(obj,{start, limit, limite,fecha_alta,fecha_baja,vigencia,intereses,status,status2,mostrar,abonos,metodo_pago,usuario}) =>{
+            paginationcredit:
+                async(obj,{start,limit,end,high_date,low_date,validity,interests,status,status2,payments,payment_method ,user}) =>{
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query = { 
                         mostrar:true,
-                        ...(limite &&!isNaN(parseFloat(limite)) && {
-                          limite: parseFloat(limite)
+                        ...(end &&!isNaN(parseFloat(end)) && {
+                          limite: parseFloat(end)
                         }),
-                        ...(fecha_alta && {
-                            fecha_alta: fecha_alta
+                        ...(high_date && {
+                            fecha_alta: high_date
                         }),
-                        ...(fecha_baja && {
-                            fecha_baja: fecha_baja
+                        ...(low_date && {
+                            fecha_baja: low_date
                         }),
-                        ...(vigencia && {
-                            vigencia: vigencia
+                        ...(validity && {
+                            vigencia: validity
                         }),
-                        ...(intereses && !isNaN(parseFloat(intereses)))&& {
-                            intereses: parseFloat(intereses)
+                        ...(interests && !isNaN(parseFloat(interests)))&& {
+                            intereses: parseFloat(interests)
                         },
                         ...(status !== undefined && {
                             status: status
@@ -55,29 +63,29 @@ module.exports = {
                         ...(status2 && {
                             status2: new RegExp(status2,'i')
                         }),
-                        ...(abonos &&!isNaN(parseFloat(abonos)) && {
-                            abonos: parseFloat(abonos)
+                        ...(payments &&!isNaN(parseFloat(payments)) && {
+                            abonos: parseFloat(payments)
                         }),
-                        ...(metodo_pago &&!isNaN(parseFloat(metodo_pago)) && {
-                            "metodo_pago.numero_tarjeta": parseFloat(metodo_pago)
+                        ...(payment_method  &&!isNaN(parseFloat(payment_method )) && {
+                            "metodo_pago.numero_tarjeta": parseFloat(payment_method )
                          }),
-                         ...(usuario && !isNaN(parseInt(usuario))) && {
-                            "usuario.nombre": parseInt(usuario)
-                          },
+                        ...(user && {
+                            "usuario.nombre": new RegExp(user, 'i')
+                        }),
 
                     };
-                    const Credito = await strapi.query('Credito').find(query);
-                    const edges = Credito
+                    const credit = await strapi.query('Credito').find(query);
+                    const edges = credit
                       .slice(startIndex, startIndex + parseInt(limit))
-                      .map((Credi) => ({ node: Credi, cursor: Credi.id }));
+                      .map((credence) => ({ node: credence, cursor: credence.id }));
                     const pageInfo = {
                       startCursor: edges.length > 0 ? edges[0].cursor : null,
                       endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                      hasNextPage:  startIndex + parseInt(limit) < Credito.length,
+                      hasNextPage:  startIndex + parseInt(limit) < credit.length,
                       hasPreviousPage: startIndex > 0,
                     };
                     return {
-                      totalCount: Credito.length,
+                      totalCount: credit.length,
                       edges,
                       pageInfo,
                     };

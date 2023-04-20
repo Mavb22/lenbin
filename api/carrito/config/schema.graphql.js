@@ -26,6 +26,7 @@ module.exports ={
     //cantidad  = amount
     //productos = products
     //usuario = user
+    //venta = sale
     resolver: {
         Query: {
             paginationcarts:
@@ -41,9 +42,10 @@ module.exports ={
                           ...(user && {
                             "usuario.nombre": new RegExp(user, 'i')
                           }),
-                          ...(sale && {
-                            "venta.monto": new RegExp(sale, 'i')
-                          }),
+                          ...(sale && !isNaN(parseFloat(sale))) && {
+                            "venta.monto": parseFloat(sale)
+                          },
+                          
 
                     }
                     const carts = await strapi.query('carrito').find(query);
