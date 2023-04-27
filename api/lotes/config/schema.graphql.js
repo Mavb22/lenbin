@@ -50,7 +50,7 @@ module.exports = {
             "products.nombre": new RegExp(product_name,'i')
           }),
         }
-        const lots = await strapi.query('lots').find(query);
+        const lots = await strapi.query('lotes').find(query);
         const edges = lots
         .slice(startIndex, startIndex + parseInt(limit))
         .map((lot) => ({ node: lot, cursor:lot.id }));
