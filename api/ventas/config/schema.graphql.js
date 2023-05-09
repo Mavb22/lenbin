@@ -18,7 +18,6 @@ module.exports = {
       amount: Float,
       total_amount: Float,
       date: DateTime,
-
       classification: String,
       delivery_date: DateTime,
       delivery_pending: Boolean,
@@ -124,4 +123,5 @@ module.exports = {
       }
     }
   }
+  
 };
