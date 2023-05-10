@@ -10,8 +10,9 @@ const redis = require('redis');
 const NodeRSA = require('node-rsa');
 const keysRSA = {};
 const client = redis.createClient({
-  port: 6379,
-  host: "redis://red-chdugne4dad5gbgcugbg:6379",
+  url:"rediss://red-chdugne4dad5gbgcugbg:a0bNMlqbCvGnTuqtIUkFoMqS0JRNaZJr@oregon-redis.render.com:6379"
+  // port: 6379,
+  // host: "rediss://red-chdugne4dad5gbgcugbg:a0bNMlqbCvGnTuqtIUkFoMqS0JRNaZJr@oregon-redis.render.com:6379",
   // host: "127.0.0.1"
 })
 // const recapchaKey = "6Ld_IVskAAAAAKZZ9M-R_QCATx4VThTwFBS1WGsG2";
