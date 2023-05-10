@@ -152,14 +152,14 @@ module.exports ={
     key = CryptoJS.enc.Utf8.parse(key);
     //Get Iv
     iv = CryptoJS.enc.Utf8.parse(iv);
-    // if(!recaptcha){
-    //   // return ctx.badRequest(null, 'Captcha token is undefined');
-    //   return ctx.throw(400, 'Captcha token is undefined');
-    // }
-    // const verifyURL = await fetch(url,{method:'POST'}).then(_res => _res.json());
-    // if(verifyURL.success == false){
-    //   return ctx.badRequest(null, 'Error');
-    // }
+    if(!recaptcha){
+      // return ctx.badRequest(null, 'Captcha token is undefined');
+      return ctx.throw(400, 'Captcha token is undefined');
+    }
+    const verifyURL = await fetch(url,{method:'POST'}).then(_res => _res.json());
+    if(verifyURL.success == false){
+      return ctx.badRequest(null, 'Error');
+    }
     if(!email || !password){
       return ctx.throw(400, 'Email and password are required');
     }
