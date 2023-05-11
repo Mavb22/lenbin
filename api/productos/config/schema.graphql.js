@@ -14,24 +14,24 @@ module.exports = {
      paginationProduct(
         start: Int!,
         limit: Int!,
-        nombre: String,
-        peso_neto: Float,
-        presentacion: String,
-        marca: String,
-        descripcion_generica: String,
-        precio: Float,
-        costo: Float,
-        inventario_disp: Long,
+        name: String,
+        net_weight: Float,
+        presentation: String,
+        brand: String,
+        generic_description: String,
+        price: Float,
+        cost: Float,
+        available_inventory: Long,
         value_min: Int,
-        codigo_barras: Long,
-        codigoInterno: Long,
-        venta_gramos: Float,
+        barcode: Long,
+        internal_code: Long,
+        sale_grams: Float,
         status: Boolean,
         status2: String,
-        dimension_nombre: String,
-        carritos_cantidad: Float,
-        promociones_fecha_creacion:DateTime,
-        lotes_codigo_interno:Long,
+        size_name: String,
+        carts_quantity: Float,
+        promotions_date_creation:DateTime,
+        batches_internal_code:Long,
      ): ProductConnection
   `,
   resolver: {
@@ -40,72 +40,72 @@ module.exports = {
         obj, {
           start,
           limit,
-          nombre,
-          peso_neto,
-          presentacion,
-          marca,
-          descripcion_generica,
-          precio,
-          costo,
-          inventario_disp,
+          name,
+          net_weight,
+          presentation,
+          brand,
+          generic_description,
+          price,
+          cost,
+          available_inventory,
           value_min,
-          codigo_barras,
-          codigo_interno,
-          venta_gramos,
+          barcode,
+          internal_code,
+          sale_grams,
           status,
           status2,
-          dimension_nombre,
-          carritos_cantidad,
-          promociones_fecha_creacion,
-          lotes_codigo_interno,
+          size_name,
+          carts_quantity,
+          promotions_date_creation,
+          batches_internal_code,
         }
       ) => {
         const startIndex = parseInt(start, 10) >= 0 ? parseInt(start, 10) : 0;
         const query = {
-          ...(nombre && {
-            nombre2: {
-              $regex: RegExp(nombre, "i"),
+          ...(name && {
+            nombre: {
+              $regex: RegExp(name, "i"),
             },
           }),
-          ...(peso_neto &&
-            !isNaN(parseInt(peso_neto)) && {
-              peso_neto2: parseInt(peso_neto),
+          ...(net_weight &&
+            !isNaN(parseInt(net_weight)) && {
+              peso_neto: parseInt(net_weight),
             }),
-          ...(presentacion && {
-            presentacion2: {
-              $regex: RegExp(presentacion, "i"),
+          ...(presentation && {
+            presentacion: {
+              $regex: RegExp(presentation, "i"),
             },
           }),
-          ...(marca && {
-            marca2: {
-              $regex: RegExp(marca, "i"),
+          ...(brand && {
+            marca: {
+              $regex: RegExp(brand, "i"),
             },
           }),
-          ...(descripcion_generica && {
-            descripcion_generica2: {
-              $regex: RegExp(descripcion_generica, "i"),
+          ...(generic_description && {
+            descripcion_generica: {
+              $regex: RegExp(generic_description, "i"),
             },
           }),
-          ...(precio && !isNaN(parseFloat(precio)) && {
-              precio2: parseFloat(precio),
+          ...(price && !isNaN(parseFloat(price)) && {
+              precio: parseFloat(price),
             }),
-          ...(costo && !isNaN(parseFloat(costo)) && {
-              costo2: costo,
+          ...(cost && !isNaN(parseFloat(cost)) && {
+              costo: cost,
             }),
-          ...(inventario_disp && !isNaN(parseInt(inventario_disp)) && {
-              inventario_disp2: inventario_disp,
+          ...(available_inventory && !isNaN(parseInt(available_inventory)) && {
+              inventario_disp: available_inventory,
             }),
           ...(value_min && !isNaN(parseInt(value_min)) && {
-              value_min2: parseInt(value_min),
+              value_min: parseInt(value_min),
             }),
-          ...(codigo_barras && !isNaN(parseInt(codigo_barras)) && {
-            codigo_barras2: parseInt(codigo_barras),
+          ...(barcode && !isNaN(parseInt(barcode)) && {
+            codigo_barras: parseInt(barcode),
           }),
-          ...(codigo_interno && !isNaN(parseInt(codigo_interno))) && {
-            codigo_interno2: parseInt(codigo_interno),
+          ...(internal_code && !isNaN(parseInt(internal_code))) && {
+            codigo_interno: parseInt(internal_code),
           },
-          ...(venta_gramos && !isNaN(parseFloat(venta_gramos))) && {
-            venta_gramos: parseFloat(venta_gramos),
+          ...(sale_grams && !isNaN(parseFloat(sale_grams))) && {
+            venta_gramos: parseFloat(sale_grams),
           },
           ...(status &&  {
             status: status,
@@ -115,19 +115,19 @@ module.exports = {
               $regex: RegExp(status2, "i"),
             }
           }),
-          ...(dimension_nombre && {
+          ...(size_name && {
             dimension_nombre: {
-              $regex: RegExp(dimension_nombre, "i"),
+              $regex: RegExp(size_name, "i"),
             }
           }),
-          ...(carritos_cantidad && !isNaN(parseFloat(carritos_cantidad))) && {
-            "carritos.cantidad": parseFloat(carritos_cantidad),
+          ...(carts_quantity && !isNaN(parseFloat(carts_quantity))) && {
+            "carritos.cantidad": parseFloat(carts_quantity),
           },
-          ...(promociones_fecha_creacion && {
-            "promociones.fecha_creacion": promociones_fecha_creacion,
+          ...(promotions_date_creation && {
+            "promociones.fecha_creacion": promotions_date_creation,
           }),
-          ...(lotes_codigo_interno && !isNaN(parseInt(lotes_codigo_interno)) )&& {
-            "lotes.codigo_interno": parseInt(lotes_codigo_interno)
+          ...(batches_internal_code && !isNaN(parseInt(batches_internal_code)) )&& {
+            "lotes.internal_code": parseInt(batches_internal_code)
           },
         };
         const Products = await strapi.query("productos").find(query);
