@@ -16,7 +16,7 @@ module.exports ={
             limit: Int,
             name : String,
             width: Float,
-            alto: Float,
+            high: Float,
             long: Float,
             products: String 
         ):DimensionConnection
@@ -29,7 +29,7 @@ module.exports ={
     resolver: {
         Query: {
             paginationDimensions:
-            async(obj,{start,limit,name ,width,alto,long,products},ctx) =>{
+            async(obj,{start,limit,name ,width,high,long,products},ctx) =>{
                 const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                 const query = {
                     ...(name  && {
@@ -38,8 +38,8 @@ module.exports ={
                     ...(width && !isNaN(parseFloat(width)))&& {
                         ancho: parseFloat(width)
                     },
-                    ...(alto && !isNaN(parseFloat(alto)))&& {
-                        alto: parseFloat(alto)
+                    ...(high&& !isNaN(parseFloat(high)))&& {
+                        alto: parseFloat(high)
                     },
                     ...( long && !isNaN(parseFloat( long)))&& {
                          largo: parseFloat(long)
@@ -48,7 +48,7 @@ module.exports ={
                         "productos.nombre": new RegExp(products,'i')
                     }),
                 }
-                const Dimensions= await strapi.query('Deimenciones').find(query);
+                const Dimensions= await strapi.query('dimensiones').find(query);
                 const edges = Dimensions
                 .slice(startIndex, startIndex + parseInt(limit))
                 .map((Deimencion) => ({ node: Deimencion, cursor: Deimencion.id }));

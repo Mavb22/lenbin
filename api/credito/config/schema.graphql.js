@@ -21,7 +21,7 @@ module.exports = {
             validity: DateTime,
             interests: Float,
             status: Boolean,
-            statud2: String,
+            status2: String,
             payments: Float,
             payment_method : Float,
             user: String
@@ -64,7 +64,7 @@ module.exports = {
                             status2: new RegExp(status2,'i')
                         }),
                         ...(payments &&!isNaN(parseFloat(payments)) && {
-                            abonos: parseFloat(payments)
+                            "abonos.cantidad_abono": parseFloat(payments)
                         }),
                         ...(payment_method  &&!isNaN(parseFloat(payment_method )) && {
                             "metodo_pago.numero_tarjeta": parseFloat(payment_method )
@@ -74,7 +74,7 @@ module.exports = {
                         }),
 
                     };
-                    const credit = await strapi.query('Credito').find(query);
+                    const credit = await strapi.query('credito').find(query);
                     const edges = credit
                       .slice(startIndex, startIndex + parseInt(limit))
                       .map((credence) => ({ node: credence, cursor: credence.id }));

@@ -59,7 +59,7 @@ module.exports ={
                             "camions.num_serie": parseInt(trucks)
                         },
                     } 
-                    const spents = await strapi.query('Gastos').find(query);
+                    const spents = await strapi.query('gastos').find(query);
                     const edges = spents
                     .slice(startIndex, startIndex + parseInt(limit))
                     .map((spent) => ({node: spent, cursor: spent.id }));

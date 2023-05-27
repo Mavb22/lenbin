@@ -123,7 +123,7 @@ module.exports ={
                         "ventas.monto": parseInt(sales)
                     },
                 }
-                const Local = await strapi.query('Local').find(query);
+                const Local = await strapi.query('local').find(query);
                 const edges = Local
                   .slice(startIndex, startIndex + parseInt(limit))
                   .map((Loc) => ({ node: Loc, cursor: Loc.id }));

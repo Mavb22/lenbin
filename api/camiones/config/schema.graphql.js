@@ -20,8 +20,7 @@ module.exports = {
       plaque_active: Boolean,
       num_serial: String,
       niv: String,
-      date_start: DateTime,
-      date_end: DateTime,
+      record:DateTime,
       destination: String,
       driver: String,
       spent: String
@@ -30,7 +29,7 @@ module.exports = {
   resolver: {
       Query: {
           paginationtrucks:
-            async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,date_start,date_end, destination,driver, spent}) => {
+            async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,record, destination,driver, spent}) => {
               const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
               const query = {
                 ...( plaque && {
@@ -68,6 +67,9 @@ module.exports = {
                 }),
                 ...( niv && {
                   niv: new RegExp( niv,'i')
+                }),
+                ...( record && {
+                  "historial.fecha": record
                 }),
                 ...( destination && {
                   "ruta.destino": new RegExp( destination,'i')
