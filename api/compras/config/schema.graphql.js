@@ -23,9 +23,9 @@ module.exports ={
             status: Boolean,
             status2: String,
             lot: Int,
-            payment_method: String,
+            payment_method:Int,
             provider: String,
-            usuer: String
+            user: String
         ):purchaseConnection 
         
     `,
@@ -65,14 +65,13 @@ module.exports ={
                             "lote.codigo_interno": parseInt(lot)
                         },
                         ...(payment_method && !isNaN(parseInt(payment_method))) && {
-                            "metodo_pago.numero_tarjeta": parseInt(payment_method)
+                            "metodo_pago.numero_tarjeta":parseInt(payment_method)
                         },
-                        
-                        ...(provider && !isNaN(parseInt(provider))) && {
-                            "proveedor.usuario": parseInt(provider )
-                        },
+                       ...( provider && {
+                            'proveedor.nombre': new RegExp( provider,'i')
+                        }),
                         ...(user && {
-                            "usuario.nombre": new RegExp(user, 'i')
+                            "usuarios.nombre": new RegExp(user, 'i')
                         }),
                         
                     }
