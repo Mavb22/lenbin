@@ -11,7 +11,7 @@ module.exports = {
     }
   `,
   query: `
-    paginateSellers(
+    paginationSeller(
       start: Int!,
       limit: Int!,
       name: String,
@@ -20,7 +20,7 @@ module.exports = {
   `,
   resolver: {
     Query: {
-      paginateSellers: async (obj, {
+      paginationSeller: async (obj, {
         name,
         sales_amount
       }, {
@@ -34,7 +34,7 @@ module.exports = {
             }
           }),
           ...(sales_amount && !isNaN(parseFloat(sales_amount))) && {
-            ventas_monto: parseFloat(sales_amount)
+            'ventas.monto': parseFloat(sales_amount)
           },
         };
 

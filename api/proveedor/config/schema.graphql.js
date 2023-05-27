@@ -122,12 +122,12 @@ module.exports = {
             "compras.costo": parseFloat(purchase_cost)
           },
           ...(product_name && {
-            "productos_nombre": {
+            "productos.nombre": {
               $regex: RegExp(product_name, 'i')
             }
           })
         };
-        const providers = await strapi.query('proveedores').find(query);
+        const providers = await strapi.query('proveedor').find(query);
         const edges = providers
           .slice(startIndex, startIndex + parseInt(limit))
           .map((provider) => ({

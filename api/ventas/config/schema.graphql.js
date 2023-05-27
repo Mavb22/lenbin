@@ -18,7 +18,7 @@ module.exports = {
       amount: Float,
       total_amount: Float,
       date: DateTime,
-      classification: String,
+      clasification: String,
       delivery_date: DateTime,
       delivery_pending: Boolean,
       paid: Boolean,
@@ -40,8 +40,7 @@ module.exports = {
         amount,
         total_amount,
         date,
-        invoice,
-        classification,
+        clasification,
         delivery_date,
         delivery_pending,
         paid,
@@ -65,11 +64,8 @@ module.exports = {
           ...(date && {
             fecha: date
           }),
-          ...(invoice && {
-            factura: invoice
-          }),
-          ...(classification && {
-            clasificacion: classification
+          ...(clasification && {
+            clasificacion: new RegExp(clasification, 'i')
           }),
           ...(delivery_date && {
             fecha_entrega: delivery_date
