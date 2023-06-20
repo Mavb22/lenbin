@@ -33,6 +33,11 @@ module.exports = {
         Query:{
             paginationrecords:
                 async(obj,{start,limit,date,start_time,end_time,status,status2,user,trucks} ) =>{
+                    const authorization = ['Administrator']
+                    const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+                    if(!token){
+                      throw new Error('No tienes autorización para realizar esta acción.');
+                    }
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query={
                         ...(date && {
@@ -56,7 +61,7 @@ module.exports = {
                         ...(trucks && !isNaN(parseInt(trucks))) && {
                             "camiones.num_serie": parseInt(trucks)
                         },
-                        
+
                     }
                     const records = await strapi.query('historial').find(query);
                     const edges = records

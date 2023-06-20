@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports = {
   definition: `
   type truckEdge{
@@ -9,7 +11,7 @@ module.exports = {
       edges: [truckEdge!]!
       pageInfo: PageInfo!
   }
-  
+
   `,
   query:`
    paginationtrucks(
@@ -21,6 +23,8 @@ module.exports = {
       num_serial: String,
       niv: String,
       record:DateTime,
+      start_record:DateTime,
+      end_record:DateTime,
       destination: String,
       driver: String,
       spent: String
@@ -29,7 +33,12 @@ module.exports = {
   resolver: {
       Query: {
           paginationtrucks:
-            async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,record, destination,driver, spent}) => {
+            async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,record,start_record, end_record,  destination,driver, spent}) => {
+              const authorization = ['Administrator']
+              const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+              if(!token){
+                throw new Error('No tienes autorización para realizar esta acción.');
+              }
               const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
               const query = {
                 ...( plaque && {
@@ -71,6 +80,12 @@ module.exports = {
                 ...( record && {
                   "historial.fecha": record
                 }),
+                ...( start_record && end_record && {
+                  "historial.fecha": {
+                    $gte: start_record,
+                    $lte: end_record
+                  }
+                }),
                 ...( destination && {
                   "ruta.destino": new RegExp( destination,'i')
                 }),
@@ -80,18 +95,9 @@ module.exports = {
                 ...( spent && {
                   "gastos.categoria": new RegExp( spent,'i')
                 }),
-                
               }
               const trucks = await strapi.query('camiones').find(query);
-              const edges = trucks
-              .slice(startIndex, startIndex + parseInt(limit))
-              .map((truck) => ({ node: truck, cursor: truck.id }));
-            const pageInfo = {
-              startCursor: edges.length > 0 ? edges[0].cursor : null,
-              endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-              hasNextPage:  startIndex + parseInt(limit) < trucks.length,
-              hasPreviousPage: startIndex > 0,
-            };
+              const {edges, pageInfo} = schema.search(trucks,startIndex, limit)
             return {
               totalCount: trucks.length,
               edges,

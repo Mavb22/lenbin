@@ -27,6 +27,11 @@ module.exports = {
         startIndex = 0,
         limit = 10
       }) => {
+        const authorization = ['Administrator']
+        const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+        if(!token){
+          throw new Error('No tienes autorización para realizar esta acción.');
+        }
         const query = {
           ...(name && {
             nombre: {

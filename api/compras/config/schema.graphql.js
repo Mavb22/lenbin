@@ -26,21 +26,26 @@ module.exports ={
             payment_method:Int,
             provider: String,
             user: String
-        ):purchaseConnection 
-        
+        ):purchaseConnection
+
     `,
     // costo = cost
-    // fecha_pedido = order_date 
+    // fecha_pedido = order_date
     // referencia = reference
     // fecha_llegada = arrival_date
-    // lote = lot 
-    // metodo_pago = payment_method 
+    // lote = lot
+    // metodo_pago = payment_method
     // proveedor = provider
     // usuarios = user
     resolver:{
         Query:{
             paginationshopping:
                 async(obj,{start,limit,cost,order_date, reference, arrival_date, status, status2,lot, payment_method, provider, user}) => {
+                    const authorization = ['Administrator']
+                    const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+                    if(!token){
+                      throw new Error('No tienes autorización para realizar esta acción.');
+                    }
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query={
                         ...(cost && !isNaN(parseFloat(cost)))&& {
@@ -73,7 +78,7 @@ module.exports ={
                         ...(user && {
                             "usuarios.nombre": new RegExp(user, 'i')
                         }),
-                        
+
                     }
                     const shopping = await strapi.query('compras').find(query);
                     const edges = shopping
@@ -90,7 +95,7 @@ module.exports ={
                         edges,
                         pageInfo,
                       };
-                
+
                 }
 
         }

@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports = {
   definition: `
     type paymentEdge {
@@ -22,13 +24,17 @@ module.exports = {
     paginationpayments(
       start: Int,
       limit: Int,
-      credit_quantity: Int, 
+      credit_quantity: Int,
+      max_credit_quantity: Int,
+      min_credit_quantity: Int,
       credit_date: DateTime,
       quantity_payment: String,
       credit: Int,
+      max_credit: Int,
+      min_credit: Int,
       user: String
     ): paymentConnection
-   
+
   `,
    //cantidad_abono = credit_quantity
    //fecha_abono = credit_date
@@ -39,7 +45,14 @@ module.exports = {
   resolver: {
     Query: {
       paginationpayments:
-        async (obj, { start, limit, credit_quantity,credit_date,quantity_payment,credit,user}, ctx) => {
+        async (obj, { start, limit, credit_quantity,max_credit_quantity,min_credit_quantity,credit_date,quantity_payment,credit,max_credit, min_credit,user},ctx) => {
+          const authorization = ['Administrator'];
+          const authenticated = ctx.context.headers.authorization
+
+          const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+          if(!token){
+            throw new Error('No tienes autorización para realizar esta acción.');
+          }
           const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
           const query = {
             mostrar:true,
@@ -49,6 +62,12 @@ module.exports = {
             ...(credit_date && {
               fecha_abono: credit_date
             }),
+            // ...(min_credit_quantity && !isNaN(parseFloat(min_credit_quantity)) && {
+            //   cantidad_abono: { $gte: parseFloat(min_credit_quantity) }
+            // }),
+            // ...(max_credit_quantity && !isNaN(parseFloat(max_credit_quantity)) && {
+            //   cantidad_abono: { $lte: parseFloat(max_credit_quantity) }
+            // }),
             ...(quantity_payment && {
               estado_abono:{
                 $regex: new RegExp(quantity_payment, 'i')
@@ -61,16 +80,34 @@ module.exports = {
               "usuario.nombre": new RegExp(user, 'i')
             }),
           }
-          const payments = await strapi.query('abonos').find(query);
-          const edges = payments
-            .slice(startIndex, startIndex + parseInt(limit))
-            .map((payment) => ({ node: payment, cursor: payment.id }));
-          const pageInfo = {
-            startCursor: edges.length > 0 ? edges[0].cursor : null,
-            endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-            hasNextPage:  startIndex + parseInt(limit) < payments.length,
-            hasPreviousPage: startIndex > 0,
-          };
+          let payments = await strapi.query('abonos').find(query);
+          if(min_credit_quantity && max_credit_quantity) {
+            payments = payments.filter( payment => payment.cantidad_abono > min_credit_quantity && payment.cantidad_abono < max_credit_quantity);
+          }
+          else if(min_credit_quantity){
+            payments = payments.filter( payment => payment.cantidad_abono > min_credit_quantity)
+          }
+          else if(max_credit_quantity){
+            payments = payments.filter(payment => payment.cantidad_abono < max_credit_quantity)
+          }
+          if(max_credit && min_credit){
+            payments = payments.filter(payment => {
+              const intereses = payment.credito.intereses
+              return intereses > max_credit && intereses < min_credit;
+            })
+          }
+          else if(min_credit){
+            payments = payments.filter(payment =>{
+              const intereses = payment.credito.intereses
+              return intereses > min_credit;
+            })
+          }else if(max_credit){
+            payments = payments.filter(payment =>{
+              const intereses = payment.credito.intereses
+              return intereses < max_credit;
+            });
+          }
+          const {edges, pageInfo} = schema.search(payments,startIndex, limit)
           return {
             totalCount: payments.length,
             edges,

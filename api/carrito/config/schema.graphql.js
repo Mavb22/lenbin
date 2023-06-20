@@ -1,3 +1,4 @@
+const utils = require('../../../extensions/controllers/utils');
 module.exports ={
     definition:`
         type cartEdge{
@@ -20,8 +21,8 @@ module.exports ={
             user: String,
             sale: Float
         ):cartConnection
-    
-    
+
+
     `,
     //cantidad  = amount
     //productos = products
@@ -31,6 +32,11 @@ module.exports ={
         Query: {
             paginationcarts:
                 async(obj,{start,limit,amount,products,user,sale}) =>{
+                    const authorization = ['Administrator']
+                    const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+                    if(!token){
+                      throw new Error('No tienes autorización para realizar esta acción.');
+                    }
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query={
                         ...(amount && !isNaN(parseInt(amount))) && {
@@ -45,8 +51,6 @@ module.exports ={
                           ...(sale && !isNaN(parseFloat(sale))) && {
                             "venta.monto": parseFloat(sale)
                           },
-                          
-
                     }
                     const carts = await strapi.query('carrito').find(query);
                     const edges = carts

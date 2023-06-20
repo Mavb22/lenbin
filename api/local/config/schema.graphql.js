@@ -57,6 +57,11 @@ module.exports ={
         Query:{
             paginationLocal:
             async(obj,{start,limit,name,alias,social_reason,rfc,high_date,street,cologne,street_number,municipality,internal_number,city,cp,latitude,length,phone,cell_phone,turn,status,status2,user,sales}) =>{
+                const authorization = ['Administrator']
+                const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+                if(!token){
+                  throw new Error('No tienes autorización para realizar esta acción.');
+                }
                 const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                 const query={
                     ...( name && {

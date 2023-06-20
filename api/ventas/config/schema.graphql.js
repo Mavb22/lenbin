@@ -53,6 +53,11 @@ module.exports = {
         destination_routes,
         sellers_name
       }) => {
+        const authorization = ['Administrator']
+        const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+        if(!token){
+          throw new Error('No tienes autorización para realizar esta acción.');
+        }
         const startIndex = parseInt(start, 10) >= 0 ? parseInt(start, 10) : 0;
         const query = {
           ...(amount && !isNaN(parseFloat(amount))) && {

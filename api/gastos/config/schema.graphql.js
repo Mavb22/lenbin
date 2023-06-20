@@ -30,11 +30,16 @@ module.exports ={
     // monto = amount
     // categoria = category
     // usuario = user
-    // camions =  trucks 
+    // camions =  trucks
     resolver:{
         Query:{
             paginationspents:
                 async(obj,{start,limit,description,date,amount,categoria,status,user,trucks }) => {
+                    const authorization = ['Administrator']
+                    const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+                    if(!token){
+                      throw new Error('No tienes autorización para realizar esta acción.');
+                    }
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query = {
                         ...(description && {
@@ -58,7 +63,7 @@ module.exports ={
                         ...(trucks  && !isNaN(parseInt(trucks))) && {
                             "camions.num_serie": parseInt(trucks)
                         },
-                    } 
+                    }
                     const spents = await strapi.query('gastos').find(query);
                     const edges = spents
                     .slice(startIndex, startIndex + parseInt(limit))

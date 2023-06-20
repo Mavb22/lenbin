@@ -33,14 +33,19 @@ module.exports = {
     // vigencia = validity
     // intereses = interests
     // abonos = payments
-    // metodo_pago = payment_method 
+    // metodo_pago = payment_method
     // usuario = user
     resolver:{
         Query: {
             paginationcredit:
                 async(obj,{start,limit,end,high_date,low_date,validity,interests,status,status2,payments,payment_method ,user}) =>{
+                    const authorization = ['Administrator']
+                    const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+                    if(!token){
+                      throw new Error('No tienes autorización para realizar esta acción.');
+                    }
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
-                    const query = { 
+                    const query = {
                         mostrar:true,
                         ...(end &&!isNaN(parseFloat(end)) && {
                           limite: parseFloat(end)

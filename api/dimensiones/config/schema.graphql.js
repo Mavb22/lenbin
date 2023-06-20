@@ -18,10 +18,10 @@ module.exports ={
             width: Float,
             high: Float,
             long: Float,
-            products: String 
+            products: String
         ):DimensionConnection
     `,
-    //nombre = name 
+    //nombre = name
     //ancho = width
     // alto = high
     // largo = long
@@ -30,6 +30,11 @@ module.exports ={
         Query: {
             paginationDimensions:
             async(obj,{start,limit,name ,width,high,long,products},ctx) =>{
+                const authorization = ['Administrator']
+                const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+                if(!token){
+                  throw new Error('No tienes autorización para realizar esta acción.');
+                }
                 const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                 const query = {
                     ...(name  && {
@@ -67,5 +72,5 @@ module.exports ={
             }
         }
     }
- 
+
 }

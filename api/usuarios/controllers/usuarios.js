@@ -1,321 +1,42 @@
-'use strict';
-
-const bcrypt = require('bcryptjs'); // Importar bcryptjs
-const fetch = require("node-fetch");
-const jwt = require('jsonwebtoken'); // Importar jsonwebtoken
-const nodemailer = require('nodemailer');
-const CryptoJS = require("crypto-js");
-const recapchaKey = "6Ldi6mgkAAAAADe9RqQmyhpwtKQ7r0F1tYX45PrD";
-const redis = require('redis');
-const NodeRSA = require('node-rsa');
-const keysRSA = {};
-const client = redis.createClient({
-  url:"rediss://red-chdugne4dad5gbgcugbg:a0bNMlqbCvGnTuqtIUkFoMqS0JRNaZJr@oregon-redis.render.com:6379"
-  // port: 6379,
-  // host: "rediss://red-chdugne4dad5gbgcugbg:a0bNMlqbCvGnTuqtIUkFoMqS0JRNaZJr@oregon-redis.render.com:6379",
-  // host: "127.0.0.1"
-})
-// const recapchaKey = "6Ld_IVskAAAAAKZZ9M-R_QCATx4VThTwFBS1WGsG2";
-/* Creating a transporter to send emails. */
-let transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // true for 465, false for other ports
-  auth: {
-    user: process.env.USEREMAIL, // generated ethereal user
-    pass: process.env.PASSWORDEMAIL // generated ethereal password
-  },
-});
-transporter.verify().then(() => {
-  console.log("Ready for send emails")
-})
-// function Client (){
-//   client.on('connect', () =>{
-//     console.log('Redis connect')
-//   });
-//   client.on('ready', () =>{
-//     console.log('Redis ready');
-//   });
-//   client.on('error', (err) =>{
-//     console.log('Redis error', err.message);
-//   });
-//   client.on('end', () =>{
-//     console.log('Redis end');
-//   });
-//   process.on('SIGINT',()=>{
-//     client.quit
-//   })
-//   client.SET("foo","bar");
-//   client.GET('foo',(err, value)=>{
-//     if(err) console.log(err.message)
-//     console.log(value);
-//   })
-// }
-// client.on('error', err => console.log('Redis Client Error', err));
-
-function Keys(){
-  const keys = new NodeRSA({b: 1024});
-  const publicKeyBackend = keys.exportKey('public');
-  const publicKeyUsuario = keys.exportKey('public');
-  const privateKeyBackend = keys.exportKey('private');
-  const privateKeyUsuario = keys.exportKey('private');
-  return {
-    publicKeyBackend,
-    publicKeyUsuario,
-    privateKeyBackend,
-    privateKeyUsuario
-  }
-}
-function Encrypt(text, key){
-  const keyPublic = new NodeRSA(key);
-  const encrypted = keyPublic.encrypt(text, 'base64');
-  return {encrypt:encrypted}
-}
-function Decrypt (text,key){
-  let keyPrivate = new NodeRSA(key);
-  let decrypt = keyPrivate.decrypt(text, 'utf8');
-  return decrypt;
-}
+const { Decrypt } = require("../../../extensions/controllers/encrypt");
+const { client } = require("../../../extensions/controllers/redis");
+const { sign_off } = require("../../../extensions/usuarios/Sign_off");
+const { confirm } = require("../../../extensions/usuarios/confirm");
+const { createUser } = require("../../../extensions/usuarios/create_user");
+const { email_validate } = require("../../../extensions/usuarios/email_validate");
+const { loggin } = require("../../../extensions/usuarios/loggin");
+const { password_recover } = require("../../../extensions/usuarios/password_recover");
+const { token_refrehs } = require("../../../extensions/usuarios/token_refresh");
 module.exports ={
+  async session_out(ctx){
+    await sign_off(ctx);
+  },
+  async confirm(ctx){
+    await confirm(ctx);
+  },
+  async loggin(ctx) {
+    await loggin(ctx);
+  },
+  async create(ctx) {
+    await createUser(ctx);
+  },
   async decrypt(ctx){
     const {role, key} =  ctx.request.body;
     ctx.send({
       role:Decrypt(role,key)
     });
   },
-  async token_refresh (ctx){
-    Object.assign(keysRSA, Keys());
-    try {
-      let key = process.env.KEY;
-      //Iniciar el VI (vector inicial)
-      let iv = key.slice(0,16);
-      //Create Key
-      key = CryptoJS.enc.Utf8.parse(key);
-      //Get Iv
-      iv = CryptoJS.enc.Utf8.parse(iv);
-      const {refresh} = ctx.request.header;
-      if(!refresh){
-        return ctx.throw(400, 'Somenthing goes wrong');
-      }
-      const verifyRefresh = jwt.verify(refresh , process.env.REFRESH_KEY);
-      await client.connect();
-      const refreshToken = await client.get(verifyRefresh.email);
-      await client.disconnect();
-      if(!refreshToken){
-        return ctx.badRequest(404, 'Not found');
-      }
-      if(refresh !== refreshToken){
-        return ctx.badRequest(403, 'Este refresh token no es correcto');
-      }
-      const user = await strapi.services.usuarios.findOne({email:CryptoJS.AES.decrypt(verifyRefresh.email, key,{ iv: iv}).toString(CryptoJS.enc.Utf8)});
-      const roleEncrypt = Encrypt(user.tipo_rol.id, keysRSA.publicKeyBackend);
-      if(user){
-        const token = jwt.sign({
-          email: CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
-          // role: user.tipo_rol.rol,
-          role:roleEncrypt,
-          last_login: user.last_login.toString()
-        }, process.env.SECRET_KEY, {expiresIn: '8h'})
-        ctx.send({
-          token: token,
-          // user: {
-          //   // email:  CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
-          //   // tipo_rol: user.tipo_rol.rol,
-          //   last_login: user.last_login.toString()
-          // }
-        });
-      }
-    } catch (error) {
-      ctx.badRequest(400,'Hubo algun error, ' + error)
-    }
+  async token_refresh(ctx){
+    await token_refrehs(ctx);
   },
-  /* This function is responsible for logging in the user, it receives the email and password of the
-  user, it validates that the email and password are not empty, it searches the user by email, it
-  validates that the user exists, it validates that the password is correct, it validates that the
-  user has not logged in before, if it has not logged in before, it updates the last login date, it
-  creates the token, it sends the token, if the user has logged in before, it updates the last login
-  date, it creates the token, it sends the token. */
-  async loggin(ctx) {
-    Object.assign(keysRSA, Keys())
-    const date = new Date();
-    const {
-      email,
-      password,
-      recaptcha
-    } = ctx.request.body; // Obtener los datos del usuario
-    //  Iniciar la llave secreta
-    const url = `https://www.google.com/recaptcha/api/siteverify?secret=${recapchaKey}&response=${recaptcha}`;
-    let key = process.env.KEY;
-    //Iniciar el VI (vector inicial)
-    let iv = key.slice(0,16);
-    //Create Key
-    key = CryptoJS.enc.Utf8.parse(key);
-    //Get Iv
-    iv = CryptoJS.enc.Utf8.parse(iv);
-    // if(!recaptcha){
-    //   // return ctx.badRequest(null, 'Captcha token is undefined');
-    //   return ctx.throw(400, 'Captcha token is undefined');
-    // }
-    // const verifyURL = await fetch(url,{method:'POST'}).then(_res => _res.json());
-    // if(verifyURL.success == false){
-    //   return ctx.badRequest(null, 'Error');
-    // }
-    if(!email || !password){
-      return ctx.throw(400, 'Email and password are required');
-    }
-    const user = await strapi.services.usuarios.findOne({
-      email
-    }); // Buscar el usuario por email
-
-    if(!user){
-      return ctx.unauthorized('User not found');
-    }
-    // const role =  user.tipo_rol.rol;
-    const roleEncrypt = Encrypt(user.tipo_rol.id, keysRSA.publicKeyBackend);
-    // const roleDecrypt = Decrypt(roleEncrypt, keysRSA.privateKeyBackend);
-    // console.log({roleEncrypt,roleDecrypt:Decrypt(roleEncrypt, keysRSA.privateKeyUsuario)});
-    const hashed = await bcrypt.compare(password, user.password);
-    if(!hashed){
-      return ctx.badRequest(null, 'Invalid email or password');
-    }
-    // const emailTokens = CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString();
-    const refresh = jwt.sign({
-      email: CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
-    }, process.env.REFRESH_KEY, {
-      expiresIn: '1d'
-    });
-    await client.connect();
-    // 1 * 24 * 60 * 60
-
-    await client.set(CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),refresh, (err, reply)=>{
-      if(err){
-        console.log(err.message);
-        reject(createError.InternalServerError());
-        return
-      }
-      resolve(refresh);
-    });
-    // const timeout = 2 * 60
-    const timeout = 1 * 24 * 60 * 60
-    await client.expire(CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(), timeout);
-    await client.disconnect();
-
-    if (user.last_login == null) {
-      // Obtener la fecha actual
-      await strapi.services.usuarios.update({
-        id: user.id
-      }, {
-        last_login: date
-      }); // Actualizar la fecha de ultimo login
-
-      // Crear el token
-      const token = jwt.sign({
-        email: CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
-        role: roleEncrypt.encrypt,
-        key: keysRSA.privateKeyUsuario,
-        // role: user.tipo_rol.rol,
-        last_login: date
-      }, process.env.SECRET_KEY, {
-        // expiresIn: '8h'
-        expiresIn: '8h'
-      });
-      console.log('primera vez date:', date.toString);
-      // Enviar el token
-      ctx.send({
-        token: token,
-        refreshToken: refresh,
-        // user: {
-        //   // email:  CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
-        //   // tipo_rol: roleEncrypt.encrypt,
-        //   last_login: date.toString()
-        // }
-      });
-    } else {
-      await strapi.services.usuarios.update({
-        id: user.id
-      }, {
-        last_login: date
-      });
-      const token = jwt.sign({
-        email: CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
-        // role: user.tipo_rol.rol,
-        key: keysRSA.privateKeyUsuario,
-        role: roleEncrypt.encrypt,
-        last_login: date
-      }, process.env.SECRET_KEY, {
-        // expiresIn: '8h'
-        expiresIn: '8h'
-      });
-
-      // Enviar el token
-      ctx.send({
-        token: token,
-        refreshToken: refresh,
-        // user: {
-        //   // email:  CryptoJS.AES.encrypt(user.email, key,{ iv: iv}).toString(),
-        //   tipo_rol: roleEncrypt.encrypt,
-        //   last_login: user.last_login.toString()
-        // }
-      });
-    }
-  },
-  /* This function is responsible for sending an email to the user to change the password, it receives
-  the email of the user, it validates that the email is not empty, it searches the user by email, it
-  validates that the user exists, it creates the token, it sends the email, it validates that the
-  email was sent, it sends a message. */
   async password_recover(ctx) {
-    const {email} = ctx.request.body;
-    const {nombre} = await strapi.services.usuarios.findOne({
-      email
-    });
-    const url = 'http://localhost:4200/auth/email-validator/';
-    const token = jwt.sign({
-      email
-    },process.env.SECRET_KEY,{
-      expiresIn:'20mins'
-    });
-    if(!nombre){
-      ctx.throw(400, 'User not found');
-    }
-    let info = await transporter.sendMail({
-      from: '"Forgot password" <lenin79it@gmail.com>', // sender address
-      to: email, // list of receivers
-      subject: `Forgot password for ${email}`, // Subject line
-      // text: "Hello world?", // plain text body
-      html: `<b>Pleace clcick  on the following link, or paste this into your browser to complete the process: </b>
-        <a href="${url}${token}">Forgot password</a>
-        ` // html body
-    });
-    if (!info) {
-      ctx.throw(400, 'No se envio el email');
-    }
-    ctx.send({msj: "Esta listo",})
+    await password_recover(ctx);
   },
   /* This function is responsible for validating the email, it receives the token, it decodes the
   token, it searches the user by email, it validates that the user exists, it sends a message. */
   async email_validate(ctx) {
-    const {
-      token
-    } = ctx.params
-    const decoded = jwt.verify(token,process.env.SECRET_KEY)
-    const {email} = await strapi.services.usuarios.findOne({email:decoded.email});
-    if(!email){
-      ctx.throw(400, 'User not found');
-    }
-    ctx.send({
-      msj: "Esta listo",
-      token
-    })
+    await email_validate(ctx);
   },
-  /* This function is responsible for changing the password, it receives the new password and the
-  confirmation password, it validates that the new password and the confirmation password are not
-  empty, it validates that the new password and the confirmation password have more than 8
-  characters, it validates that the new password and the confirmation password are the same, it
-  validates that the new password meets the corresponding characters, it validates that the new
-  password is not the same as the old password, it validates that the new password does not contain
-  the name, it validates that the new password does not contain the last name, it validates that the
-  new password does not contain the last name, it encrypts the new password, it updates the
-  password, it validates that the password was updated, it sends a message. */
   async password_change(ctx) {
     const {new_password, confirm_password} = ctx.request.body;
     const {token} =  ctx.params;

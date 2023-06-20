@@ -10,6 +10,14 @@
     },
     {
       "method": "GET",
+      "path": "/usuarios/session_out",
+      "handler": "usuarios.session_out",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
       "path": "/usuarios",
       "handler": "usuarios.find",
       "config": {
@@ -53,7 +61,7 @@
       "path": "/usuarios",
       "handler": "usuarios.create",
       "config": {
-        "policies": ["global::create-user"]
+        "policies": []
       }
     },
     {
@@ -69,6 +77,14 @@
       "method": "GET",
       "path": "/usuarios/email_validator/:token",
       "handler": "usuarios.email_validate",
+      "config": {
+        "policies": []
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/usuarios/confirm/:token",
+      "handler": "usuarios.confirm",
       "config": {
         "policies": []
       }

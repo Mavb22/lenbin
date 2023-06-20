@@ -1,63 +1,3 @@
-// module.exports = {
-//   definition: `
-//     type PaymentMethodEdge{
-//         node: MetodoPago
-//         cursor: ID!
-//     }
-//     type PaymentMethodConnection{
-//         totalCount: Int!
-//         edges: [PaymentMethodEdge!]!
-//         pageInfo: PageInfo!
-//     }
-//   `,
-//   query: `
-//      paginationPaymentMethod(
-//         start: Int!,
-//         limit: Int!,
-//         card_number: Long,
-//         month: String,
-//         year:Long,
-//         cvc:Int,
-//         holder:String,
-//         invoice:Long,
-//         expedition_date:DateTime,
-//         admission_date:Date,
-//         description:String,
-//         reference:String,
-//         type:String,
-//         shopping_cost:Float,
-//         credits_limit:Long,
-//         username:String,
-//         sale_amount:Float
-//      ): PaymentMethodConnection
-//   `,
-//   resolver: {
-//     Query: {
-//       paginationPaymentMethod: async (obj, {start, limit, card_number, month, year, cvc, holder, invoice,expedition_date, admission_date, description, reference, type, shopping_cost, credits_limit, username, sale_amount}) => {
-//         const startIndex = parseInt(start, 10) >= 0 ? parseInt(start, 10) : 0;
-
-//         const PaymentMethods = await strapi.query('metodo-pago').find(query);
-//         const edges = PaymentMethods
-//           .slice(startIndex, startIndex + parseInt(limit))
-//           .map((PaymentMethod) => ({
-//             node: PaymentMethod,
-//             cursor: PaymentMethod.id
-//           }));
-//         const pageInfo = {
-//           startCursor: edges.length > 0 ? edges[0].cursor : null,
-//           endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-//           hasNextPage: startIndex + parseInt(limit) < PaymentMethods.length,
-//           hasPreviousPage: startIndex > 0,
-//         };
-//         return {
-//           totalCount: PaymentMethods.length,
-//           edges,
-//           pageInfo,
-//         };
-//       }
-//     }
-//   }
-// }
 module.exports ={
   definition:`
       type PaymentMethodEdge{
@@ -95,7 +35,11 @@ module.exports ={
       Query:{
           paginationPaymentMethod:
           async(obj,{start, limit, card_number, month, year, cvc, holder, invoice,expedition_date, admission_date, description, reference, type, shopping_cost, credits_limit, username, sale_amount}) =>{
-
+              const authorization = ['Administrator']
+              const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+              if(!token){
+                throw new Error('No tienes autorización para realizar esta acción.');
+              }
               const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
               const query = {
                 ...(card_number && !isNaN(parseInt(card_number))) && {

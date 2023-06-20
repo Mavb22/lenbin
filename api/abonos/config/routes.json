@@ -5,30 +5,15 @@
       "path": "/abonos",
       "handler": "abonos.find",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
-
-    },
-    {
-      "method": "GET",
-      "path": "/abonos/pagination",
-      "handler": "abonos.findAbonos",
-      "config": {
-        "policies": []
-      }
-
-    },
-    {
-      "method": "GET",
-      "path": "/abonos/buscar",
-      "handler": "abonos.buscarAbonos"
     },
     {
       "method": "GET",
       "path": "/abonos/count",
       "handler": "abonos.count",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -36,7 +21,7 @@
       "path": "/abonos/:id",
       "handler": "abonos.findOne",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -44,7 +29,7 @@
       "path": "/abonos",
       "handler": "abonos.create",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -52,7 +37,7 @@
       "path": "/abonos/:id",
       "handler": "abonos.update",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -60,7 +45,15 @@
       "path": "/abonos/:id",
       "handler": "abonos.delete",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies":["global::AuthenticationPermissions"]
+      }
+    },
+    {
+      "method": "POST",
+      "path": "/abonos/table/files",
+      "handler": "abonos.file",
+      "config": {
+        "policies": []
       }
     }
   ]
