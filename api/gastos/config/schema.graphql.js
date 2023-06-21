@@ -55,9 +55,12 @@ module.exports ={
                         ...(user && {
                             "usuario.nombre": new RegExp(user, 'i')
                         }),
-                        ...(trucks  && !isNaN(parseInt(trucks))) && {
-                            "camions.num_serie": parseInt(trucks)
-                        },
+                        // ...(trucks  && !isNaN(parseInt(trucks))) && {
+                        //     "camions.num_serie": parseInt(trucks)
+                        // },
+                        ...(trucks && {
+                            "camions.num_serie": new RegExp(trucks, 'i')
+                        }),
                     } 
                     const spents = await strapi.query('gastos').find(query);
                     const edges = spents

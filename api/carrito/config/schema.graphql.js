@@ -37,7 +37,7 @@ module.exports ={
                             cantidad: parseInt(amount)
                           },
                           ...(products && {
-                            "productos.nombre": new RegExp(product_name,'i')
+                            "productos.nombre": new RegExp(products,'i')
                           }),
                           ...(user && {
                             "usuario.nombre": new RegExp(user, 'i')

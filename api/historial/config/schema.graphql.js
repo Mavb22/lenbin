@@ -53,9 +53,9 @@ module.exports = {
                         ...(user && {
                             "usuario.nombre": new RegExp(user, 'i')
                         }),
-                        ...(trucks && !isNaN(parseInt(trucks))) && {
-                            "camiones.num_serie": parseInt(trucks)
-                        },
+                        ...(trucks && {
+                            "camiones.num_serie": new RegExp(trucks, 'i')
+                        }),
                         
                     }
                     const records = await strapi.query('historial').find(query);
