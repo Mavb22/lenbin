@@ -104,8 +104,8 @@ module.exports = {
               pageInfo,
             };
 
-            }
       }
+    }
   }
 
 

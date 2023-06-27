@@ -3,7 +3,6 @@
 const { fileUpload } = require("../../../extensions/controllers/file");
 
 module.exports = {
-
   async file(ctx){
     await fileUpload(ctx, 'abonos', 'abonos');
   },

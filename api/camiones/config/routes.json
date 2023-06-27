@@ -54,6 +54,14 @@
       "config": {
         "policies": ["global::Administrator","global::Deliveryman","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/camiones/table/files",
+      "handler": "camiones.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

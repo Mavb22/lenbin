@@ -13,125 +13,118 @@
   "pluginOptions": {},
   "attributes": {
     "nombre": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "ap_paterno": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "ap_materno": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "fecha_nacimiento": {
-      "type": "datetime",
-      "required": true
+      "type": "datetime"
+
     },
     "genero": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "fecha_inscripcion": {
-      "type": "datetime",
-      "required": true
+      "type": "datetime"
+
     },
     "fecha_alta": {
-      "type": "datetime",
-      "required": true
+      "type": "datetime"
+
     },
     "rfc": {
       "type": "string",
-      "maxLength": 14,
-      "required": true
+      "maxLength": 14
+
     },
     "curp": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "nss": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "tel_cel": {
       "type": "biginteger",
-      "max": "10",
-      "required": true
+      "max": "10"
+
     },
     "tel_cel3": {
       "type": "string"
     },
     "email": {
       "type": "email",
-      "unique": true,
-      "required": true
+      "unique": true
+
     },
     "password": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "tipo_sangre": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "licencia": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "alergias": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "padecimientos": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "nacionalidad": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "calle": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "numero": {
-      "type": "biginteger",
-      "required": true
+      "type": "biginteger"
+
     },
     "colonia": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "cp": {
-      "type": "biginteger",
-      "required": true
+      "type": "biginteger"
     },
     "municipio": {
-      "type": "string",
-      "required": true
+      "type": "string"
+
     },
     "ciudad": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "pais": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "referencia_direccion": {
-      "type": "string",
-      "required": true
+      "type": "string"
     },
     "comment": {
-      "type": "richtext",
-      "required": true
+      "type": "richtext"
     },
     "last_login": {
       "type": "datetime"
     },
     "status": {
-      "type": "boolean",
-      "required": true
+      "type": "boolean"
     },
     "status2": {
       "type": "string"

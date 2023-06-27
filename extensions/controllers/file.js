@@ -7,7 +7,7 @@ const fileUpload = async (ctx,models, query )=>{
   }
   // console.log(ctx.request.body);
   // Campos que se mostrarán en los pagos
-  const fieldsToShow = campos
+  const fieldsToShow = campos;
 
   // Obtener el modelo de la tabla
   const model = strapi.models[models];
