@@ -46,13 +46,13 @@ module.exports = {
     Query: {
       paginationpayments:
         async (obj, { start, limit, credit_quantity,max_credit_quantity,min_credit_quantity,credit_date,quantity_payment,credit,max_credit, min_credit,user},ctx) => {
-          const authorization = ['Administrator'];
-          const authenticated = ctx.context.headers.authorization
+          // const authorization = ['Administrator'];
+          // const authenticated = ctx.context.headers.authorization
 
-          const token = await utils.authorization(authenticated.split(' ')[1], authorization);
-          if(!token){
-            throw new Error('No tienes autorización para realizar esta acción.');
-          }
+          // const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+          // if(!token){
+          //   throw new Error('No tienes autorización para realizar esta acción.');
+          // }
           const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
           const query = {
             mostrar:true,
@@ -81,6 +81,7 @@ module.exports = {
             }),
           }
           let payments = await strapi.query('abonos').find(query);
+          // son para los campos de numero directos de la tabla 
           if(min_credit_quantity && max_credit_quantity) {
             payments = payments.filter( payment => payment.cantidad_abono > min_credit_quantity && payment.cantidad_abono < max_credit_quantity);
           }
@@ -88,12 +89,13 @@ module.exports = {
             payments = payments.filter( payment => payment.cantidad_abono > min_credit_quantity)
           }
           else if(max_credit_quantity){
-            payments = payments.filter(payment => payment.cantidad_abono < max_credit_quantity)
+            payments = payments.filter(payment => payment.cantidad_abono <= max_credit_quantity)
           }
+          //Para los Numeros
           if(max_credit && min_credit){
             payments = payments.filter(payment => {
               const intereses = payment.credito.intereses
-              return intereses > max_credit && intereses < min_credit;
+              return intereses > min_credit && intereses < max_credit; 
             })
           }
           else if(min_credit){
@@ -106,7 +108,9 @@ module.exports = {
               const intereses = payment.credito.intereses
               return intereses < max_credit;
             });
-          }
+          }//Es un objeto
+          //conson log(payments)
+          //Numeros
           const {edges, pageInfo} = schema.search(payments,startIndex, limit)
           return {
             totalCount: payments.length,
