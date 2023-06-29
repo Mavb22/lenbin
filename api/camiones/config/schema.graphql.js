@@ -34,8 +34,10 @@ module.exports = {
       Query: {
           paginationtrucks:
             async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,record,start_record, end_record,  destination,driver, spent}) => {
-              const authorization = ['Administrator']
-              const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+              const authorization = ['Administrator'];
+              const authenticated = ctx.context.headers.authorization
+
+              const token = await utils.authorization(authenticated.split(' ')[1], authorization);
               if(!token){
                 throw new Error('No tienes autorización para realizar esta acción.');
               }
