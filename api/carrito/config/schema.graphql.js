@@ -32,11 +32,13 @@ module.exports ={
         Query: {
             paginationcarts:
                 async(obj,{start,limit,amount,products,user,sale}) =>{
-                    const authorization = ['Administrator']
-                    const token = await utils.authorization(ctx.context.headers.authorization, authorization);
-                    if(!token){
-                      throw new Error('No tienes autorización para realizar esta acción.');
-                    }
+                  const authorization = ['Administrator'];
+                  const authenticated = ctx.context.headers.authorization
+
+                  const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+                  if(!token){
+                    throw new Error('No tienes autorización para realizar esta acción.');
+                  }
                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
                     const query={
                         ...(amount && !isNaN(parseInt(amount))) && {
