@@ -33,8 +33,8 @@ module.exports = {
   resolver: {
       Query: {
           paginationtrucks:
-            async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,record,start_record, end_record,  destination,driver, spent}) => {
-              const authorization = ['Administrator'];
+            async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,record,start_record, end_record,  destination,driver, spent},ctx) => {
+              const authorization = ['Administrator','User'];
               const authenticated = ctx.context.headers.authorization
 
               const token = await utils.authorization(authenticated.split(' ')[1], authorization);

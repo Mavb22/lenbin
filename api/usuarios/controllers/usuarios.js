@@ -21,10 +21,16 @@ module.exports ={
     await createUser(ctx);
   },
   async decrypt(ctx){
-    const {role, key} =  ctx.request.body;
-    ctx.send({
-      role:Decrypt(role,key)
-    });
+    try {
+      const {role, key} =  ctx.request.body;
+      console.log(role,key)
+      ctx.send({
+        role:Decrypt(role,key)
+      });
+    } catch (error) {
+      console.log(error);
+      throw new Error('No tienes autorización');
+    }
   },
   async token_refresh(ctx){
     await token_refrehs(ctx);

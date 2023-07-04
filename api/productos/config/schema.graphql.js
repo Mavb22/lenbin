@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports = {
   definition: `
       type ProductEdge{
@@ -59,8 +61,8 @@ module.exports = {
         promotions_date_creation,
         batches_internal_code,
         provider_name
-      }) => {
-        const authorization = ['Administrator']
+      },ctx) => {
+        const authorization = ['Administrator','User']
         const token = await utils.authorization(ctx.context.headers.authorization, authorization);
         if(!token){
           throw new Error('No tienes autorización para realizar esta acción.');
@@ -138,21 +140,10 @@ module.exports = {
             "proveedor.nombre": RegExp(provider_name, "i"),
           }),
         };
-        const Product = await strapi.query('productos').find(query);
-        const edges = Product
-          .slice(startIndex, startIndex + parseInt(limit))
-          .map((Product) => ({
-            node: Product,
-            cursor: Product.id
-          }));
-        const pageInfo = {
-          startCursor: edges.length > 0 ? edges[0].cursor : null,
-          endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-          hasNextPage: startIndex + parseInt(limit) < Product.length,
-          hasPreviousPage: startIndex > 0,
-        };
+        const product = await strapi.query('productos').find(query);
+        const {edges, pageInfo} = schema.search(product,startIndex, limit)
         return {
-          totalCount: Product.length,
+          totalCount: product.length,
           edges,
           pageInfo,
         };

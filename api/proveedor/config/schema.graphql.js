@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports = {
   definition: `
     type ProviderEdge {
@@ -53,8 +55,8 @@ module.exports = {
         status2,
         purchase_cost,
         product_name
-      }) => {
-        const authorization = ['Administrator']
+      },ctx) => {
+        const authorization = ['Administrator','User']
         const token = await utils.authorization(ctx.context.headers.authorization, authorization);
         if(!token){
           throw new Error('No tienes autorización para realizar esta acción.');
@@ -133,18 +135,7 @@ module.exports = {
           })
         };
         const providers = await strapi.query('proveedor').find(query);
-        const edges = providers
-          .slice(startIndex, startIndex + parseInt(limit))
-          .map((provider) => ({
-            node: provider,
-            cursor: provider.id
-          }));
-        const pageInfo = {
-          startCursor: edges.length > 0 ? edges[0].cursor : null,
-          endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-          hasNextPage: startIndex + parseInt(limit) < providers.length,
-          hasPreviousPage: startIndex > 0,
-        };
+        const {edges, pageInfo} = schema.search(providers,startIndex, limit)
         return {
           totalCount: providers.length,
           edges,

@@ -1,4 +1,5 @@
 const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports ={
     definition:`
         type cartEdge{
@@ -31,8 +32,8 @@ module.exports ={
     resolver: {
         Query: {
             paginationcarts:
-                async(obj,{start,limit,amount,products,user,sale}) =>{
-                  const authorization = ['Administrator'];
+                async(obj,{start,limit,amount,products,user,sale},ctx) =>{
+                  const authorization = ['Administrator','User'];
                   const authenticated = ctx.context.headers.authorization
 
                   const token = await utils.authorization(authenticated.split(' ')[1], authorization);
@@ -54,23 +55,20 @@ module.exports ={
                             "venta.monto": parseFloat(sale)
                           },
                     }
-                    const carts = await strapi.query('carrito').find(query);
-                    const edges = carts
-                    .slice(startIndex, startIndex + parseInt(limit))
-                    .map((cart) => ({ node: cart, cursor: cart.id }));
-                    const pageInfo = {
-                     startCursor: edges.length > 0 ? edges[0].cursor : null,
-                     endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                     hasNextPage:  startIndex + parseInt(limit) < carts.length,
-                     hasPreviousPage: startIndex > 0,
-                    };
+                    const cars = await strapi.query('carrito').find(query);
+                    const {edges, pageInfo} = schema.search(cars,startIndex, limit)
                     return {
-                        totalCount: carts.length,
-                        edges,
-                        pageInfo,
-                      };
+                      totalCount: cars.length,
+                      edges,
+                      pageInfo,
+                    };
+                    // const {edges, pageInfo} = schema.search(cars,startIndex, limit)
+                    // return {
+                    //   totalCount: payments.length,
+                    //   edges,
+                    //   pageInfo,
+                    // };
                 }
-
         }
     }
 

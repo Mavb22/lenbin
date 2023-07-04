@@ -7,7 +7,7 @@ const createUser = async (ctx) => {
       ctx.request.body
     );
     const {password, email} = ctx.request.body;
-    const url = 'http://localhost:1337/usuarios/confirm';
+    const url = process.env.SERVER + '/usuarios/confirm'
     const extpassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])(?!.*(.)\1)[A-Za-z\d$@$!%*?&]{8,15}(?!\s)/g;
     if(!extpassword.test(password)){
       return ctx.send({msj:'The password does not meet the criteria. At least one lowercase letter, at least one uppercase letter, at least one digit, at least one special character ($@$!%*?&) and no duplicate digits and no spaces'})

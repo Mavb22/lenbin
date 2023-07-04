@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports ={
     definition:`
         type LocEdge{
@@ -56,8 +58,8 @@ module.exports ={
     resolver:{
         Query:{
             paginationLocal:
-            async(obj,{start,limit,name,alias,social_reason,rfc,high_date,street,cologne,street_number,municipality,internal_number,city,cp,latitude,length,phone,cell_phone,turn,status,status2,user,sales}) =>{
-                const authorization = ['Administrator']
+            async(obj,{start,limit,name,alias,social_reason,rfc,high_date,street,cologne,street_number,municipality,internal_number,city,cp,latitude,length,phone,cell_phone,turn,status,status2,user,sales}, ctx) =>{
+                const authorization = ['Administrator','User']
                 const token = await utils.authorization(ctx.context.headers.authorization, authorization);
                 if(!token){
                   throw new Error('No tienes autorización para realizar esta acción.');
@@ -128,18 +130,10 @@ module.exports ={
                         "ventas.monto": parseInt(sales)
                     },
                 }
-                const Local = await strapi.query('local').find(query);
-                const edges = Local
-                  .slice(startIndex, startIndex + parseInt(limit))
-                  .map((Loc) => ({ node: Loc, cursor: Loc.id }));
-                const pageInfo = {
-                  startCursor: edges.length > 0 ? edges[0].cursor : null,
-                  endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                  hasNextPage:  startIndex + parseInt(limit) < Local.length,
-                  hasPreviousPage: startIndex > 0,
-                };
+                const local = await strapi.query('local').find(query);
+                const {edges, pageInfo} = schema.search(local,startIndex, limit)
                 return {
-                  totalCount: Local.length,
+                  totalCount: local.length,
                   edges,
                   pageInfo,
                 };

@@ -46,7 +46,7 @@ module.exports = {
     Query: {
       paginationpayments:
         async (obj, { start, limit, credit_quantity,max_credit_quantity,min_credit_quantity,credit_date,quantity_payment,credit,max_credit, min_credit,user},ctx) => {
-          const authorization = ['Administrator'];
+          const authorization = ['Administrator','User'];
           const authenticated = ctx.context.headers.authorization
 
           const token = await utils.authorization(authenticated.split(' ')[1], authorization);

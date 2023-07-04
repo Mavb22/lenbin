@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports ={
   definition:`
       type PaymentMethodEdge{
@@ -34,8 +36,8 @@ module.exports ={
   resolver:{
       Query:{
           paginationPaymentMethod:
-          async(obj,{start, limit, card_number, month, year, cvc, holder, invoice,expedition_date, admission_date, description, reference, type, shopping_cost, credits_limit, username, sale_amount}) =>{
-              const authorization = ['Administrator']
+          async(obj,{start, limit, card_number, month, year, cvc, holder, invoice,expedition_date, admission_date, description, reference, type, shopping_cost, credits_limit, username, sale_amount},ctx) =>{
+              const authorization = ['Administrator','User']
               const token = await utils.authorization(ctx.context.headers.authorization, authorization);
               if(!token){
                 throw new Error('No tienes autorización para realizar esta acción.');
@@ -100,18 +102,10 @@ module.exports ={
                   'venta.monto': parseFloat(sale_amount )
                 },
               };
-              const PaymentMethod = await strapi.query('metodo-pago').find(query);
-              const edges = PaymentMethod
-                .slice(startIndex, startIndex + parseInt(limit))
-                .map((PaymentMethod) => ({ node: PaymentMethod, cursor: PaymentMethod.id }));
-              const pageInfo = {
-                startCursor: edges.length > 0 ? edges[0].cursor : null,
-                endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                hasNextPage:  startIndex + parseInt(limit) < PaymentMethod.length,
-                hasPreviousPage: startIndex > 0,
-              };
+              const paymentMethod = await strapi.query('metodo-pago').find(query);
+              const {edges, pageInfo} = schema.search(paymentMethod,startIndex, limit)
               return {
-                totalCount: PaymentMethod.length,
+                totalCount: paymentMethod.length,
                 edges,
                 pageInfo,
               };

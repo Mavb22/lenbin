@@ -21,7 +21,7 @@
       "path": "/usuarios",
       "handler": "usuarios.find",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -29,7 +29,7 @@
       "path": "/usuarios/:id",
       "handler": "usuarios.findOne",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -37,7 +37,7 @@
       "path": "/usuarios/count",
       "handler": "usuarios.count",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -45,7 +45,7 @@
       "path": "/usuarios/:id",
       "handler": "usuarios.update",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -53,7 +53,7 @@
       "path": "/usuarios/:id",
       "handler": "usuarios.delete",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     },
     {
@@ -110,7 +110,7 @@
       "path": "/usuarios/decrypt",
       "handler": "usuarios.decrypt",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": ["global::AuthenticationPermissions"]
       }
     }
   ]

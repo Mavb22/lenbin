@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports = {
   definition: `
     type SaleEdge {
@@ -52,8 +54,8 @@ module.exports = {
         payment_methods_owner,
         destination_routes,
         sellers_name
-      }) => {
-        const authorization = ['Administrator']
+      },ctx) => {
+        const authorization = ['Administrator','User']
         const token = await utils.authorization(ctx.context.headers.authorization, authorization);
         if(!token){
           throw new Error('No tienes autorización para realizar esta acción.');
@@ -107,15 +109,7 @@ module.exports = {
           })
         };
         const sales = await strapi.query('ventas').find(query);
-        const edges = sales
-          .slice(startIndex, startIndex + parseInt(limit))
-          .map((sale) => ({ node: sale, cursor: sale.id }));
-        const pageInfo = {
-          startCursor: edges.length > 0 ? edges[0].cursor : null,
-          endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-          hasNextPage: startIndex + parseInt(limit) < sales.length,
-          hasPreviousPage: startIndex > 0,
-        };
+        const {edges, pageInfo} = schema.search(sales,startIndex, limit)
         return {
           totalCount: sales.length,
           edges,

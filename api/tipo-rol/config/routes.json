@@ -5,7 +5,7 @@
       "path": "/tipo-rols",
       "handler": "tipo-rol.find",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": []
       }
     },
     {
@@ -21,7 +21,7 @@
       "path": "/tipo-rols/:id",
       "handler": "tipo-rol.findOne",
       "config": {
-        "policies": ["global::Administrator","global::Access"]
+        "policies": []
       }
     },
     {

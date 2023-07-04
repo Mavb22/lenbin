@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports = {
   definition: `
       type UserEdge{
@@ -101,8 +103,8 @@ module.exports = {
         payment_methods_holder,
         sales_amount,
         trucks_serial_number
-      }) => {
-        const authorization = ['Administrator']
+      },ctx) => {
+        const authorization = ['Administrator','User']
         const token = await utils.authorization(ctx.context.headers.authorization, authorization);
         if(!token){
           throw new Error('No tienes autorización para realizar esta acción.');
@@ -284,21 +286,10 @@ module.exports = {
             }
           }),
         };
-        const Users = await strapi.query('usuarios').find(query);
-        const edges = Users
-          .slice(startIndex, startIndex + parseInt(limit))
-          .map((user) => ({
-            node: user,
-            cursor: user.id
-          }));
-        const pageInfo = {
-          startCursor: edges.length > 0 ? edges[0].cursor : null,
-          endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-          hasNextPage: startIndex + parseInt(limit) < Users.length,
-          hasPreviousPage: startIndex > 0,
-        };
+        const users = await strapi.query('usuarios').find(query);
+        const {edges, pageInfo} = schema.search(users,startIndex, limit)
         return {
-          totalCount: Users.length,
+          totalCount: users.length,
           edges,
           pageInfo,
         };

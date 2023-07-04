@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports ={
     definition:`
         type purchaseEdge{
@@ -40,8 +42,8 @@ module.exports ={
     resolver:{
         Query:{
             paginationshopping:
-                async(obj,{start,limit,cost,order_date, reference, arrival_date, status, status2,lot, payment_method, provider, user}) => {
-                    const authorization = ['Administrator']
+                async(obj,{start,limit,cost,order_date, reference, arrival_date, status, status2,lot, payment_method, provider, user}, ctx) => {
+                    const authorization = ['Administrator','User']
                     const token = await utils.authorization(ctx.context.headers.authorization, authorization);
                     if(!token){
                       throw new Error('No tienes autorización para realizar esta acción.');
@@ -81,21 +83,12 @@ module.exports ={
 
                     }
                     const shopping = await strapi.query('compras').find(query);
-                    const edges = shopping
-                    .slice(startIndex, startIndex + parseInt(limit))
-                    .map((purchase) => ({ node: purchase, cursor: purchase.id }));
-                    const pageInfo = {
-                     startCursor: edges.length > 0 ? edges[0].cursor : null,
-                     endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                     hasNextPage:  startIndex + parseInt(limit) < shopping.length,
-                     hasPreviousPage: startIndex > 0,
-                    };
+                    const {edges, pageInfo} = schema.search(shopping,startIndex, limit)
                     return {
-                        totalCount: shopping.length,
-                        edges,
-                        pageInfo,
-                      };
-
+                      totalCount: shopping.length,
+                      edges,
+                      pageInfo,
+                    };
                 }
 
         }

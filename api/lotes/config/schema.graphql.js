@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports ={
   definition:`
       type LotEdge{
@@ -26,8 +28,8 @@ module.exports ={
   resolver:{
       Query:{
           paginationLot:
-          async(obj,{start,limit,internal_code, arrival_date,expiration_date,acquisition_date, cost, shopping_cost,product_name}) =>{
-              const authorization = ['Administrator']
+          async(obj,{start,limit,internal_code, arrival_date,expiration_date,acquisition_date, cost, shopping_cost,product_name},ctx) =>{
+              const authorization = ['Administrator','User']
               const token = await utils.authorization(ctx.context.headers.authorization, authorization);
               if(!token){
                 throw new Error('No tienes autorización para realizar esta acción.');
@@ -56,21 +58,13 @@ module.exports ={
                   "products.nombre": new RegExp(product_name,'i')
                 }),
               }
-              const Lotes = await strapi.query('lotes').find(query);
-              const edges = Lotes
-                .slice(startIndex, startIndex + parseInt(limit))
-                .map((lot) => ({ node: lot, cursor: lot.id }));
-              const pageInfo = {
-                startCursor: edges.length > 0 ? edges[0].cursor : null,
-                endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                hasNextPage:  startIndex + parseInt(limit) < Lotes.length,
-                hasPreviousPage: startIndex > 0,
-              };
-              return {
-                totalCount: Lotes.length,
-                edges,
-                pageInfo,
-              };
+              const lotes = await strapi.query('lotes').find(query);
+              const {edges, pageInfo} = schema.search(lotes,startIndex, limit)
+          return {
+            totalCount: lotes.length,
+            edges,
+            pageInfo,
+          };
           }
       }
   }

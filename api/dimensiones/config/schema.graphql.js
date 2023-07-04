@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports ={
     definition:`
         type DimensionEdge{
@@ -53,20 +55,12 @@ module.exports ={
                         "productos.nombre": new RegExp(products,'i')
                     }),
                 }
-                const Dimensions= await strapi.query('dimensiones').find(query);
-                const edges = Dimensions
-                .slice(startIndex, startIndex + parseInt(limit))
-                .map((Deimencion) => ({ node: Deimencion, cursor: Deimencion.id }));
-                const pageInfo = {
-                startCursor: edges.length > 0 ? edges[0].cursor : null,
-                endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                hasNextPage:  startIndex + parseInt(limit) < Dimensions.length,
-                hasPreviousPage: startIndex > 0,
-                };
+                const dimensions= await strapi.query('dimensiones').find(query);
+                const {edges, pageInfo} = schema.search(dimensions,startIndex, limit)
                 return {
-                    totalCount: Dimensions.length,
-                    edges,
-                    pageInfo,
+                  totalCount: dimensions.length,
+                  edges,
+                  pageInfo,
                 };
 
             }

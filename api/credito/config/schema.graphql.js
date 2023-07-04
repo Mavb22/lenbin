@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports = {
     definition:`
         type credenceEdge{
@@ -38,8 +40,8 @@ module.exports = {
     resolver:{
         Query: {
             paginationcredit:
-                async(obj,{start,limit,end,high_date,low_date,validity,interests,status,status2,payments,payment_method ,user}) =>{
-                    const authorization = ['Administrator']
+                async(obj,{start,limit,end,high_date,low_date,validity,interests,status,status2,payments,payment_method ,user}, ctx) =>{
+                    const authorization = ['Administrator','User']
                     const token = await utils.authorization(ctx.context.headers.authorization, authorization);
                     if(!token){
                       throw new Error('No tienes autorización para realizar esta acción.');
@@ -80,15 +82,7 @@ module.exports = {
 
                     };
                     const credit = await strapi.query('credito').find(query);
-                    const edges = credit
-                      .slice(startIndex, startIndex + parseInt(limit))
-                      .map((credence) => ({ node: credence, cursor: credence.id }));
-                    const pageInfo = {
-                      startCursor: edges.length > 0 ? edges[0].cursor : null,
-                      endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                      hasNextPage:  startIndex + parseInt(limit) < credit.length,
-                      hasPreviousPage: startIndex > 0,
-                    };
+                    const {edges, pageInfo} = schema.search(credit,startIndex, limit)
                     return {
                       totalCount: credit.length,
                       edges,

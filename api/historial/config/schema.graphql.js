@@ -1,3 +1,5 @@
+const utils = require('../../../extensions/controllers/utils');
+const schema = require('../../../extensions/controllers/schemas');
 module.exports = {
     definition:`
     type recordEdge{
@@ -32,8 +34,8 @@ module.exports = {
     resolver:{
         Query:{
             paginationrecords:
-                async(obj,{start,limit,date,start_time,end_time,status,status2,user,trucks} ) =>{
-                    const authorization = ['Administrator']
+                async(obj,{start,limit,date,start_time,end_time,status,status2,user,trucks}, ctx ) =>{
+                    const authorization = ['Administrator','User']
                     const token = await utils.authorization(ctx.context.headers.authorization, authorization);
                     if(!token){
                       throw new Error('No tienes autorización para realizar esta acción.');
@@ -64,20 +66,12 @@ module.exports = {
 
                     }
                     const records = await strapi.query('historial').find(query);
-                    const edges = records
-                    .slice(startIndex, startIndex + parseInt(limit))
-                    .map((record) => ({ node: record, cursor: record.id }));
-                    const pageInfo = {
-                     startCursor: edges.length > 0 ? edges[0].cursor : null,
-                     endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
-                     hasNextPage:  startIndex + parseInt(limit) < records.length,
-                     hasPreviousPage: startIndex > 0,
-                    };
+                    const {edges, pageInfo} = schema.search(records,startIndex, limit)
                     return {
-                        totalCount: records.length,
-                        edges,
-                        pageInfo,
-                      };
+                      totalCount: records.length,
+                      edges,
+                      pageInfo,
+                    };
                 }
         }
     }
