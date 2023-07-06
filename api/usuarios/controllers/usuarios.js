@@ -23,7 +23,7 @@ module.exports ={
   async decrypt(ctx){
     try {
       const {role, key} =  ctx.request.body;
-      console.log(role,key)
+      // console.log(role,key)
       ctx.send({
         role:Decrypt(role,key)
       });
