@@ -20,6 +20,12 @@ module.exports = {
       ref_code: Long,
       condition: String,
       product_name: String
+      max_creation_date: DateTime,
+      min_creation_date: DateTime,
+      max_validity_date: DateTime,
+      min_validity_date: DateTime,
+      max_discount_value: Float,
+      min_discount_value: Float
     ): PromotionConnection
   `,
   resolver: {
@@ -32,8 +38,25 @@ module.exports = {
         discount_value,
         ref_code,
         condition,
-        product_name
-      }) => {
+        product_name,
+        max_discount_value,
+        min_discount_value,
+        max_creation_date,
+        min_creation_date,
+        max_validity_date,
+        min_validity_date
+      },ctx) => {
+        // const authorization = ['Administrator']
+        // const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+        // if(!token){
+        //   throw new Error('No tienes autorización para realizar esta acción.');
+        // }
+        const authorization = ['Administrator','User'];
+        const authenticated = ctx.context.headers.authorization
+        const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+        if(!token){
+          throw new Error('No tienes autorización para realizar esta acción.');
+        }
         const startIndex = parseInt(start, 10) >= 0 ? parseInt(start, 10) : 0;
         const query = {
           ...(creation_date && {
@@ -59,7 +82,32 @@ module.exports = {
             }
           })
         };
-        const promotions = await strapi.query('promociones').find(query);
+        let promotions = await strapi.query('promociones').find(query);
+
+        if (min_creation_date && max_creation_date) {
+          promotions= promotions.filter(promotions => {
+            const fecha_creacion = new Date(promotions.fecha_creacion);
+            return fecha_creacion >= new Date(min_creation_date) && fecha_creacion <= new Date(max_creation_date);
+          });
+        }
+
+        if (min_validity_date && max_validity_date) {
+          promotions= promotions.filter(promotions => {
+            const fecha_vigencia = new Date(promotions.fecha_vigencia);
+            return fecha_vigencia >= new Date(min_validity_date) && fecha_vigencia <= new Date(max_validity_date);
+          });
+        }
+
+        if(min_discount_value && max_discount_value) {
+          promotions = promotions.filter( promotions => promotions.valor_descuento >= min_discount_value && promotions.valor_descuento <= max_discount_value);
+        }
+        else if(min_discount_value){
+          promotions = promotions.filter( promotions => promotions.valor_descuento > min_discount_value)
+        }
+        else if(max_discount_value){
+          promotions = promotions.filter(promotions => promotions.valor_descuento <= max_discount_value)
+        }
+
         const edges = promotions
           .slice(startIndex, startIndex + parseInt(limit))
           .map((promotion) => ({
