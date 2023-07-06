@@ -28,15 +28,31 @@ module.exports ={
           shopping_cost:Float,
           credits_limit:Long,
           username:String,
-          sale_amount:Float
+          sale_amount:Float,
+          max_cvc: Int,
+          min_cvc: Int,
+          max_expedition_date:DateTime,
+          min_expedition_date:DateTime,
+          max_admission_date:DateTime,
+          min_admission_date:DateTime,
+          max_shopping_cost: Float,
+          min_shopping_cost: Float,
+          max_sale_amount: Float,
+          min_sale_amount: Float
       ):PaymentMethodConnection
   `,
   resolver:{
       Query:{
           paginationPaymentMethod:
-          async(obj,{start, limit, card_number, month, year, cvc, holder, invoice,expedition_date, admission_date, description, reference, type, shopping_cost, credits_limit, username, sale_amount}) =>{
-              const authorization = ['Administrator']
-              const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+          async(obj,{start, limit, card_number, month, year, cvc, holder, invoice,expedition_date, admission_date, description, reference, type, shopping_cost, credits_limit, username, sale_amount,max_cvc,min_cvc,max_expedition_date,min_expedition_date,max_admission_date,min_admission_date,max_shopping_cost,min_shopping_cost,max_sale_amount,min_sale_amount},ctx) =>{
+              // const authorization = ['Administrator']
+              // const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+              // if(!token){
+              //   throw new Error('No tienes autorización para realizar esta acción.');
+              // }
+              const authorization = ['Administrator','User'];
+              const authenticated = ctx.context.headers.authorization
+              const token = await utils.authorization(authenticated.split(' ')[1], authorization);
               if(!token){
                 throw new Error('No tienes autorización para realizar esta acción.');
               }
@@ -100,7 +116,68 @@ module.exports ={
                   'venta.monto': parseFloat(sale_amount )
                 },
               };
-              const PaymentMethod = await strapi.query('metodo-pago').find(query);
+              let PaymentMethod = await strapi.query('metodo-pago').find(query);
+
+              if(min_cvc && max_cvc) {
+                PaymentMethod = PaymentMethod.filter( PaymentMethod => PaymentMethod.cvc >= min_cvc && PaymentMethod.cvc <= max_cvc);
+              }
+              else if(min_cvc){
+                PaymentMethod = PaymentMethod.filter( PaymentMethod => PaymentMethod.cvc > min_cvc)
+              }
+              else if(max_cvc){
+                PaymentMethod = PaymentMethod.filter(PaymentMethod => PaymentMethod.cvc <= max_cvc)
+              }
+
+              if (min_expedition_date && max_expedition_date) {
+                PaymentMethod= PaymentMethod.filter(PaymentMethod => {
+                  const fecha_expedicion = new Date(PaymentMethod.fecha_expedicion);
+                  return fecha_expedicion >= new Date(min_expedition_date) && fecha_expedicion <= new Date(max_expedition_date);
+                });
+              }
+
+              if (min_admission_date && max_admission_date) {
+                PaymentMethod= PaymentMethod.filter(PaymentMethod => {
+                  const fecha_ingreso = new Date(PaymentMethod.fecha_ingreso);
+                  return fecha_ingreso >= new Date(min_admission_date) && fecha_ingreso <= new Date(max_admission_date);
+                });
+              }
+
+              if(max_shopping_cost && min_shopping_cost){
+                 PaymentMethod =  PaymentMethod.filter( PaymentMethod => {
+                  const costo =  PaymentMethod.compras.costo
+                  return costo > min_shopping_cost && costo < max_shopping_cost; 
+                })
+              }
+              else if(min_shopping_cost){
+                 PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
+                  const costo =  PaymentMethod.compras.costo
+                  return costo > min_shopping_cost;
+                })
+              }else if(max_shopping_cost){
+                 PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
+                  const costo  =  PaymentMethod.compras.costo
+                  return costo < max_shopping_cost;
+                });
+              }
+
+              if(max_sale_amount && min_sale_amount){
+                PaymentMethod =  PaymentMethod.filter( PaymentMethod => {
+                 const monto =  PaymentMethod.venta.monto
+                 return monto > min_sale_amount && monto < max_sale_amount; 
+               })
+             }
+             else if(min_sale_amount){
+                PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
+                 const monto =  PaymentMethod.venta.monto
+                 return monto > min_sale_amount;
+               })
+             }else if(max_sale_amount){
+                PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
+                 const monto  =  PaymentMethod.venta.monto
+                 return monto < max_sale_amount;
+               });
+             }
+
               const edges = PaymentMethod
                 .slice(startIndex, startIndex + parseInt(limit))
                 .map((PaymentMethod) => ({ node: PaymentMethod, cursor: PaymentMethod.id }));
