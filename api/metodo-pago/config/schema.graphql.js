@@ -37,11 +37,13 @@ module.exports ={
       Query:{
           paginationPaymentMethod:
           async(obj,{start, limit, card_number, month, year, cvc, holder, invoice,expedition_date, admission_date, description, reference, type, shopping_cost, credits_limit, username, sale_amount},ctx) =>{
-              const authorization = ['Administrator','User']
-              const token = await utils.authorization(ctx.context.headers.authorization, authorization);
-              if(!token){
-                throw new Error('No tienes autorización para realizar esta acción.');
-              }
+            const authorization = ['Administrator','User'];
+            const authenticated = ctx.context.headers.authorization
+
+            const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+            if(!token){
+              throw new Error('No tienes autorización para realizar esta acción.');
+            }
               const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
               const query = {
                 ...(card_number && !isNaN(parseInt(card_number))) && {

@@ -62,11 +62,13 @@ module.exports = {
         batches_internal_code,
         provider_name
       },ctx) => {
-        const authorization = ['Administrator','User']
-        const token = await utils.authorization(ctx.context.headers.authorization, authorization);
-        if(!token){
-          throw new Error('No tienes autorización para realizar esta acción.');
-        }
+        const authorization = ['Administrator','User'];
+                  const authenticated = ctx.context.headers.authorization
+
+                  const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+                  if(!token){
+                    throw new Error('No tienes autorización para realizar esta acción.');
+                  }
         const startIndex = parseInt(start, 10) >= 0 ? parseInt(start, 10) : 0;
         const query = {
           ...(name && {

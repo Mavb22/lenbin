@@ -29,11 +29,12 @@ module.exports ={
       Query:{
           paginationLot:
           async(obj,{start,limit,internal_code, arrival_date,expiration_date,acquisition_date, cost, shopping_cost,product_name},ctx) =>{
-              const authorization = ['Administrator','User']
-              const token = await utils.authorization(ctx.context.headers.authorization, authorization);
-              if(!token){
-                throw new Error('No tienes autorización para realizar esta acción.');
-              }
+            const authorization = ['Administrator','User'];
+            const authenticated = ctx.context.headers.authorization
+            const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+            if(!token){
+              throw new Error('No tienes autorización para realizar esta acción.');
+            }
               const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
               const query = {
                 ...(internal_code && !isNaN(parseInt(internal_code))) && {
