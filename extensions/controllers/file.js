@@ -15,7 +15,6 @@ const fileUpload = async (ctx,models, query )=>{
 
   // Verificar si los campos existen en el modelo
   const fieldsExist = fieldsToShow.every(field => model.attributes.hasOwnProperty(field));
-
   if (fieldsExist) {
   // Realiza la consulta a la base de datos
   const payments = await strapi.query(query).model.find({}, fieldsToShow.join(' '));
