@@ -41,7 +41,7 @@ const role = {
   "proveedors": ["Administrator"],
   "rutas": ["Administrator"],
   "tipo-rols": ["Administrator"],
-  "usuarios": ["Administrator"],
+  "usuarios": ["Administrator","User"],
   "vendedores": ["Administrator"],
   "ventas": ["Administrator"],
 }

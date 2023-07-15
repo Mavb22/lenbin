@@ -9,9 +9,7 @@ const confirm = async(ctx) => {
     }, {
       confirm:true,
     });
-    ctx.send({
-      msj: "Esta listo",
-    });
+    ctx.redirect(process.env.URL+'/auth/login');
   } catch (error) {
     return ctx.throw(400, 'There was some mistake ' + error.message);
   }
