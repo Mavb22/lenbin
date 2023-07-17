@@ -116,10 +116,26 @@
 //     },
 //   },
 // };
+const { petition } = require('../../../extensions/graphql/petition');
+const { resolverFilters } = require('../../../extensions/graphql/resolverFilters');
 const schema = require('../../../extensions/graphql/schema');
-const {definition,query,resolver}  = schema('Abonos','Payment','abonos');
+const {definition,query,resolver}  = schema('Abonos','Payment');
 module.exports = {
   definition,
   query,
-  resolver
+  resolver: {
+    Query : {
+      [resolver]: async (obj,{start,limit,filters},{context}) => {
+        const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
+
+        const query = await resolverFilters(filters,'Abonos',{mostrar:true});
+        const {totalCount,edges,pageInfo} = await petition.abonos(query,startIndex,limit);
+        return {
+          totalCount,
+          edges,
+          pageInfo,
+        };
+    }
+    }
+  }
 };

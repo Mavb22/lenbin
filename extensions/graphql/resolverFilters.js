@@ -1,21 +1,8 @@
 const { collections,relationsValues } = require("./table");
 
-const resolverFilters = async (filters, query = {}) => {
-  const {filtered,relation} = collections.Abonos;
+const resolverFilters = async (filters, table, query = {}) => {
+  const {filtered,relation} = collections[table];
   const operators = ['==','!=','<','>','<=','>=','range','contain'];
-  // const filtered = ['cantidad_abono','fecha_abono','estado_abono','credito','usuario'];
-  // const relation = ['credito','usuario']
-  // const relationsValues = {
-  //   usuario:{
-  //     '==': async(value) => {
-  //       const users= await strapi.query('usuarios').model.find({nombre: value});
-  //       if(users.length > 0){
-  //         const user = users.map(object => object.id)
-  //         return {$in: user}
-  //       }
-  //     }
-  //   }
-  // }
   const operatorValue = {
     '==': async (field,value,operator) => {
       let query;
@@ -100,15 +87,15 @@ const resolverFilters = async (filters, query = {}) => {
     if(!operators.includes(operator)){
       throw new Error(`The operator: ${operator} not supported`);
     }
-    if(field && ['==,!='].includes(field) && !min && !max && value){
+    if(field && ['==','!='].includes(operator) && !min && !max && value){
       query[field] = await operatorValue[operator](field,value,operator);
-    }else if ( field && ['contain'].includes(field) && !min && !max && value){
+    }else if ( field && ['contain'].includes(operator) && !min && !max && value){
       query[field] = await operatorValue[operator](field,value,operator);
-    }else if(field && ['>,>='].includes(field) && min && !value){
+    }else if(field && ['>','>='].includes(operator) && min && !value){
       query[field] = await operatorValue[operator](field,min,operator);
-    }else if(field && ['<,<='].includes(field) && max && !value){
+    }else if(field && ['<','<='].includes(operator) && max && !value){
       query[field] = await operatorValue[operator](field,min,operator);
-    }else if(field && ['range'].includes(field) && max && min && !value){
+    }else if(field && ['range'].includes(operator) && max && min && !value){
       query[field] = await operatorValue[operator](field,min,max,operator);
     }
   }
