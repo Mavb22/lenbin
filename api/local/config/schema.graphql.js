@@ -1,5 +1,3 @@
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
 // module.exports ={
 //     definition:`
 //         type LocEdge{
@@ -36,7 +34,15 @@
 //             status: Boolean,
 //             status2: String,
 //             user: String,
-//             sales: Int
+//             sales: Int,
+//             max_high_date: DateTime,
+//             min_high_date: DateTime,
+//             max_latitude: Float,
+//             min_latitude: Float,
+//             max_length: Float,
+//             min_length: Float,
+//             max_sales: Int,
+//             min_sales: Int
 //         ):LocConnection
 //     `,
 //     // nombre = name
@@ -58,14 +64,18 @@
 //     resolver:{
 //         Query:{
 //             paginationLocal:
-//             async(obj,{start,limit,name,alias,social_reason,rfc,high_date,street,cologne,street_number,municipality,internal_number,city,cp,latitude,length,phone,cell_phone,turn,status,status2,user,sales}, ctx) =>{
-//               const authorization = ['Administrator','User'];
-//               const authenticated = ctx.context.headers.authorization
-
-//               const token = await utils.authorization(authenticated.split(' ')[1], authorization);
-//               if(!token){
-//                 throw new Error('No tienes autorización para realizar esta acción.');
-//               }
+//             async(obj,{start,limit,name,alias,social_reason,rfc,high_date,street,cologne,street_number,municipality,internal_number,city,cp,latitude,length,phone,cell_phone,turn,status,status2,user,sales,max_high_date,min_high_date,max_latitude,min_latitude,max_length,min_length,max_sales,min_sales},ctx) =>{
+//                 // const authorization = ['Administrator']
+//                 // const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+//                 // if(!token){
+//                 //   throw new Error('No tienes autorización para realizar esta acción.');
+//                 // }
+//                 const authorization = ['Administrator','User'];
+//                 const authenticated = ctx.context.headers.authorization
+//                 const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+//                 if(!token){
+//                   throw new Error('No tienes autorización para realizar esta acción.');
+//                 }
 //                 const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
 //                 const query={
 //                     ...( name && {
@@ -126,21 +136,74 @@
 //                         status2: new RegExp(status2,'i')
 //                     }),
 //                     ...(user && {
-//                         "usuario.nombre": new RegExp(user, 'i')
+//                         "usuarios.nombre": new RegExp(user, 'i')
 //                       }),
 //                     ...(sales && !isNaN(parseInt(sales))) && {
 //                         "ventas.monto": parseInt(sales)
 //                     },
 //                 }
-//                 const local = await strapi.query('local').find(query);
-//                 const {edges, pageInfo} = schema.search(local,startIndex, limit)
+//                 let Local = await strapi.query('local').find(query);
+
+//                 if (min_high_date && max_high_date) {
+//                     Local= Local.filter(Loc => {
+//                       const fecha_alta = new Date(Loc.fecha_alta);
+//                       return fecha_alta >= new Date(min_high_date) && fecha_alta <= new Date(max_high_date);
+//                     });
+//                   }
+
+//                 if(min_latitude && max_latitude) {
+//                     Local = Local.filter( Loc => Loc.latitud >= min_latitude && Loc.latitud <= max_latitude);
+//                   }
+//                   else if(min_latitude){
+//                     Local = Local.filter( Loc => Loc.latitud > min_latitude)
+//                   }
+//                   else if(max_latitude){
+//                     Local = Local.filter(Loc => Loc.latitud <= max_latitude)
+//                 }
+
+//                 if(min_length && max_length) {
+//                     Local = Local.filter( Loc => Loc.longitud > min_length && Loc.longitud < max_length);
+//                   }
+//                   else if(min_length){
+//                     Local = Local.filter( Loc => Loc.longitud > min_length)
+//                   }
+//                   else if(max_length){
+//                     Local = Local.filter(Loc => Loc.longitud <= max_length)
+//                 }
+
+//                 if(max_sales && min_sales){
+//                     Local = Local.filter(Loc => {
+//                       const monto = Loc.ventas.monto
+//                       return monto > min_sales && monto < max_sales;
+//                     })
+//                   }
+//                   else if(min_sales){
+//                     Local = Local.filter(Loc =>{
+//                       const monto = Loc.ventas.monto
+//                       return monto >min_sales;
+//                     })
+//                   }else if(max_sales){
+//                     Local = Local.filter(Loc =>{
+//                       const monto = Loc.ventas.monto
+//                       return monto < max_sales;
+//                     });
+//                   }
+
+//                 const edges = Local
+//                   .slice(startIndex, startIndex + parseInt(limit))
+//                   .map((Loc) => ({ node: Loc, cursor: Loc.id }));
+//                 const pageInfo = {
+//                   startCursor: edges.length > 0 ? edges[0].cursor : null,
+//                   endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+//                   hasNextPage:  startIndex + parseInt(limit) < Local.length,
+//                   hasPreviousPage: startIndex > 0,
+//                 };
 //                 return {
-//                   totalCount: local.length,
+//                   totalCount: Local.length,
 //                   edges,
 //                   pageInfo,
 //                 };
 //             }
 //         }
 //     }
-
 // }

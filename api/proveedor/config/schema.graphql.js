@@ -1,5 +1,3 @@
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
 // module.exports = {
 //   definition: `
 //     type ProviderEdge {
@@ -32,6 +30,12 @@
 //       status2: String,
 //       purchase_cost: Float,
 //       product_name: String
+//       max_purchase_cost: Float,
+//       min_purchase_cost: Float
+//       max_start_date: DateTime,
+//       min_start_date: DateTime,
+//       max_scheduled_visit: DateTime,
+//       min_scheduled_visit: DateTime,
 //     ): ProviderConnection
 //   `,
 //   resolver: {
@@ -54,15 +58,25 @@
 //         status,
 //         status2,
 //         purchase_cost,
-//         product_name
+//         product_name,
+//         max_purchase_cost,
+//         min_purchase_cost,
+//         max_start_date,
+//         min_start_date,
+//         max_scheduled_visit,
+//         min_scheduled_visit
 //       },ctx) => {
+//         // const authorization = ['Administrator']
+//         // const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+//         // if(!token){
+//         //   throw new Error('No tienes autorización para realizar esta acción.');
+//         // }
 //         const authorization = ['Administrator','User'];
-//                   const authenticated = ctx.context.headers.authorization
-
-//                   const token = await utils.authorization(authenticated.split(' ')[1], authorization);
-//                   if(!token){
-//                     throw new Error('No tienes autorización para realizar esta acción.');
-//                   }
+//         const authenticated = ctx.context.headers.authorization
+//         const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+//         if(!token){
+//           throw new Error('No tienes autorización para realizar esta acción.');
+//         }
 //         const startIndex = parseInt(start, 10) >= 0 ? parseInt(start, 10) : 0;
 //         const query = {
 //           ...(name && {
@@ -131,15 +145,69 @@
 //             "compras.costo": parseFloat(purchase_cost)
 //           },
 //           ...(product_name && {
-//             "productos.nombre": {
+//             "productos_nombre": {
 //               $regex: RegExp(product_name, 'i')
 //             }
 //           })
 //         };
-//         const providers = await strapi.query('proveedor').find(query);
-//         const {edges, pageInfo} = schema.search(providers,startIndex, limit)
+//         let provider = await strapi.query('proveedor').find(query);
+
+//         if (min_start_date && max_start_date) {
+//           provider= provider.filter(provider => {
+//             const fecha_alta = new Date(provider.fecha_alta);
+//             return fecha_alta >= new Date(min_start_date) && fecha_alta <= new Date(max_start_date);
+//           });
+//         }
+
+//         if (min_scheduled_visit && max_scheduled_visit) {
+//           provider= provider.filter(provider => {
+//             const visita_programada = new Date(provider.visita_programada);
+//             return visita_programada >= new Date(min_scheduled_visit) && visita_programada <= new Date(max_scheduled_visit);
+//           });
+//         }
+
+//         if(max_purchase_cost && min_purchase_cost){
+//           provider = provider.filter(provider => {
+//             const costo = provider.compras.costo
+//             return costo > min_purchase_cost && costo < max_purchase_cost;
+//           })
+//         }
+//         else if(min_purchase_cost){
+//           provider = provider.filter(provider =>{
+//             const costo = provider.compras.costo
+//             return costo > min_purchase_cost;
+//           })
+//         }else if(max_purchase_cost){
+//           provider = provider.filter(provider =>{
+//             const costo = provider.compras.costo
+//             return costo < max_purchase_cost;
+//           });
+//         }
+
+//         // if(min_purchase_cost && max_purchase_cost) {
+//         //   provider = provider.filter(  provider  =>  provider.compras.costo >= min_purchase_cost &&  provider.compras.costo <= max_purchase_cost);
+//         // }
+//         // else if(min_purchase_cost){
+//         //   provider = provider.filter(  provider =>  provider.compras.costo > min_purchase_cost)
+//         // }
+//         // else if(max_purchase_cost){
+//         //   provider = provider.filter( provider =>  provider.compras.costo < max_purchase_cost)
+//         // }
+
+//         const edges = provider
+//           .slice(startIndex, startIndex + parseInt(limit))
+//           .map((provider) => ({
+//             node: provider,
+//             cursor: provider.id
+//           }));
+//         const pageInfo = {
+//           startCursor: edges.length > 0 ? edges[0].cursor : null,
+//           endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+//           hasNextPage: startIndex + parseInt(limit) < provider.length,
+//           hasPreviousPage: startIndex > 0,
+//         };
 //         return {
-//           totalCount: providers.length,
+//           totalCount: provider.length,
 //           edges,
 //           pageInfo,
 //         };

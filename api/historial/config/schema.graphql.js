@@ -1,5 +1,3 @@
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
 // module.exports = {
 //     definition:`
 //     type recordEdge{
@@ -23,6 +21,8 @@
 //             status2: String,
 //             trucks: String,
 //             user: String
+//             max_date: DateTime,
+//             min_date: DateTime
 //         ):recordConnection
 //     `,
 //     //records
@@ -34,14 +34,18 @@
 //     resolver:{
 //         Query:{
 //             paginationrecords:
-//                 async(obj,{start,limit,date,start_time,end_time,status,status2,user,trucks}, ctx ) =>{
-//                   const authorization = ['Administrator','User'];
-//                   const authenticated = ctx.context.headers.authorization
-
-//                   const token = await utils.authorization(authenticated.split(' ')[1], authorization);
-//                   if(!token){
-//                     throw new Error('No tienes autorización para realizar esta acción.');
-//                   }
+//                 async(obj,{start,limit,date,start_time,end_time,status,status2,user,trucks,min_date,max_date},ctx ) =>{
+//                     // const authorization = ['Administrator']
+//                     // const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+//                     // if(!token){
+//                     //   throw new Error('No tienes autorización para realizar esta acción.');
+//                     // }
+//                     const authorization = ['Administrator','User'];
+//                     const authenticated = ctx.context.headers.authorization
+//                     const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+//                     if(!token){
+//                       throw new Error('No tienes autorización para realizar esta acción.');
+//                     }
 //                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
 //                     const query={
 //                         ...(date && {
@@ -62,18 +66,34 @@
 //                         ...(user && {
 //                             "usuario.nombre": new RegExp(user, 'i')
 //                         }),
-//                         ...(trucks && !isNaN(parseInt(trucks))) && {
-//                             "camiones.num_serie": parseInt(trucks)
-//                         },
+//                         ...(trucks && {
+//                             "camiones.num_serie": new RegExp(trucks, 'i')
+//                         }),
 
 //                     }
-//                     const records = await strapi.query('historial').find(query);
-//                     const {edges, pageInfo} = schema.search(records,startIndex, limit)
-//                     return {
-//                       totalCount: records.length,
-//                       edges,
-//                       pageInfo,
+//                     let records = await strapi.query('historial').find(query);
+
+//                     if (min_date && max_date) {
+//                         records = records.filter(record => {
+//                           const fecha = new Date(record.fecha);
+//                           return fecha >= new Date(min_date) && fecha <= new Date(max_date);
+//                         });
+//                       }
+
+//                     const edges = records
+//                     .slice(startIndex, startIndex + parseInt(limit))
+//                     .map((record) => ({ node: record, cursor: record.id }));
+//                     const pageInfo = {
+//                      startCursor: edges.length > 0 ? edges[0].cursor : null,
+//                      endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+//                      hasNextPage:  startIndex + parseInt(limit) < records.length,
+//                      hasPreviousPage: startIndex > 0,
 //                     };
+//                     return {
+//                         totalCount: records.length,
+//                         edges,
+//                         pageInfo,
+//                       };
 //                 }
 //         }
 //     }
