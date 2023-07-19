@@ -29,6 +29,20 @@ const relationsValues = {
     }
   },
   credito: {
+    '==': async(value) => {
+      const users= await strapi.query('usuarios').model.find({nombre: value});
+      if(users.length > 0){
+        const user = users.map(object => object.id)
+        return {$in: user}
+      }
+    },
+    '!=': async(value) => {
+      const users= await strapi.query('usuarios').model.find({nombre: { $ne: value }});
+      if(users.length > 0){
+        const user = users.map(object => object.id)
+        return {$in: user}
+      }
+    },
     '>': async (min) => {
       const creditos = await strapi.query('credito').model.find({intereses:{ $gt: min }});
       if (creditos.length > 0) {
@@ -64,7 +78,7 @@ const relationsValues = {
         return {$in: credito};
       }
     }
-  }
+  },
 }
 module.exports = {
   collections,

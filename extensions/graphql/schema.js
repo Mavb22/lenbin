@@ -28,8 +28,8 @@ module.exports = (tableName,name) => {
   `;
   const query = `
     paginationData${name}(
-      start: Int!,
-      limit: Int!,
+      start: Int,
+      limit: Int,
       filters: [Filter${name}Field]
     ): Filter${name}Connection
  `;

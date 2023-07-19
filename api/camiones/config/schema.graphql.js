@@ -12,6 +12,8 @@
 //       pageInfo: PageInfo!
 //   }
 
+
+
 //   `,
 //   query:`
 //    paginationtrucks(
@@ -98,7 +100,7 @@
 //                   "gastos.categoria": new RegExp( spent,'i')
 //                 }),
 //               }
-//               const trucks = await strapi.query('camiones').find(query);
+//               const trucks = await strapi.query('camiones').model.find(query);
 //               const {edges, pageInfo} = schema.search(trucks,startIndex, limit)
 //             // return {
 //             //   totalCount: trucks.length,
@@ -112,4 +114,32 @@
 
 
 // }
-
+const utils = require('../../../extensions/controllers/utils');
+const { petition } = require('../../../extensions/graphql/petition');
+const { resolverFilters } = require('../../../extensions/graphql/resolverFilters');
+const schema = require('../../../extensions/graphql/schema');
+const {definition,query,resolver}  = schema('Camiones','Truck');
+module.exports = {
+  definition,
+  query,
+  resolver: {
+    Query : {
+      [resolver]: async (obj,{start,limit,filters},{context}) => {
+        const authorization = ['Administrator','User'];
+        const authenticated = context.headers.authorization;
+        const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+          if(!token){
+            throw new Error('No tienes autorización para realizar esta acción.');
+          }
+        const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
+        const query = await resolverFilters(filters,'Camiones');
+        const {totalCount,edges,pageInfo} = await petition.truck(query,startIndex,limit);
+        return {
+          totalCount,
+          edges,
+          pageInfo,
+        };
+    }
+    }
+  }
+};
