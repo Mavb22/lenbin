@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 // const utils = require('../../../extensions/controllers/utils');
 // const schema = require('../../../extensions/controllers/schemas');
+=======
+>>>>>>> geo
 // module.exports ={
 //     definition:`
 //         type DimensionEdge{
@@ -29,7 +32,11 @@
 //             min_long: Float
 //         ):DimensionConnection
 //     `,
+<<<<<<< HEAD
 //     //nombre = name
+=======
+//     //nombre = name
+>>>>>>> geo
 //     //ancho = width
 //     // alto = high
 //     // largo = long
@@ -113,7 +120,9 @@
 //                     edges,
 //                     pageInfo,
 //                 };
+
 //             }
 //         }
 //     }
+
 // }

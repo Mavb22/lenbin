@@ -1,5 +1,3 @@
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
 // module.exports ={
 //     definition:`
 //         type spentEdge{
@@ -11,6 +9,14 @@
 //             edges: [spentEdge!]!
 //             pageInfo: PageInfo!
 //         }
+
+//                     if (min_date && max_date) {
+//                         spents = spents.filter(spent => {
+//                           const fecha = new Date(spent.fecha);
+//                           return fecha >= new Date(min_date) && fecha <= new Date(max_date);
+//                         });
+//                       }
+
 //     `,
 //     query:`
 //         paginationspents(
@@ -113,4 +119,5 @@
 //                 }
 //         }
 //     }
-//   };
+
+// }

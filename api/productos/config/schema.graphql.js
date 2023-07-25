@@ -62,7 +62,6 @@
 //         if(!token){
 //           throw new Error('No tienes autorización para realizar esta acción.');
 //         }
-
 //         const startIndex = parseInt(start, 10) >= 0 ? parseInt(start, 10) : 0;
 //         const query = {
 //           ...(name && {
@@ -209,7 +208,6 @@
 //         // if (min_promotions_date_creation && max_promotions_date_creation) {
 //         //   const minDate = new Date(min_promotions_date_creation);
 //         //   const maxDate = new Date(max_promotions_date_creation);
-
 //         //   Product = Product.filter(Product => {
 //         //     for (const promociones of Product.promociones) {
 //         //       const fecha_creacion = new Date(promociones.fecha_creacion);

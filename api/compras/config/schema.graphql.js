@@ -1,5 +1,3 @@
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
 // module.exports ={
 //     definition:`
 //         type purchaseEdge{
@@ -11,6 +9,64 @@
 //             edges: [purchaseEdge!]!
 //             pageInfo: PageInfo!
 //         }
+
+//     `,
+//     // costo = cost
+//     // fecha_pedido = order_date
+//     // referencia = reference
+//     // fecha_llegada = arrival_date
+//     // lote = lot
+//     // metodo_pago = payment_method
+//     // proveedor = provider
+//     // usuarios = user
+//     resolver:{
+//         Query:{
+//             paginationshopping:
+//                 async(obj,{start,limit,cost,order_date, reference, arrival_date, status, status2,lot, payment_method, provider, user,max_cost,max_order_date,min_order_date,max_arrival_date,min_arrival_date,min_cost,max_lot,min_lot,max_payment_method,min_payment_method}, ctx) => {
+//                     // const authorization = ['Administrator']
+//                     // const token = await utils.authorization(ctx.context.headers.authorization, authorization);
+//                     // if(!token){
+//                     //   throw new Error('No tienes autorización para realizar esta acción.');
+//                     // }
+//                     const authorization = ['Administrator','User'];
+//                     const authenticated = ctx.context.headers.authorization
+//                     const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+//                     if(!token){
+//                       throw new Error('No tienes autorización para realizar esta acción.');
+//                     }
+//                     const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
+//                     const query={
+//                         ...(cost && !isNaN(parseFloat(cost)))&& {
+//                             costo: parseFloat(cost)
+//                         },
+//                         ...(order_date && {
+//                             fecha_pedido: order_date
+//                           }),
+//                         ...(reference && {
+//                             referencia: new RegExp(reference,'i')
+//                         }),
+//                         ...(arrival_date && {
+//                             fecha_llegada: arrival_date
+//                         }),
+//                         ...(status !== undefined && {
+//                             status: status
+//                         }),
+//                         ...(status2 && {
+//                             status2: new RegExp(status2,'i')
+//                         }),
+//                         ...(lot && !isNaN(parseInt(lot))) && {
+//                             "lote.codigo_interno": parseInt(lot)
+//                         },
+//                         ...(payment_method && !isNaN(parseInt(payment_method))) && {
+//                             "metodo_pago.numero_tarjeta":parseInt(payment_method)
+//                         },
+//                        ...( provider && {
+//                             'proveedor.nombre': new RegExp( provider,'i')
+//                         }),
+//                         ...(user && {
+//                             "usuarios.nombre": new RegExp(user, 'i')
+//                         }),
+
 //     `,
 //     query:`
 //         paginationshopping(
@@ -125,7 +181,11 @@
 //                       if(max_lot && min_lot){
 //                         shopping = shopping.filter(purchase => {
 //                           const codigo_interno = purchase.lote.codigo_interno
+<<<<<<< HEAD
 //                           return codigo_interno > min_lot && codigo_interno < max_lot;
+=======
+//                           return codigo_interno > min_lot && codigo_interno < max_lot;
+>>>>>>> geo
 //                         })
 //                       }
 //                       else if(min_lot){
@@ -143,7 +203,11 @@
 //                       if(max_payment_method && min_payment_method){
 //                         shopping = shopping.filter(purchase => {
 //                           const numero_tarjeta = purchase.metodo_pago.numero_tarjeta
+<<<<<<< HEAD
 //                           return numero_tarjeta > min_payment_method && codigo_interno < max_payment_method;
+=======
+//                           return numero_tarjeta > min_payment_method && codigo_interno < max_payment_method;
+>>>>>>> geo
 //                         })
 //                       }
 //                       else if(min_payment_method){
@@ -171,9 +235,18 @@
 //                         edges,
 //                         pageInfo,
 //                       };
+<<<<<<< HEAD
 
 //                 }
 
 //               }
 //             }
 //           }
+=======
+
+//                 }
+
+//         }
+//     }
+// }
+>>>>>>> geo

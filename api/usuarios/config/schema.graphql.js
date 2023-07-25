@@ -348,7 +348,6 @@
 //           return  fecha_alta >= new Date(min_enrollment_date) &&  fecha_alta <= new Date(max_enrollment_date);
 //         });
 //       }
-
 //       if (min_histories_date && max_histories_date) {
 //         Users = Users.filter(user =>
 //           user.historiales.some(historial => {

@@ -1,5 +1,3 @@
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
 // module.exports = {
 //     definition:`
 //         type credenceEdge{
@@ -11,6 +9,7 @@
 //             edges: [credenceEdge!]!
 //             pageInfo: PageInfo!
 //         }
+
 //     `,
 //     query:`
 //         paginationcredit(
@@ -146,7 +145,11 @@
 //                       if(max_payments && min_payments){
 //                         credit = credit.filter(credence => {
 //                           const cantidad_abono = credence.abonos.cantidad_abono
+<<<<<<< HEAD
 //                           return cantidad_abono > min_payments && cantidad_abono < max_payments;
+=======
+//                           return cantidad_abono > min_payments && cantidad_abono < max_payments;
+>>>>>>> geo
 //                         })
 //                       }
 //                       else if(min_payments){
@@ -164,7 +167,11 @@
 //                       if(max_payment_method && min_payment_method){
 //                         credit = credit.filter(credence => {
 //                           const numero_tarjeta = credence.metodo_pago.numero_tarjeta
+<<<<<<< HEAD
 //                           return numero_tarjeta > min_payment_method && numero_tarjeta < max_payment_method;
+=======
+//                           return numero_tarjeta > min_payment_method && numero_tarjeta < max_payment_method;
+>>>>>>> geo
 //                         })
 //                       }
 //                       else if(min_payment_method){
@@ -178,6 +185,7 @@
 //                           return numero_tarjeta < max_payment_method;
 //                         });
 //                       }
+<<<<<<< HEAD
 
 //                     const edges = credit
 //                       .slice(startIndex, startIndex + parseInt(limit))
@@ -193,6 +201,24 @@
 //                       edges,
 //                       pageInfo,
 //                     };
+=======
+
+//                     const edges = credit
+//                       .slice(startIndex, startIndex + parseInt(limit))
+//                       .map((credence) => ({ node: credence, cursor: credence.id }));
+//                     const pageInfo = {
+//                       startCursor: edges.length > 0 ? edges[0].cursor : null,
+//                       endCursor: edges.length > 0 ? edges[edges.length - 1].cursor : null,
+//                       hasNextPage:  startIndex + parseInt(limit) < credit.length,
+//                       hasPreviousPage: startIndex > 0,
+//                     };
+//                     return {
+//                       totalCount: credit.length,
+//                       edges,
+//                       pageInfo,
+//                     };
+
+>>>>>>> geo
 //                 }
 //         }
 //     }

@@ -142,41 +142,41 @@
 //                 });
 //               }
 
-//               if(max_shopping_cost && min_shopping_cost){
-//                  PaymentMethod =  PaymentMethod.filter( PaymentMethod => {
-//                   const costo =  PaymentMethod.compras.costo
-//                   return costo > min_shopping_cost && costo < max_shopping_cost;
-//                 })
-//               }
-//               else if(min_shopping_cost){
-//                  PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
-//                   const costo =  PaymentMethod.compras.costo
-//                   return costo > min_shopping_cost;
-//                 })
-//               }else if(max_shopping_cost){
-//                  PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
-//                   const costo  =  PaymentMethod.compras.costo
-//                   return costo < max_shopping_cost;
-//                 });
-//               }
+              if(max_shopping_cost && min_shopping_cost){
+                 PaymentMethod =  PaymentMethod.filter( PaymentMethod => {
+                  const costo =  PaymentMethod.compras.costo
+                  return costo > min_shopping_cost && costo < max_shopping_cost;
+                })
+              }
+              else if(min_shopping_cost){
+                 PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
+                  const costo =  PaymentMethod.compras.costo
+                  return costo > min_shopping_cost;
+                })
+              }else if(max_shopping_cost){
+                 PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
+                  const costo  =  PaymentMethod.compras.costo
+                  return costo < max_shopping_cost;
+                });
+              }
 
-//               if(max_sale_amount && min_sale_amount){
-//                 PaymentMethod =  PaymentMethod.filter( PaymentMethod => {
-//                  const monto =  PaymentMethod.venta.monto
-//                  return monto > min_sale_amount && monto < max_sale_amount;
-//                })
-//              }
-//              else if(min_sale_amount){
-//                 PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
-//                  const monto =  PaymentMethod.venta.monto
-//                  return monto > min_sale_amount;
-//                })
-//              }else if(max_sale_amount){
-//                 PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
-//                  const monto  =  PaymentMethod.venta.monto
-//                  return monto < max_sale_amount;
-//                });
-//              }
+              if(max_sale_amount && min_sale_amount){
+                PaymentMethod =  PaymentMethod.filter( PaymentMethod => {
+                 const monto =  PaymentMethod.venta.monto
+                 return monto > min_sale_amount && monto < max_sale_amount;
+               })
+             }
+             else if(min_sale_amount){
+                PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
+                 const monto =  PaymentMethod.venta.monto
+                 return monto > min_sale_amount;
+               })
+             }else if(max_sale_amount){
+                PaymentMethod =  PaymentMethod.filter( PaymentMethod =>{
+                 const monto  =  PaymentMethod.venta.monto
+                 return monto < max_sale_amount;
+               });
+             }
 
 //               const edges = PaymentMethod
 //                 .slice(startIndex, startIndex + parseInt(limit))
