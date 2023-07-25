@@ -19,8 +19,10 @@ const resolverFilters = async (filters, table, query = {}) => {
       validateOperator(operator, value, min, max);
 
       if (operator in operatorValueMap) {
-        if ((['==', '!=', 'contain'].includes(operator) && value) || (['>', '>='].includes(operator) && min) ||(['<', '<='].includes(operator) && max) || (operator === 'range' && min && max)) {
+        if ((['==', '!=', 'contain'].includes(operator) && value) || (['>', '>='].includes(operator) && min) ||(['<', '<='].includes(operator) && max)) {
           query[field] = await operatorValueMap[operator](field,relation, value || min || max);
+        }else if((operator === 'range' && min && max)){
+          query[field] = await operatorValueMap[operator](field,relation, min, max);
         }
       }
     }

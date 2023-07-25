@@ -1,18 +1,12 @@
-<<<<<<< HEAD
-=======
 //Nombre de la tabla = abonos = se cambia al nombre de la tabla
 //filtered = Son los campos de la tabla
-//relation = son las relaciones que tiene la tabla 
+//relation = son las relaciones que tiene la tabla
 //en camiones en el campo placas va hacer por placas.placa,placa.activa,placa.estado
->>>>>>> geo
 const collections = {
   Abonos:{
     filtered: ['cantidad_abono','fecha_abono','estado_abono','credito','usuario'],
     relation: ['credito','usuario']
   },
-<<<<<<< HEAD
-}
-=======
   Camiones:{
     filtered: ['placas','num_serie','niv','historial','rutas','usuario','gastos'],
     relation: ['usuario','rutas','historial','gastos']
@@ -27,7 +21,6 @@ const collections = {
   },
 }
 
->>>>>>> geo
 const relationsValues = {
   usuario:{
     '==': async(value) => {
@@ -53,7 +46,6 @@ const relationsValues = {
     }
   },
   credito: {
-<<<<<<< HEAD
     '==': async(value) => {
       const users= await strapi.query('usuarios').model.find({nombre: value});
       if(users.length > 0){
@@ -68,8 +60,6 @@ const relationsValues = {
         return {$in: user}
       }
     },
-=======
->>>>>>> geo
     '>': async (min) => {
       const creditos = await strapi.query('credito').model.find({intereses:{ $gt: min }});
       if (creditos.length > 0) {
@@ -98,23 +88,6 @@ const relationsValues = {
         return {$in: credito};
       }
     },
-<<<<<<< HEAD
-=======
-    '==': async(value) => {
-      const creditos= await strapi.query('credito').model.find({intereses: value});
-      if(creditos.length > 0){
-        const credito = creditos.map(object => object.id)
-        return {$in: credito}
-      }
-    },
-    '!=': async(value) => {
-      const creditos= await strapi.query('credito').model.find({intereses: { $ne: value }});
-      if(creditos.length > 0){
-        const credito = creditos.map(object => object.id)
-        return {$in: credito}
-      }
-    },
->>>>>>> geo
     'range': async (min,max) => {
       const creditos = await strapi.query('credito').model.find({intereses:{$gte:min, $lte: max }});
       if (creditos.length > 0) {
@@ -123,8 +96,6 @@ const relationsValues = {
       }
     }
   },
-<<<<<<< HEAD
-=======
   rutas:{
     '==': async(value) => {
       const destination= await strapi.query('rutas').model.find({destino: value});
@@ -231,7 +202,6 @@ const relationsValues = {
       }
     }
   },
-
   lote: {
     '>': async (min) => {
       const lot = await strapi.query('lote').model.find({codigo_interno:{ $gt: min }});
@@ -352,7 +322,6 @@ const relationsValues = {
       }
     }
   },
->>>>>>> geo
 }
 module.exports = {
   collections,

@@ -133,8 +133,10 @@ module.exports = {
           if(!token){
             throw new Error('No tienes autorización para realizar esta acción.');
           }
+        console.log(filters);
         const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
         const query = await resolverFilters(filters,'Abonos',{mostrar:true});
+        console.log(query);
         const {totalCount,edges,pageInfo} = await petition.abonos(query,startIndex,limit);
         return {
           totalCount,

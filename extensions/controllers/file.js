@@ -1,14 +1,17 @@
 const XLSX = require('xlsx');
 const fs = require('fs');
 const fileUpload = async (ctx,models, query )=>{
-  const {campos, type, nombre_archivo} = ctx.request.body;
+  // const {campos, type, nombre_archivo} = ctx.request.body;
+  const campos = ["cantidad_abono","fecha_abono","estado_abono","usuario"];
+  const type = "xlsx";
+  // const type = "txt";
+  const nombre_archivo = "Camiones2"
   if(campos.length == 0) {
     return ctx.throw(403, 'Es necesarico que digas que campos quieres mostrar');
   }
   // console.log(ctx.request.body);
   // Campos que se mostrarán en los pagos
   const fieldsToShow = campos;
-
   // Obtener el modelo de la tabla
   const model = strapi.models[models];
   const file = type;
@@ -17,24 +20,100 @@ const fileUpload = async (ctx,models, query )=>{
   const fieldsExist = fieldsToShow.every(field => model.attributes.hasOwnProperty(field));
   if (fieldsExist) {
   // Realiza la consulta a la base de datos
-  const payments = await strapi.query(query).model.find({}, fieldsToShow.join(' '));
-
+  let payments = await strapi.query(query).model.find({}, fieldsToShow.join(' '))
+  .populate({
+    path: 'usuario',
+    select: 'id nombre ap_paterno ap_materno'
+  })
+  .populate({
+    path: 'credito',
+    select: 'id intereses'
+  });
+  const renameMap = {
+    cantidad_abono: 'Cantidad de abono',
+    fecha_abono: 'Fecha de abono',
+    estado_abono: 'Estado de abono',
+    usuario: 'Nombre de usuario',
+  };
   if (file === 'txt') {
-    // Crear una cadena de texto con los datos de los pagos
-    const textData = payments
-      .map(payment => fieldsToShow.map(field => `${field}: ${payment[field]}`).join(' | '))
-      .join('\n');
 
-    // Guardar los datos en un archivo de texto
+  // Encontrar la longitud más grande de cada clave y valor
+  const maxLengths = Object.keys(renameMap).reduce((acc, key) => {
+    const fieldLength = renameMap[key].length;
+    // const valueLength = renameMap[key].length;
+
+    // Determinar el valor más largo entre la clave y el valor
+    // Encontrar el valor actual del campo en la petición
+    const currentValueLength = payments.reduce((maxLen, payment) => {
+      let value;
+      if(key === 'usuario'){
+        value = `${formatValue(payment[key]?.nombre)} ${formatValue(payment[key]?.ap_paterno)} ${formatValue(payment[key]?.ap_materno)}`;
+      }else {
+        value = payment[key].toString();
+      }
+      if (typeof value === 'string') {
+        return Math.max(maxLen, value.length);
+      }
+      return maxLen;
+    }, 0);
+
+  // Determinar si el nuevo nombre o el valor actual es más grande
+  if (currentValueLength > fieldLength) {
+    acc[key] = {
+      fieldLength,
+      valueLength: currentValueLength,
+      max: currentValueLength,
+    };
+  } else {
+    acc[key] = {
+      fieldLength,
+      currentValueLength,
+      max:fieldLength,
+    };
+  }
+  return acc;
+}, {});
+    console.log('Fecha de abono                                            '.length);
+    console.log(maxLengths)
+    const table = [];
+    let titleDashesRow = Object.keys(renameMap).map(key => '-'.repeat(maxLengths[key].max));
+    table.push(`--${titleDashesRow.join('---')}--`);
+    const header = Object.keys(renameMap).map(key =>{
+      const title = `${renameMap[key]}`;
+      const spaces = maxLengths[key].max - maxLengths[key].fieldLength;
+      console.log(maxLengths[key].max - maxLengths[key].fieldLength);
+      return `${title}${' '.repeat(spaces)}`;
+    });
+    table.push(`| ${header.join(' | ')} |`);
+    table.push(`--${titleDashesRow.join('---')}--`);
+    payments.forEach(payment => {
+      const row = Object.keys(renameMap).map(key => {
+        let value;
+        if(key === 'usuario'){
+          value = `${formatValue(payment[key]?.nombre)} ${formatValue(payment[key]?.ap_paterno)} ${formatValue(payment[key]?.ap_materno)}`;
+        }else {
+          value = String(payment[key]);
+        }
+        const spaces = maxLengths[key].max - value.length;
+        return `${value}${' '.repeat(spaces)}`;
+      });
+      table.push(`| ${row.join(' | ')} |`);
+      table.push(`--${titleDashesRow.join('---')}--`);
+    });
+    const tableString = table.join('\n');
+    // // Ruta del archivo
     const filePath = nombre_archivo + '.txt';
-    fs.writeFileSync(filePath, textData, 'utf-8');
 
-    // Establecer los encabezados de respuesta para la descarga
-    ctx.set('Content-Disposition', 'attachment; filename='+nombre_archivo+'.txt');
+    // Escribir el contenido en un archivo TXT
+    fs.writeFileSync(filePath, tableString);
+
+    // Configurar la respuesta HTTP para la descarga
+    ctx.set('Content-Disposition', 'attachment; filename=' + nombre_archivo + '.txt');
     ctx.type = 'text/plain';
 
     // Enviar el archivo como respuesta HTTP
-    ctx.send(fs.createReadStream(filePath));
+    ctx.body = fs.createReadStream(filePath);
+
     // Eliminar el archivo después de enviarlo
     fs.unlinkSync(filePath);
   } else if (file === 'xlsx') {
@@ -42,19 +121,23 @@ const fileUpload = async (ctx,models, query )=>{
     const plainObjects = payments.map(payment => {
       const obj = {};
       fieldsToShow.forEach(field => {
-        obj[field] = payment[field];
+        if(field == 'usuario') {
+          obj[renameMap[field]] = `${formatValue(payment[field]?.nombre)} ${formatValue(payment[field]?.ap_paterno)} ${formatValue(payment[field]?.ap_materno)}`;
+        }else {
+          obj[renameMap[field]] = payment[field];
+        }
       });
       return obj;
     });
 
     // Crear archivo de Excel (xlsx)
-    const worksheet = XLSX.utils.json_to_sheet(plainObjects, { header: fieldsToShow });
+    const worksheet = XLSX.utils.json_to_sheet(plainObjects, {});
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Tabla');
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
 
     // Establecer los encabezados de respuesta para la descarga
-    ctx.set('Content-Disposition', 'attachment; filename='+nombre_archivo+'xlsx');
+    ctx.set('Content-Disposition', 'attachment; filename='+nombre_archivo+'.xlsx');
     ctx.type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 
     // Enviar el archivo como respuesta HTTP
@@ -70,6 +153,9 @@ const fileUpload = async (ctx,models, query )=>{
   // console.log('Uno o más campos no existen en la tabla');
 }
 
+}
+function formatValue(value) {
+  return value !== undefined && value !== null ? value : '';
 }
 module.exports ={
   fileUpload

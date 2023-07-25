@@ -1,7 +1,5 @@
 const routes = require('../../extensions/controllers/routes');
 module.exports = async (ctx, next) => {
-  console.log(ctx.request.url);
-  console.log(ctx.request.heders);
   const route = ctx.request.url.split('/')[1];
   const token = ctx.request.headers.authenticated.split(' ')[1];
   const rol = await routes[route](token, route);
