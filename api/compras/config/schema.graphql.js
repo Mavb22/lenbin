@@ -181,11 +181,7 @@
 //                       if(max_lot && min_lot){
 //                         shopping = shopping.filter(purchase => {
 //                           const codigo_interno = purchase.lote.codigo_interno
-<<<<<<< HEAD
 //                           return codigo_interno > min_lot && codigo_interno < max_lot;
-=======
-//                           return codigo_interno > min_lot && codigo_interno < max_lot;
->>>>>>> geo
 //                         })
 //                       }
 //                       else if(min_lot){
@@ -203,11 +199,7 @@
 //                       if(max_payment_method && min_payment_method){
 //                         shopping = shopping.filter(purchase => {
 //                           const numero_tarjeta = purchase.metodo_pago.numero_tarjeta
-<<<<<<< HEAD
 //                           return numero_tarjeta > min_payment_method && codigo_interno < max_payment_method;
-=======
-//                           return numero_tarjeta > min_payment_method && codigo_interno < max_payment_method;
->>>>>>> geo
 //                         })
 //                       }
 //                       else if(min_payment_method){
@@ -235,18 +227,7 @@
 //                         edges,
 //                         pageInfo,
 //                       };
-<<<<<<< HEAD
-
 //                 }
-
-//               }
-//             }
-//           }
-=======
-
-//                 }
-
 //         }
 //     }
 // }
->>>>>>> geo
