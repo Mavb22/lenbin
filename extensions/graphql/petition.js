@@ -1,6 +1,6 @@
 const pagination = require("../controllers/pagination");
 const petition = {
-  abonos: async (query,startIndex,limit) => {
+  abonos: async (query,startIndex = 0,limit = 20) => {
     let payments = await strapi.query('abonos').model.find(query)
     .populate({
       path: 'usuario',
@@ -10,7 +10,7 @@ const petition = {
       path: 'credito',
       select: 'id intereses'
     });
-    payments = await Promise.all(
+    const paymentsRelations = await Promise.all(
       payments.map(async (payment) => {
         const usuario = await strapi.query('usuarios').model
           .findById(payment.usuario)
@@ -28,11 +28,12 @@ const petition = {
         };
       })
     );
-    const {edges, pageInfo} = pagination.search(payments,startIndex, limit)
+    const {edges, pageInfo} = pagination.search(paymentsRelations,startIndex, limit)
     return {
       totalCount: payments.length,
       edges,
       pageInfo,
+      payments
     };
   },
   truck: async (query,startIndex,limit) => {

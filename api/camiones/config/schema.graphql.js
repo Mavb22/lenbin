@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
-=======
->>>>>>> geo
 // module.exports = {
 //   definition: `
 //   type truckEdge{
@@ -14,13 +9,6 @@
 //       edges: [truckEdge!]!
 //       pageInfo: PageInfo!
 //   }
-<<<<<<< HEAD
-
-
-
-=======
-
->>>>>>> geo
 //   `,
 //   query:`
 //    paginationtrucks(
@@ -46,12 +34,6 @@
 //   resolver: {
 //       Query: {
 //           paginationtrucks:
-<<<<<<< HEAD
-//             async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,record,start_record, end_record,  destination,driver, spent},ctx) => {
-//               const authorization = ['Administrator','User'];
-//               const authenticated = ctx.context.headers.authorization
-
-=======
 //             async (obj, {start,limit,plaque,state,plaque_active,num_serial,niv,record,start_record, end_record,  destination,driver,spent,max_record,min_record,max_start_record,min_start_record,max_end_record,min_end_record}, ctx) => {
 //               // const authorization = ['Administrator']
 //               // const token = await utils.authorization(ctx.context.headers.authorization, authorization);
@@ -60,7 +42,6 @@
 //               // }
 //               const authorization = ['Administrator','User'];
 //               const authenticated = ctx.context.headers.authorization
->>>>>>> geo
 //               const token = await utils.authorization(authenticated.split(' ')[1], authorization);
 //               if(!token){
 //                 throw new Error('No tienes autorización para realizar esta acción.');
@@ -87,11 +68,7 @@
 //                     }
 //                   }
 //                 }),
-<<<<<<< HEAD
-//                 ...( plaque_active && {
-=======
 //                 ...(plaque_active && {
->>>>>>> geo
 //                   // "placas.activa": new RegExp( plaque_active,'i')
 //                   placas:{
 //                     $elemMatch:{
@@ -101,11 +78,7 @@
 //                     }
 //                   }
 //                 }),
-<<<<<<< HEAD
-//                 ...( num_serial && {
-=======
 //                 ...(num_serial && {
->>>>>>> geo
 //                   num_serie: new RegExp( num_serial,'i')
 //                 }),
 //                 ...( niv && {
@@ -114,38 +87,12 @@
 //                 ...( record && {
 //                   "historial.fecha": record
 //                 }),
-<<<<<<< HEAD
-//                 ...( start_record && end_record && {
-=======
 //                 ...(start_record && end_record && {
->>>>>>> geo
 //                   "historial.fecha": {
 //                     $gte: start_record,
 //                     $lte: end_record
 //                   }
 //                 }),
-<<<<<<< HEAD
-//                 ...( destination && {
-//                   "ruta.destino": new RegExp( destination,'i')
-//                 }),
-//                 ...( driver && {
-//                   "usuario.nombre": new RegExp( driver,'i')
-//                 }),
-//                 ...( spent && {
-//                   "gastos.categoria": new RegExp( spent,'i')
-//                 }),
-//               }
-//               const trucks = await strapi.query('camiones').model.find(query);
-//               const {edges, pageInfo} = schema.search(trucks,startIndex, limit)
-//             // return {
-//             //   totalCount: trucks.length,
-//             //   edges,
-//             //   pageInfo,
-//             // };
-
-//       }
-//     }
-=======
 //                 ...(destination && {
 //                   "ruta.destino": new RegExp(destination,'i')
 //                 }),
@@ -189,12 +136,10 @@
 
 //             }
 //       }
->>>>>>> geo
 //   }
 
 
 // }
-<<<<<<< HEAD
 const utils = require('../../../extensions/controllers/utils');
 const { petition } = require('../../../extensions/graphql/petition');
 const { resolverFilters } = require('../../../extensions/graphql/resolverFilters');
@@ -224,6 +169,3 @@ module.exports = {
     }
   }
 };
-=======
-
->>>>>>> geo

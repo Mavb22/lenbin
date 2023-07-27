@@ -3,8 +3,8 @@ const fs = require('fs');
 const fileUpload = async (ctx,models, query )=>{
   // const {campos, type, nombre_archivo} = ctx.request.body;
   const campos = ["cantidad_abono","fecha_abono","estado_abono","usuario"];
-  const type = "xlsx";
-  // const type = "txt";
+  // const type = "xlsx";
+  const type = "txt";
   const nombre_archivo = "Camiones2"
   if(campos.length == 0) {
     return ctx.throw(403, 'Es necesarico que digas que campos quieres mostrar');
