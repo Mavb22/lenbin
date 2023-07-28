@@ -49,7 +49,7 @@
       }
     },
     {
-      "method": "POST",
+      "method": "GET",
       "path": "/abonos/table/files",
       "handler": "abonos.file",
       "config": {

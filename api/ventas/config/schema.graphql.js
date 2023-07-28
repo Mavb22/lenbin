@@ -18,7 +18,7 @@
 //       amount: Float,
 //       total_amount: Float,
 //       date: DateTime,
-//       clasification: String,
+//       classification: String,
 //       delivery_date: DateTime,
 //       delivery_pending: Boolean,
 //       paid: Boolean,
@@ -50,7 +50,8 @@
 //         amount,
 //         total_amount,
 //         date,
-//         clasification,
+//         invoice,
+//         classification,
 //         delivery_date,
 //         delivery_pending,
 //         paid,
@@ -89,8 +90,11 @@
 //           ...(date && {
 //             fecha: date
 //           }),
-//           ...(clasification && {
-//             clasificacion: new RegExp(clasification, 'i')
+//           ...(invoice && {
+//             factura: invoice
+//           }),
+//           ...(classification && {
+//             clasificacion: classification
 //           }),
 //           ...(delivery_date && {
 //             fecha_entrega: delivery_date

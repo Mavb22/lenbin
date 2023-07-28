@@ -1,5 +1,3 @@
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
 // module.exports ={
 //     definition:`
 //         type spentEdge{
@@ -12,6 +10,12 @@
 //             pageInfo: PageInfo!
 //         }
 
+//                     if (min_date && max_date) {
+//                         spents = spents.filter(spent => {
+//                           const fecha = new Date(spent.fecha);
+//                           return fecha >= new Date(min_date) && fecha <= new Date(max_date);
+//                         });
+//                       }
 
 //     `,
 //     query:`
@@ -72,8 +76,11 @@
 //                         ...(user && {
 //                             "usuario.nombre": new RegExp(user, 'i')
 //                         }),
+//                         // ...(trucks  && !isNaN(parseInt(trucks))) && {
+//                         //     "camions.num_serie": parseInt(trucks)
+//                         // },
 //                         ...(trucks && {
-//                           "camions.num_serie": new RegExp(trucks, 'i')
+//                             "camions.num_serie": new RegExp(trucks, 'i')
 //                         }),
 //                     }
 //                     let spents = await strapi.query('gastos').find(query);

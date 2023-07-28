@@ -1,5 +1,3 @@
-// const utils = require('../../../extensions/controllers/utils');
-// const schema = require('../../../extensions/controllers/schemas');
 // module.exports = {
 //   definition: `
 //   type truckEdge{
@@ -11,30 +9,27 @@
 //       edges: [truckEdge!]!
 //       pageInfo: PageInfo!
 //   }
-
-  // `,
-  // query:`
-  //  paginationtrucks(
-  //     start: Int,
-  //     limit: Int,
-  //     plaque: String,
-  //     state: String,
-  //     plaque_active: Boolean,
-  //     num_serial: String,
-  //     niv: String,
-  //     record:DateTime,
-  //     start_record:DateTime,
-  //     end_record:DateTime,
-  //     destination: String,
-  //     driver: String,
-  //     spent: String,
-  //     max_record: DateTime,
-  //     min_record: DateTime,
-  //     max_start_record: DateTime,
-  //     min_start_record: DateTime,
-  //     max_end_record: DateTime,
-  //     min_end_record: DateTime,
-  //  ): truckConnection
+//   `,
+//   query:`
+//    paginationtrucks(
+//       start: Int,
+//       limit: Int,
+//       plaque: String,
+//       state: String,
+//       plaque_active: Boolean,
+//       num_serial: String,
+//       niv: String,
+//       record:DateTime,
+//       destination: String,
+//       driver: String,
+//       spent: String,
+//       max_record: DateTime,
+//       min_record: DateTime,
+//       max_start_record: DateTime,
+//       min_start_record: DateTime,
+//       max_end_record: DateTime,
+//       min_end_record: DateTime,
+//    ): truckConnection
 //   `,
 //   resolver: {
 //       Query: {
@@ -45,12 +40,12 @@
 //               // if(!token){
 //               //   throw new Error('No tienes autorización para realizar esta acción.');
 //               // }
-//               // const authorization = ['Administrator','User'];
-//               // const authenticated = ctx.context.headers.authorization
-//               // const token = await utils.authorization(authenticated.split(' ')[1], authorization);
-//               // if(!token){
-//               //   throw new Error('No tienes autorización para realizar esta acción.');
-//               // }
+//               const authorization = ['Administrator','User'];
+//               const authenticated = ctx.context.headers.authorization
+//               const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+//               if(!token){
+//                 throw new Error('No tienes autorización para realizar esta acción.');
+//               }
 //               const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
 //               const query = {
 //                 ...( plaque && {
@@ -107,6 +102,7 @@
 //                 ...( spent && {
 //                   "gastos.categoria": new RegExp(spent,'i')
 //                 }),
+
 //               }
 //               let trucks = await strapi.query('camiones').find(query);
 
@@ -123,7 +119,7 @@
 //                   return fecha >= new Date(min_start_record) && fecha <= new Date(max_start_record);
 //                 });
 //               }
-              
+
 //               if (min_end_record && max_end_record) {
 //                 trucks = trucks.filter(truck => {
 //                   const fecha = new Date(truck.historial.fecha);
@@ -138,78 +134,38 @@
 //               pageInfo,
 //             };
 
-// //               const token = await utils.authorization(authenticated.split(' ')[1], authorization);
-// //               if(!token){
-// //                 throw new Error('No tienes autorización para realizar esta acción.');
-// //               }
-// //               const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
-// //               const query = {
-// //                 ...( plaque && {
-// //                   // "placas.placa": new RegExp( plaque,'i')
-// //                   placas:{
-// //                     $elemMatch:{
-// //                       placa:{
-// //                         $regex: new RegExp(plaque, 'i')
-// //                       }
-// //                     }
-// //                   }
-// //                 }),
-// //                 ...( state && {
-// //                   // "placas.estado": new RegExp( state,'i')
-// //                   placas:{
-// //                     $elemMatch:{
-// //                       estado:{
-// //                         $regex: new RegExp(state, 'i')
-// //                       }
-// //                     }
-// //                   }
-// //                 }),
-// //                 ...( plaque_active && {
-// //                   // "placas.activa": new RegExp( plaque_active,'i')
-// //                   placas:{
-// //                     $elemMatch:{
-// //                       activa:{
-// //                         $regex: new RegExp(plaque_active, 'i')
-// //                       }
-// //                     }
-// //                   }
-// //                 }),
-// //                 ...( num_serial && {
-// //                   num_serie: new RegExp( num_serial,'i')
-// //                 }),
-// //                 ...( niv && {
-// //                   niv: new RegExp( niv,'i')
-// //                 }),
-// //                 ...( record && {
-// //                   "historial.fecha": record
-// //                 }),
-// //                 ...( start_record && end_record && {
-// //                   "historial.fecha": {
-// //                     $gte: start_record,
-// //                     $lte: end_record
-// //                   }
-// //                 }),
-// //                 ...( destination && {
-// //                   "ruta.destino": new RegExp( destination,'i')
-// //                 }),
-// //                 ...( driver && {
-// //                   "usuario.nombre": new RegExp( driver,'i')
-// //                 }),
-// //                 ...( spent && {
-// //                   "gastos.categoria": new RegExp( spent,'i')
-// //                 }),
-// //               }
-// //               const trucks = await strapi.query('camiones').find(query);
-// //               const {edges, pageInfo} = schema.search(trucks,startIndex, limit)
-// //             // return {
-// //             //   totalCount: trucks.length,
-// //             //   edges,
-// //             //   pageInfo,
-// //             // };
-
-// //       }
-// //     }
-// //   }
+//             }
+//       }
+//   }
 
 
-// // }
+// }
+const utils = require('../../../extensions/controllers/utils');
+const { petition } = require('../../../extensions/graphql/petition');
+const { resolverFilters } = require('../../../extensions/graphql/resolverFilters');
+const schema = require('../../../extensions/graphql/schema');
+const {definition,query,resolver}  = schema('Camiones','Truck');
+module.exports = {
+  definition,
+  query,
+  resolver: {
+    Query : {
+      [resolver]: async (obj,{start,limit,filters},{context}) => {
+        const authorization = ['Administrator','User'];
+        const authenticated = context.headers.authorization;
+        const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+          if(!token){
+            throw new Error('No tienes autorización para realizar esta acción.');
+          }
+        const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
+        const query = await resolverFilters(filters,'Camiones');
+        const {totalCount,edges,pageInfo} = await petition.truck(query,startIndex,limit);
+        return {
+          totalCount,
+          edges,
+          pageInfo,
+        };
+    }
+    }
+  }
+};

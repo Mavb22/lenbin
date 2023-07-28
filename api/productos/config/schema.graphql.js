@@ -1,14 +1,14 @@
 // module.exports = {
 //   definition: `
-//       type ProductEdge{
-//           node: Productos
-//           cursor: ID!
-//       }
-//       type ProductConnection{
-//           totalCount: Int!
-//           edges: [ProductEdge!]!
-//           pageInfo: PageInfo!
-//       }
+//     type ProductEdge{
+//         node: Productos
+//         cursor: ID!
+//     }
+//     type ProductConnection{
+//         totalCount: Int!
+//         edges: [ProductEdge!]!
+//         pageInfo: PageInfo!
+//     }
 //   `,
 //   query: `
 //       paginationProduct(
@@ -89,17 +89,17 @@
 //             },
 //           }),
 //           ...(price && !isNaN(parseFloat(price)) && {
-//             precio: parseFloat(price),
-//           }),
+//               precio: parseFloat(price),
+//             }),
 //           ...(cost && !isNaN(parseFloat(cost)) && {
-//             costo: cost,
-//           }),
+//               costo: cost,
+//             }),
 //           ...(available_inventory && !isNaN(parseInt(available_inventory)) && {
-//             inventario_disp: available_inventory,
-//           }),
+//               inventario_disp: available_inventory,
+//             }),
 //           ...(value_min && !isNaN(parseInt(value_min)) && {
-//             value_min: parseInt(value_min),
-//           }),
+//               value_min: parseInt(value_min),
+//             }),
 //           ...(barcode && !isNaN(parseInt(barcode)) && {
 //             codigo_barras: parseInt(barcode),
 //           }),
@@ -109,16 +109,16 @@
 //           ...(sale_grams && !isNaN(parseFloat(sale_grams))) && {
 //             venta_gramos: parseFloat(sale_grams),
 //           },
-//           ...(status && {
+//           ...(status &&  {
 //             status: status,
 //           }),
-//           ...(status2 && {
+//           ...(status2 &&  {
 //             status2: {
 //               $regex: RegExp(status2, "i"),
 //             }
 //           }),
 //           ...(size_name && {
-//             "dimension.nombre": {
+//             dimension_nombre: {
 //               $regex: RegExp(size_name, "i"),
 //             }
 //           }),
@@ -128,12 +128,9 @@
 //           ...(promotions_date_creation && {
 //             "promociones.fecha_creacion": promotions_date_creation,
 //           }),
-//           ...(batches_internal_code && !isNaN(parseInt(batches_internal_code))) && {
-//             "lotes.codigo_interno": parseInt(batches_internal_code)
+//           ...(batches_internal_code && !isNaN(parseInt(batches_internal_code)) )&& {
+//             "lotes.internal_code": parseInt(batches_internal_code)
 //           },
-//           ...(provider_name &&  {
-//             "proveedor.nombre": RegExp(provider_name, "i"),
-//           }),
 //         };
 //         let Product = await strapi.query('productos').find(query);
 

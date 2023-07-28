@@ -1,14 +1,14 @@
 // module.exports = {
 //   definition: `
-//       type RouteEdge{
-//           node: Rutas
-//           cursor: ID!
-//       }
-//       type RouteConnection{
-//           totalCount: Int!
-//           edges: [RouteEdge!]!
-//           pageInfo: PageInfo!
-//       }
+//     type RouteEdge {
+//       node: Rutas
+//       cursor: ID!
+//     }
+//     type RouteConnection {
+//       totalCount: Int!
+//       edges: [RouteEdge!]!
+//       pageInfo: PageInfo!
+//     }
 //   `,
 //   query: `
 //       paginationRoute(
@@ -114,7 +114,7 @@
 //             ruta_ciclica: cyclic_route
 //           }),
 //           ...(trucks_serial_number && {
-//             "camiones.num_serie": {
+//             "camiones.numero_serie": {
 //               $regex: RegExp(trucks_serial_number, 'i')
 //             }
 //           }),

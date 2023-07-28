@@ -1,14 +1,14 @@
 // module.exports = {
 //   definition: `
-//       type UserEdge{
-//           node: Usuarios
-//           cursor: ID!
-//       }
-//       type UserConnection{
-//           totalCount: Int!
-//           edges: [UserEdge!]!
-//           pageInfo: PageInfo!
-//       }
+//     type UserEdge {
+//       node: Usuarios
+//       cursor: ID!
+//     }
+//     type UserConnection {
+//       totalCount: Int!
+//       edges: [UserEdge!]!
+//       pageInfo: PageInfo!
+//     }
 //   `,
 //   query: `
 //       paginationUser(
@@ -82,7 +82,7 @@
 //         name,
 //         last_name,
 //         mother_last_name,
-//         birthdate,
+//         birth_date,
 //         gender,
 //         registration_date,
 //         enrollment_date,
@@ -166,8 +166,8 @@
 //               $regex: RegExp(mother_last_name, 'i')
 //             }
 //           }),
-//           ...(birthdate && {
-//             fecha_nacimiento: birthdate
+//           ...(birth_date && {
+//             fecha_nacimiento: birth_date
 //           }),
 //           ...(gender && {
 //             genero: {
@@ -208,7 +208,7 @@
 //               $regex: RegExp(email, 'i')
 //             }
 //           }),
-//           ...(blood_type && {
+//           ...(blood_type &&{
 //             tipo_sangre: {
 //               $regex: RegExp(blood_type, 'i')
 //             }
@@ -283,12 +283,12 @@
 //             }
 //           }),
 //           ...(role_type && {
-//             "tipo_rol.rol": {
+//             tipo_rol: {
 //               $regex: RegExp(role_type, 'i')
 //             }
 //           }),
 //           ...(payments_amount && !isNaN(parseFloat(payments_amount))) && {
-//             "abonos.cantidad_abono": parseFloat(payments_amount)
+//             "abonos.cantidad_aboo": parseFloat(payments_amount)
 //           },
 //           ...(carts_quantity && !isNaN(parseFloat(carts_quantity))) && {
 //             "carritos.cantidad": parseFloat(carts_quantity)
@@ -300,28 +300,28 @@
 //             "creditos.limite": parseInt(credits_limit)
 //           },
 //           ...(expenses_description && {
-//             'gastos.descripcion': {
+//             gastos_descripcion: {
 //               $regex: RegExp(expenses_description, 'i')
 //             }
 //           }),
 //           ...(histories_date && {
-//             'historiales.fecha': histories_date
+//             historiales_fecha: histories_date
 //           }),
 //           ...(locals_name && {
-//             'locals.nombre': {
+//             locals_nombre: {
 //               $regex: RegExp(locals_name, 'i')
 //             }
 //           }),
 //           ...(payment_methods_holder && {
-//             'metodo_pagos.titular': {
+//             metodo_pagos_titular: {
 //               $regex: RegExp(payment_methods_holder, 'i')
 //             }
 //           }),
-//           ...(sales_amount  && !isNaN(parseFloat(sales_amount)) && {
-//             'ventas.monto': parseFloat(sales_amount)
+//           ...(sales_amount !== undefined && {
+//             ventas_monto: sales_amount
 //           }),
 //           ...(trucks_serial_number && {
-//             'camiones.num_serie': {
+//             camiones_num_serie: {
 //               $regex: RegExp(trucks_serial_number, 'i')
 //             }
 //           }),

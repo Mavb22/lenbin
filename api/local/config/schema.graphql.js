@@ -136,7 +136,7 @@
 //                         status2: new RegExp(status2,'i')
 //                     }),
 //                     ...(user && {
-//                         "usuario.nombre": new RegExp(user, 'i')
+//                         "usuarios.nombre": new RegExp(user, 'i')
 //                       }),
 //                     ...(sales && !isNaN(parseInt(sales))) && {
 //                         "ventas.monto": parseInt(sales)

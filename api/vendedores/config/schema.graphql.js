@@ -11,7 +11,7 @@
 //     }
 //   `,
 //   query: `
-//     paginationSeller(
+//     paginateSellers(
 //       start: Int!,
 //       limit: Int!,
 //       name: String,
@@ -22,7 +22,7 @@
 //   `,
 //   resolver: {
 //     Query: {
-//       paginationSeller: async (obj, {
+//       paginateSellers: async (obj, {
 //         name,
 //         sales_amount,
 //         max_sales_amount,
@@ -49,7 +49,7 @@
 //             }
 //           }),
 //           ...(sales_amount && !isNaN(parseFloat(sales_amount))) && {
-//             'ventas.monto': parseFloat(sales_amount)
+//             ventas_monto: parseFloat(sales_amount)
 //           },
 //         };
 

@@ -145,7 +145,7 @@
 //             "compras.costo": parseFloat(purchase_cost)
 //           },
 //           ...(product_name && {
-//             "productos.nombre": {
+//             "productos_nombre": {
 //               $regex: RegExp(product_name, 'i')
 //             }
 //           })
