@@ -32,7 +32,7 @@ const collections = {
     relation: ['usuario','camions']
   },
   Historial:{
-    filtered: ['fecha','hora_inicio','hora_fin','status','status2','camiones'],
+    filtered: ['fecha','hora_inicio','hora_fin','status','status2','usuario','camiones'],
     relation: ['usuario','camiones']
   },
   Local:{
@@ -43,7 +43,7 @@ const collections = {
     filtered: ['codigo_interno','fecha_arrivo','fecha_caducidad','fecha_adquisicion','costo','compras','products'],
     relation: ['compras','products']
   },
-  Metodo_pago:{
+  Metodopago:{
     filtered: ['numero_tarjeta','mes','anio','cvc','titular','folio','fecha_expedicion','fecha_ingreso','descripcion','referencia','tipo','compras','creditos','usuario','venta'],
     relation: ['usuario','compras','creditos','venta']
   },

@@ -240,3 +240,34 @@
 //     }
 //   }
 // }
+const utils = require('../../../extensions/controllers/utils');
+const { petition } = require('../../../extensions/graphql/petition');
+const { resolverFilters } = require('../../../extensions/graphql/resolverFilters');
+const schema = require('../../../extensions/graphql/schema');
+const {definition,query,resolver}  = schema('Productos','Product');
+module.exports = {
+  definition,
+  query,
+  resolver: {
+    Query : {
+      [resolver]: async (obj,{start,limit,filters},{context}) => {
+        const authorization = ['Administrator','User'];
+        const authenticated = context.headers.authorization;
+        const token = await utils.authorization(authenticated.split(' ')[1], authorization);
+          if(!token){
+            throw new Error('No tienes autorización para realizar esta acción.');
+          }
+        console.log(filters);
+        const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
+        const query = await resolverFilters(filters,'Productos',{mostrar:true});
+        console.log(query);
+        const {totalCount,edges,pageInfo} = await petition.productos(query,startIndex,limit);
+        return {
+          totalCount,
+          edges,
+          pageInfo,
+        };
+    }
+    }
+  }
+};
