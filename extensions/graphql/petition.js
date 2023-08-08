@@ -1,6 +1,6 @@
 const pagination = require("../controllers/pagination");
 const petition = {
-  abonos: async (query,startIndex = 0,limit = 20) => {
+  abonos: async (query,type ='Filter',startIndex = 0,limit = 20) => {
     let payments = await strapi.query('abonos').model.find(query)
     .populate({
       path: 'usuario',
@@ -10,31 +10,36 @@ const petition = {
       path: 'credito',
       select: 'id intereses'
     });
-    const paymentsRelations = await Promise.all(
-      payments.map(async (payment) => {
-        const usuario = await strapi.query('usuarios').model
-          .findById(payment.usuario)
-          .select('id nombre ap_paterno ap_materno');
-        const credito = await strapi.query('credito').model
-          .findById(payment.credito)
-          .select('id intereses');
-        return {
-          id:payment.id,
-          cantidad_abono:payment.cantidad_abono,
-          fecha_abono:payment.fecha_abono,
-          estado_abono:payment.estado_abono,
-          usuario,
-          credito,
-        };
-      })
-    );
-    const {edges, pageInfo} = pagination.search(paymentsRelations,startIndex, limit)
-    return {
-      totalCount: payments.length,
-      edges,
-      pageInfo,
-      payments
-    };
+    if(type == 'Export'){
+      return payments
+    }
+    if(type == 'Filter'){
+      const paymentsRelations = await Promise.all(
+        payments.map(async (payment) => {
+          const usuario = await strapi.query('usuarios').model
+            .findById(payment.usuario)
+            .select('id nombre ap_paterno ap_materno');
+          const credito = await strapi.query('credito').model
+            .findById(payment.credito)
+            .select('id intereses');
+          return {
+            id:payment.id,
+            cantidad_abono:payment.cantidad_abono,
+            fecha_abono:payment.fecha_abono,
+            estado_abono:payment.estado_abono,
+            usuario,
+            credito,
+          };
+        })
+      );
+      const {edges, pageInfo} = pagination.search(paymentsRelations,startIndex, limit)
+      return {
+        totalCount: payments.length,
+        edges,
+        pageInfo,
+        payments
+      };
+    }
   },
   truck: async (query,startIndex,limit) => {
     let trucks = await strapi.query('camiones').model.find(query)
@@ -99,7 +104,7 @@ const petition = {
           usuario,
           productos,
           venta
-         
+
         };
       })
     );
@@ -155,14 +160,14 @@ const petition = {
           proveedor,
           metodo_pago,
           lote
-         
+
         };
       })
     );
     const {edges, pageInfo} = pagination.search(shoppingRelations,startIndex, limit)
     return {
       totalCount: shopping.length,
-      edges,
+               edges,
       pageInfo,
     };
   },
@@ -203,7 +208,7 @@ const petition = {
           usuario,
           metodo_pago,
           abonos
-         
+
         };
       })
     );
@@ -233,7 +238,7 @@ const petition = {
           alto:dimension.alto,
           largo:dimension.largo,
           productos
-         
+
         };
       })
     );
@@ -245,7 +250,7 @@ const petition = {
     };
   },
 
-  gastos: async (query,startIndex = 0,limit = 20) => {
+  gastos: async (query,startIndex          = 0,limit = 20) => {
     let spents = await strapi.query('gastos').model.find(query)
     .populate({
       path: 'usuario',
@@ -272,7 +277,7 @@ const petition = {
           status:spent.status,
           usuario,
           camions,
-         
+
         };
       })
     );
@@ -311,7 +316,7 @@ const petition = {
           status2:records.status2,
           usuario,
           camiones,
-         
+
         };
       })
     );
@@ -325,7 +330,7 @@ const petition = {
 
   local: async (query,startIndex = 0,limit = 20) => {
     let store = await strapi.query('local').model.find(query)
-    .populate({
+             .populate({
       path: 'usuarios',
       select: 'id nombre'
     })
@@ -464,7 +469,7 @@ const petition = {
       edges,
       pageInfo,
     };
-  },  
+  },
 
   productos: async (query,startIndex = 0,limit = 20) => {
     let Product = await strapi.query('lotes').model.find(query)
