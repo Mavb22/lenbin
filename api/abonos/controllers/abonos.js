@@ -1,10 +1,9 @@
 'use strict';
 
-const { fileUpload } = require("../../../extensions/controllers/file");
-
+const { fileUpload } = require("../../../extensions/export/file");
 module.exports = {
   async file(ctx){
-    await fileUpload(ctx, 'abonos', 'abonos');
+    await fileUpload(ctx, 'abonos', 'Abonos',{mostrar:true});
   },
   async find(ctx){
     const payments = await strapi.query('abonos').find({mostrar: true});

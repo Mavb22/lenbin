@@ -1,6 +1,8 @@
 'use strict';
 
-const { fileUpload } = require("../../../extensions/controllers/file");
+const { fileUpload } = require("../../../extensions/export/file");
+
+// const { fileUpload } = require("../../../extensions/controllers/file");
 /**
  * Read the documentation (https://strapi.io/documentation/developer-docs/latest/development/backend-customization.html#core-controllers)
  * to customize this controller
@@ -24,7 +26,6 @@ module.exports = {
     }
   },
   async file(ctx){
-
-    await fileUpload(ctx, 'camiones', 'camiones');
+    await fileUpload(ctx, 'camiones', 'Camiones');
   },
 };

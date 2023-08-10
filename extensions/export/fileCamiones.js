@@ -15,35 +15,36 @@ const fileUpload = async (ctx, models, table, Query={}) => {
   const fieldsToShow = campos;
   const model = strapi.models[models];
   const file = type;
-
   // Verificar si los campos existen en el modelo
   const fieldsExist = fieldsToShow.every(field => model.attributes.hasOwnProperty(field));
   if (fieldsExist) {
     const query = await resolverFilters(filters,table,Query);
     const fields = await petition.abonos(query,'Export');
     const renameMap = {
-      cantidad_abono: 'Cantidad de abono',
-      fecha_abono: 'Fecha de abono',
-      estado_abono: 'Estado de abono',
-      usuario: 'Nombre de usuario',
-      credito: 'Intereses del Credito'
+      // placas: 'Placas',
+      num_serie: 'Numero de serie',
+      niv: 'Numero de identificacion vehicular',
+      // historial: 'Historial',
+      rutas: 'Rutas'
     };
     if (file === 'txt') {
-      // Encontrar la longitud más grande de cada clave y valor
+
       const maxLengths = Object.keys(renameMap).reduce((acc, key) => {
         const fieldLength = renameMap[key].length;
-        // const valueLength = renameMap[key].length;
-
-        // Determinar el valor más largo entre la clave y el valor
-        // Encontrar el valor actual del campo en la petición
-        const currentValueLength = fields.reduce((maxLen, payment) => {
+        const currentValueLength = fields.reduce((maxLen, field) => {
           let value;
           if (key === 'usuario') {
-            value = `${formatValue(payment[key]?.nombre)} ${formatValue(payment[key]?.ap_paterno)} ${formatValue(payment[key]?.ap_materno)}`;
+            value = `${formatValue(field[key]?.nombre)} ${formatValue(field[key]?.ap_paterno)} ${formatValue(field[key]?.ap_materno)}`;
           } else if (key === 'credito') {
-            value = `${formatValue(payment[key]?.intereses)}`;
-          } else {
-            value = payment[key].toString();
+            value = `${formatValue(field[key]?.intereses)}`;
+          } else if (key == 'Rutas'){
+            const formattedUsers = field[key]?.map(rute => {
+              return `${formatValue(rute.destino)}`;
+            });
+            const rutesValue = formattedUsers.join(', ');
+            value = `[${rutesValue}]`;
+          }else {
+            value = field[key].toString();
           }
           if (typeof value === 'string') {
             return Math.max(maxLen, value.length);
@@ -80,13 +81,15 @@ const fileUpload = async (ctx, models, table, Query={}) => {
       });
       table.push(`| ${header.join(' | ')} |`);
       table.push(`--${titleDashesRow.join('---')}--`);
-      fields.forEach(payment => {
+      fields.forEach(field => {
         const row = Object.keys(renameMap).map(key => {
           let value;
           if (key === 'usuario') {
-            value = `${formatValue(payment[key]?.nombre)} ${formatValue(payment[key]?.ap_paterno)} ${formatValue(payment[key]?.ap_materno)}`;
-          } else {
-            value = String(payment[key]);
+            value = `${formatValue(field[key]?.nombre)} ${formatValue(field[key]?.ap_paterno)} ${formatValue(field[key]?.ap_materno)}`;
+          } else if(key === 'credito'){
+            value = `${formatValue(field[key]?.intereses)}`;
+          }else {
+            value = String(field[key]);
           }
           const spaces = maxLengths[key].max - value.length;
           return `${value}${' '.repeat(spaces)}`;
@@ -112,13 +115,13 @@ const fileUpload = async (ctx, models, table, Query={}) => {
       fs.unlinkSync(filePath);
     } else if (file === 'xlsx') {
       // Crear una matriz de objetos planos con solo las propiedades necesarias
-      const plainObjects = fields.map(payment => {
+      const plainObjects = fields.map(field => {
         const obj = {};
         fieldsToShow.forEach(field => {
           if (field == 'usuario') {
-            obj[renameMap[field]] = `${formatValue(payment[field]?.nombre)} ${formatValue(payment[field]?.ap_paterno)} ${formatValue(payment[field]?.ap_materno)}`;
+            obj[renameMap[field]] = `${formatValue(field[field]?.nombre)} ${formatValue(field[field]?.ap_paterno)} ${formatValue(field[field]?.ap_materno)}`;
           } else {
-            obj[renameMap[field]] = payment[field];
+            obj[renameMap[field]] = field[field];
           }
         });
         return obj;

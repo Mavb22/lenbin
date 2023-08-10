@@ -155,7 +155,7 @@ module.exports = {
         console.log(filters);
         const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
         const query = await resolverFilters(filters,'Abonos',{mostrar:true});
-        const {totalCount,edges,pageInfo} = await petition.abonos(query,'Filter',startIndex,limit);
+        const {totalCount,edges,pageInfo} = await petition.abonos(query,"Filter",[],startIndex,limit);
         return {
           totalCount,
           edges,
