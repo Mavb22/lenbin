@@ -144,7 +144,7 @@ const utils = require('../../../extensions/controllers/utils');
 const { petition } = require('../../../extensions/graphql/petition');
 const { resolverFilters } = require('../../../extensions/graphql/resolverFilters');
 const schema = require('../../../extensions/graphql/schema');
-const {definition,query,resolver}  = schema('Camiones','Truck');
+const {definition,query,resolver}  = schema('Camiones','Trucks');
 module.exports = {
   definition,
   query,
@@ -159,7 +159,7 @@ module.exports = {
           }
         const startIndex = parseInt(start,10)>=0 ? parseInt(start,10) :0;
         const query = await resolverFilters(filters,'Camiones');
-        const {totalCount,edges,pageInfo} = await petition.truck(query,startIndex,limit);
+        const {totalCount,edges,pageInfo} = await petition.camiones(query,startIndex,limit);
         return {
           totalCount,
           edges,

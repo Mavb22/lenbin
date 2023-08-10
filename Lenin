@@ -1,0 +1,654 @@
+abonos
+
+query {
+  paginationDataPayment(start:0,limit:20,
+  filters:[
+    {field:"cantidad_abono",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+        id
+        cantidad_abono
+        fecha_abono
+        estado_abono
+        usuario{
+          id
+          nombre
+        }
+        credito{
+          id
+          intereses
+        }
+      }
+    }
+  }
+}
+
+camiones
+
+query {
+  paginationDataTrucks(start:0,limit:20,
+  filters:[
+    {field:"placas",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				placas
+				num_serie
+				niv
+				historial{
+          id
+          fecha
+        }
+				usuario{
+          id
+          nombre
+        }
+				rutas{
+          destino
+          id
+        }
+				gastos{
+          id
+          categoria
+        }
+      }
+    }
+  }
+}
+
+Carrito
+
+query {
+  paginationDataCarts(start:0,limit:20,
+  filters:[
+    {field:"cantidad",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				cantidad
+				usuario{
+          id
+          nombre
+        }
+				venta{
+          id
+          monto
+        }
+				productos{
+          id
+          nombre
+        }
+      }
+    }
+  }
+}
+
+compras
+
+query {
+  paginationDataShopping(start:0,limit:20,
+  filters:[
+    {field:"costo",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				costo
+				fecha_pedido
+				referencia
+				fecha_llegada
+				status
+				status2
+				lote{
+          id
+          codigo_interno
+        }
+				metodo_pago{
+          id
+          numero_tarjeta
+        }
+				proveedor{
+          id
+          nombre
+        }
+				usuarios{
+          id
+          nombre
+        }
+      }
+    }
+  }
+}
+
+credito
+
+query {
+  paginationDataCredit(start:0,limit:20,
+  filters:[
+    {field:"limite",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				limite
+				fecha_alta
+				fecha_baja
+				vigencia
+				intereses
+				status
+				status2
+				mostrar
+				metodo_pago{
+          id
+          numero_tarjeta
+        }
+				usuario{
+          id
+          nombre
+        }
+				abonos{
+          id
+          cantidad_abono
+        }
+      }
+    }
+  }
+}
+
+Dimension
+
+query {
+  paginationDataDimensions(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				nombre
+				ancho
+				alto
+				largo
+				productos{
+          id
+          nombre
+        }
+      }
+    }
+  }
+}
+
+gastos
+
+query {
+  paginationDataSpents(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				 descripcion
+				 fecha
+				 monto
+				 categoria
+				 status
+				 usuario{
+          id 
+          nombre
+        }
+				 camions{
+          id
+          num_serie
+        }
+      }
+    }
+  }
+}
+
+historial
+
+query {
+  paginationDataRecords(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+       node{
+       fecha
+        hora_inicio
+        hora_fin
+        status
+        status2
+        usuario{
+          id
+          nombre
+        }
+        camiones{
+          id
+          num_serie
+        }
+      }
+    }
+  }
+}
+
+Local
+
+query {
+  paginationDataStore(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+       node{
+				nombre
+				alias
+				razon_social
+				rfc
+				fecha_alta
+				calle
+				colonia
+				numero_ext
+				municipio
+				numero_int
+				ciudad
+				cp
+				latitud
+				longitud
+				telefono
+				telefono_cel
+				giro
+				status
+				status2
+				cuentas
+				usuarios{
+          id
+          nombre
+        }
+				ventas{
+          id
+          monto
+        }
+      }
+    }
+  }
+}
+
+Lotes
+
+query {
+  paginationDataLots(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				codigo_interno
+				fecha_arrivo
+				fecha_caducidad
+				fecha_adquisicion
+				costo
+				compras{
+          id
+          costo
+        }
+				products{
+          id
+          nombre
+        }
+      }
+    }
+  }
+}
+
+metodo_pago
+
+query {
+  paginationDataPaymentMethod(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				numero_tarjeta
+				mes
+				anio
+				cvc
+				titular
+				folio
+				fecha_expedicion
+				fecha_ingreso
+				descripcion
+				referencia
+				tipo
+				usuario{
+          id
+          nombre
+        }
+				venta{
+          id 
+          monto
+        }
+				compras{
+          id 
+          costo
+        }
+				creditos{
+          id 
+          limite
+        }
+      }
+    }
+  }
+}
+
+productos
+
+query {
+  paginationDataProduct(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				nombre
+				peso_neto
+				presentacion
+				marca
+				descripcion_generica
+				precio
+				costo
+				inventario_disp
+				value_min
+				codigo_barras
+				codigo_interno
+				venta_gramos
+				status
+				status2
+				dimension{
+          id
+          nombre
+        }
+				proveedor{
+          id
+          nombre
+        }
+				carritos{
+          id
+          cantidad
+        }
+				promociones{
+          id
+          fecha_creacion
+        }
+				lotes{
+          id
+          codigo_interno
+        }
+      }
+    }
+  }
+}
+
+promociones
+
+query {
+  paginationDataPromotions(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				fecha_creacion
+				fecha_vigencia
+				valor_descuento
+				codigo_ref
+				condicion
+				productos{
+          id
+          nombre
+        }
+      }
+    }
+  }
+}
+
+proveedor
+
+query {
+  paginationDataProvider(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				nombre
+				razon_social
+				rfc
+				fecha_alta
+				calle
+				numero
+				colonia
+				cp
+				municipio
+				ciudad
+				pais
+				visita_programada
+				status
+				status2
+				compras{
+          id
+          costo
+        }
+				productos{
+          id
+          nombre
+        }
+      }
+    }
+  }
+}
+
+rutas
+
+query {
+  paginationDataRoute(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				descripcion
+				lugar_origen
+				destino
+				fecha_salida
+				fecha_llegada
+				referencia
+				nombre_mercancia_recibida
+				comentarios
+				estado
+				ruta_ciclica
+				camiones{
+          id
+          num_serie
+        }
+				ventas{
+          id
+          monto
+        }
+      }
+    }
+  }
+}
+
+usuario
+
+query {
+  paginationDataUsers(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+				nombre
+				ap_paterno
+				ap_materno
+				fecha_nacimiento
+				genero
+				fecha_inscripcion
+				fecha_alta
+				rfc
+				curp
+				nss
+				tel_cel
+				tel_cel3
+				email
+				password
+				tipo_sangre
+				licencia
+				alergias
+				padecimientos
+				nacionalidad
+				calle
+				numero
+				colonia
+				cp
+				municipio
+				ciudad
+				pais
+				referencia_direccion
+				comment
+				last_login
+				status
+				status2
+				access
+				confirm
+				abonos{
+          id
+          cantidad_abono
+        }
+				carritos{
+          id 
+          cantidad
+        }
+				compras{
+          id
+          costo
+        }
+				creditos{
+          id
+          limite
+        }
+				gastos{
+          id
+          descripcion
+        }
+				historiales{
+          id
+          fecha
+        }
+				locals{
+          id
+          nombre
+        }
+				metodo_pagos{
+          id
+          titular
+        }
+				ventas{
+          id
+          monto
+        }
+				camiones{
+         id
+          num_serie
+        }
+      }
+    }
+  }
+}
+
+vendedores
+
+query {
+  paginationDataSellers(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+     node{
+				nombre
+				published_at
+				ventas{
+          id
+          monto
+        }
+      }
+    }
+  }
+}
+
+ventas
+
+query {
+  paginationDataSales(start:0,limit:20,
+  filters:[
+    {field:"nombre",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+     node{
+				monto
+				monto_total
+				fecha
+				factura
+				clasificacion
+				fecha_entrega
+				entrega_pendiente
+				pagada
+				status
+				status2
+				local{
+          id
+          nombre
+        }
+				usuario{
+          id
+          nombre
+        }
+				carritos{
+          id
+          cantidad
+        }
+				metodo_pagos{
+          id
+          titular
+        }
+				rutas{
+          id
+          destino
+        }
+				vendedores{
+          id
+          nombre
+        }
+      }
+    }
+  }
+}
+
