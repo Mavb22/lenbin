@@ -57,41 +57,58 @@ const petition = {
       return payments
     }
   },
-  truck: async (query, startIndex, limit) => {
+  camiones: async (query,startIndex = 0,limit = 20) => {
     let trucks = await strapi.query('camiones').model.find(query)
-      .populate({
-        path: 'usuario',
-        select: 'id nombre ap_paterno ap_materno'
-      })
-    // .populate({
-    //   path: 'credito',
-    //   select: 'id intereses'
-    // });
-    trucks = await Promise.all(
+    .populate({
+      path: 'usuario',
+      select: 'id nombre'
+    })
+    .populate({
+      path: 'rutas',
+      select: 'id destino'
+    })
+    .populate({
+      path: 'gastos',
+      select: 'id categoria'
+    })
+    .populate({
+      path: 'historial',
+      select: 'id fecha'
+    });
+    const trucksRelations = await Promise.all(
       trucks.map(async (truck) => {
-        const user = await strapi.query('usuarios').model
+        const usuario = await strapi.query('usuario').model
           .findById(truck.usuario)
-          .select('id nombre ap_paterno ap_materno');
+          .select('id nombre');
+        const rutas = await strapi.query('rutas').model
+          .findById(truck.rutas)
+          .select('id destino');
+        const gastos = await strapi.query('gastos').model
+          .findById(truck.gastos)
+          .select('id categoria');
+        const historial = await strapi.query('historial').model
+          .findById(truck.historial)
+          .select('id fecha');
         return {
-          id: truck.id,
-          cantidad_abono: truck.cantidad_abono,
-          fecha_abono: truck.fecha_abono,
-          estado_abono: truck.estado_abono,
-          usuario: user,
+          id:truck.id,
+          placas:truck.placas,
+          num_serie:truck.num_serie,
+          niv:truck.niv,
+          usuario,
+          rutas,
+          gastos,
+          historial
         };
       })
     );
-    const {
-      edges,
-      pageInfo
-    } = pagination.search(carts, startIndex, limit)
+    const {edges, pageInfo} = pagination.search(trucksRelations,startIndex, limit)
     return {
-      totalCount: payments.length,
+      totalCount: trucks.length,
       edges,
       pageInfo,
     };
   },
-  carrito: async (query, startIndex = 0, limit = 20) => {
+  carrito: async (query,startIndex = 0,limit = 20) => {
     let carts = await strapi.query('carrito').model.find(query)
       .populate({
         path: 'usuario',
@@ -138,24 +155,24 @@ const petition = {
     };
   },
 
-  compras: async (query, startIndex = 0, limit = 20) => {
-    let shopping = await strapi.query('campras').model.find(query)
-      .populate({
-        path: 'usuarios',
-        select: 'id nombre'
-      })
-      .populate({
-        path: 'proveedor',
-        select: 'id nombre'
-      })
-      .populate({
-        path: 'metodo_pago',
-        select: 'id numero_tarjeta'
-      })
-      .populate({
-        path: 'lote',
-        select: 'id codigo_interno'
-      });
+  compras: async (query,startIndex = 0,limit = 20) => {
+    let shopping = await strapi.query('compras').model.find(query)
+    .populate({
+      path: 'usuarios',
+      select: 'id nombre'
+    })
+    .populate({
+      path: 'proveedor',
+      select: 'id nombre'
+    })
+    .populate({
+      path: 'metodo_pago',
+      select: 'id numero_tarjeta'
+    })
+    .populate({
+      path: 'lote',
+      select: 'id codigo_interno'
+    });
     const shoppingRelations = await Promise.all(
       shopping.map(async (shoppin) => {
         const usuarios = await strapi.query('usuarios').model
@@ -197,20 +214,20 @@ const petition = {
     };
   },
 
-  credito: async (query, startIndex = 0, limit = 20) => {
-    let credit = await strapi.query('campras').model.find(query)
-      .populate({
-        path: 'usuario',
-        select: 'id nombre'
-      })
-      .populate({
-        path: 'abonos',
-        select: 'id cantidad_abono'
-      })
-      .populate({
-        path: 'metodo_pago',
-        select: 'id numero_tarjeta'
-      });
+  credito: async (query,startIndex = 0,limit = 20) => {
+    let credit = await strapi.query('credito').model.find(query)
+    .populate({
+      path: 'usuario',
+      select: 'id nombre'
+    })
+    .populate({
+      path: 'abonos',
+      select: 'id cantidad_abono'
+    })
+    .populate({
+      path: 'metodo_pago',
+      select: 'id numero_tarjeta'
+    });
     const creditRelations = await Promise.all(
       credit.map(async (credi) => {
         const usuario = await strapi.query('usuarios').model

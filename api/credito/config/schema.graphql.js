@@ -210,7 +210,7 @@ const utils = require('../../../extensions/controllers/utils');
 const { petition } = require('../../../extensions/graphql/petition');
 const { resolverFilters } = require('../../../extensions/graphql/resolverFilters');
 const schema = require('../../../extensions/graphql/schema');
-const {definition,query,resolver}  = schema('Credito','credit');
+const {definition,query,resolver}  = schema('Credito','Credit');
 module.exports = {
   definition,
   query,

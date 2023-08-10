@@ -312,7 +312,7 @@ const utils = require('../../../extensions/controllers/utils');
 const { petition } = require('../../../extensions/graphql/petition');
 const { resolverFilters } = require('../../../extensions/graphql/resolverFilters');
 const schema = require('../../../extensions/graphql/schema');
-const {definition,query,resolver}  = schema('Compras','shopping');
+const {definition,query,resolver}  = schema('Compras','Shopping');
 module.exports = {
   definition,
   query,
