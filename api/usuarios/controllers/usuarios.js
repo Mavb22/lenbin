@@ -155,5 +155,8 @@ module.exports ={
     } catch (error) {
       ctx.badRequest(400,'Hubo algun error, ' + error)
     }
-  }
+  },
+  async file(ctx){
+    await fileUpload(ctx, 'usuarios', 'usuarios');
+  },
 }

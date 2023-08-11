@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/metodo-pagos/table/files",
+      "handler": "metodo-pago.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

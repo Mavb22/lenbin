@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/compras/table/files",
+      "handler": "compras.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

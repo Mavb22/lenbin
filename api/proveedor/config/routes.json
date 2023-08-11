@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/proveedors/table/files",
+      "handler": "proveedor.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

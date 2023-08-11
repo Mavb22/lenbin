@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/promociones/table/files",
+      "handler": "promociones.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

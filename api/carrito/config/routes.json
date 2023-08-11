@@ -51,7 +51,7 @@
     {
       "method": "POST",
       "path": "/carritos/table/files",
-      "handler": "carritos.file",
+      "handler": "carrito.file",
       "config": {
         "policies": []
       }

@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Deliveryman","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/rutas/table/files",
+      "handler": "rutas.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

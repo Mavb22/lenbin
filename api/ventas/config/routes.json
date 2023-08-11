@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/ventas/table/files",
+      "handler": "ventas.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

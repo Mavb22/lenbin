@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/lotes/table/files",
+      "handler": "lotes.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }
