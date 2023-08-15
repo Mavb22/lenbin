@@ -46,11 +46,20 @@ Agrega un nueva peticion Post
 El path se cambia por el nombre de la tabla
      "path": "/tablaName(abonos)/table/files",
 Checa si el ejemplo esta correcto en el archivo routes de abonos y añadir de las demas tablas
-Checa el codigo de file y el archivo controllers abonos(este archivo en todas las tablas)
+Checa el codigo de file y el archivo controllers abonos(este archivo en todas las tablas);
+Habilitar la ruta
+    1.- http://localhost:1337/admin/auth/login
+    2.- Iniciar sesion
+    3.- Settings
+    4.- Users & permissions Plugin (Roles)
+    5.- Public
+    6.- Buscar la tabla y darle check en donde esta el file
 Codigo que se añadira en el controller abonos
+Ruta del archivo es tabla(abonos)/controllers/tabla(abonos)
 async file(ctx){
     await fileUpload(ctx, 'abonos', 'abonos');
   },
+  Nota: Si no se agrega en el codigo anterior mandar un error que el file no existe
  (ctx, models, table, Query={}) son los datos que estaran en la funcion de file
  ctx: Es el valor  que viene del controller
  models: Es el modelo de la tabla por decir abonos, camiones, carrito, este se puede ver en el archivi tabla/models/abonos.settings donde dice collectionName
@@ -63,9 +72,8 @@ const renameMap = {
       usuario: 'Nombre de usuario',
       credito: 'Intereses del Credito'
     };
-Con el codigo anterior hacer un nuevo archivo en la carpeta llamada graphql y poner primero export y despies un objeto con el nombre de la tabla y despues adentro un objeto con el nombre de cada campo de la tabla como se muestra en el objeto
+Con el codigo anterior hacer un nuevo archivo en la carpeta llamada export el achivo se llama renameFields, primero va el nombre de la tabla y despues va el codig anterior
 Revisar que cada uno funcione corretamente
-
 Si no funciona uno copiar en este documento el error para correjirlo
 
-
+Nota se hizo un cambio en el archivo petition checalo y cambiolo en todos los campos o si puedes ver como modificarlo sin moverle mucho seria mejor
