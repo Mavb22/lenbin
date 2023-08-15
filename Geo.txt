@@ -79,6 +79,12 @@ Si no funciona uno copiar en este documento el error para correjirlo
 Nota se hizo un cambio en el archivo petition checalo y cambiolo en todos los campos o si puedes ver como modificarlo sin moverle mucho seria mejor
 
 
+
+//Nuevo
+/export/rename
+graphql/petition
+graphql/table placas (placa,estado,activa)
+ponerlo en campo Camiones y el relaciones
 En el archivo export/tableFile en donde dice placas sirve para os que sn arrays
 tablaPural: (field, key, filters) =>{
   if(field.TablaPlural){
