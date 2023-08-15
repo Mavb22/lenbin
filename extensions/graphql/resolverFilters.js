@@ -13,6 +13,7 @@ const resolverFilters = async (filters, table, query = {}) => {
       if (!filtered.includes(field)) {
         throw new Error(`Campo no permitido`);
       }
+      
       if (!operators.includes(operator)) {
         throw new Error(`The operator: ${operator} not supported`);
       }

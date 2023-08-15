@@ -57,56 +57,71 @@ const petition = {
       return payments
     }
   },
-  camiones: async (query,startIndex = 0,limit = 20) => {
-    let trucks = await strapi.query('camiones').model.find(query)
-    .populate({
-      path: 'usuario',
-      select: 'id nombre'
-    })
-    .populate({
-      path: 'rutas',
-      select: 'id destino'
-    })
-    .populate({
-      path: 'gastos',
-      select: 'id categoria'
-    })
-    .populate({
-      path: 'historial',
-      select: 'id fecha'
-    });
-    const trucksRelations = await Promise.all(
-      trucks.map(async (truck) => {
-        const usuario = await strapi.query('usuario').model
-          .findById(truck.usuario)
-          .select('id nombre');
-        const rutas = await strapi.query('rutas').model
-          .findById(truck.rutas)
-          .select('id destino');
-        const gastos = await strapi.query('gastos').model
-          .findById(truck.gastos)
-          .select('id categoria');
-        const historial = await strapi.query('historial').model
-          .findById(truck.historial)
-          .select('id fecha');
-        return {
-          id:truck.id,
-          placas:truck.placas,
-          num_serie:truck.num_serie,
-          niv:truck.niv,
-          usuario,
-          rutas,
-          gastos,
-          historial
-        };
+  camiones: async (query,type,  fieldsToShow,startIndex = 0, limit = 20) => {
+    if(type === 'Filter'){
+      let trucks = await strapi.query('camiones').model.find(query)
+      .populate({
+        path: 'usuario',
+        select: 'id nombre'
       })
-    );
-    const {edges, pageInfo} = pagination.search(trucksRelations,startIndex, limit)
-    return {
-      totalCount: trucks.length,
-      edges,
-      pageInfo,
-    };
+      .populate({
+        path: 'rutas',
+        select: 'id destino'
+      })
+      .populate({
+        path: 'gastos',
+        select: 'id categoria'
+      })
+      .populate({
+        path: 'historial',
+        select: 'id fecha'
+      });
+      const trucksRelations = await Promise.all(
+        trucks.map(async (truck) => {
+          const usuario = await strapi.query('usuario').model
+            .findById(truck.usuario)
+            .select('id nombre');
+          const rutas = await strapi.query('rutas').model
+            .findById(truck.rutas)
+            .select('id destino');
+          const gastos = await strapi.query('gastos').model
+            .findById(truck.gastos)
+            .select('id categoria');
+          const historial = await strapi.query('historial').model
+            .findById(truck.historial)
+            .select('id fecha');
+          return {
+            id:truck.id,
+            placas:truck.placas,
+            num_serie:truck.num_serie,
+            niv:truck.niv,
+            usuario,
+            rutas,
+            gastos,
+            historial
+          };
+        })
+      );
+      const {edges, pageInfo} = pagination.search(trucksRelations,startIndex, limit)
+      return {
+        totalCount: trucks.length,
+        edges,
+        pageInfo,
+      };
+    }else if(type === "Export"){
+      let populateOptions = [];
+      if (fieldsToShow.includes('usuario')) {
+        populateOptions.push({
+          path: 'usuario',
+          select: 'id nombre ap_paterno ap_materno'
+        });
+      }
+      if(fieldsToShow.includes('placa') && fieldsToShow.includes('activa') && fieldsToShow.includes('estado')){
+        fieldsToShow.push("placas");
+      }
+      let trucks = await strapi.query('camiones').model.find(query, fieldsToShow.join(' ')).populate(populateOptions);
+      return trucks;
+    }
   },
   carrito: async (query,startIndex = 0,limit = 20) => {
     let carts = await strapi.query('carrito').model.find(query)

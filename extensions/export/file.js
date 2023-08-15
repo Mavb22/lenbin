@@ -1,7 +1,7 @@
 const XLSX = require('xlsx');
 const { resolverFilters } = require('../graphql/resolverFilters');
 const { rename } = require('./renameFields');
-const txt = require('./exportTxt');
+const txt = require('./txt');
 const { petition } = require('../graphql/petition');
 const fileUpload = async (ctx, models, table, Query={}) => {
   const {
@@ -16,8 +16,20 @@ const fileUpload = async (ctx, models, table, Query={}) => {
   const fieldsToShow = campos;
   const model = strapi.models[models];
   const file = type;
+  let fieldsExist;
+
+  if(models == "camiones"){
+    let field = fieldsToShow;
+    if(fieldsToShow.includes('placa') && fieldsToShow.includes('activa') && fieldsToShow.includes('estado')){
+      field = fieldsToShow.filter(field => field !== 'placa' && field !== 'activa' && field !== 'estado');
+      fieldsExist = field.every(field => model.attributes.hasOwnProperty(field));
+    }else{
+      fieldsExist = field.every(field => model.attributes.hasOwnProperty(field));
+    }
+  }else{
+    fieldsExist = fieldsToShow.every(field => model.attributes.hasOwnProperty(field));
+  }
   // Verificar si los campos existen en el modelo
-  const fieldsExist = fieldsToShow.every(field => model.attributes.hasOwnProperty(field));
   if(!fieldsExist){
     return ctx.throw(403, 'Uno o más campos no existen en la tabla');
   }
@@ -25,7 +37,7 @@ const fileUpload = async (ctx, models, table, Query={}) => {
   const fields = await petition[models](query,"Export",fieldsToShow);
   const renameMap = rename[models];
     if (file === 'txt') {
-      txt(ctx,renameMap,fields,campos,nombre_archivo);
+      txt(ctx,renameMap,fields,campos,nombre_archivo,models,filters);
     } else if (file === 'xlsx') {
       // Crear una matriz de objetos planos con solo las propiedades necesarias
       const plainObjects = fields.map(payment => {

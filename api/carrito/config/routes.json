@@ -47,14 +47,6 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
-    },
-    {
-      "method": "POST",
-      "path": "/carritos/table/files",
-      "handler": "carritos.file",
-      "config": {
-        "policies": []
-      }
     }
   ]
 }

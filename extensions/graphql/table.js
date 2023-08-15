@@ -8,8 +8,8 @@ const collections = {
     relation: ['credito','usuario']
   },
   Camiones:{
-    filtered: ['placas','num_serie','niv','historial','rutas','usuario','gastos'],
-    relation: ['usuario','rutas','historial','gastos']
+    filtered: ['num_serie','niv','placa.placa','placa.estado','placa.activa','historial','rutas','usuario','gastos'],
+    relation: ['usuario','rutas','historial','gastos',]
   },
   Carrito:{
     filtered: ['cantidad','productos','usuario','venta'],
@@ -78,6 +78,9 @@ const collections = {
 }
 
 const relationsValues = {
+  "placa.placa": {
+    '==': async () => {},
+  },
   usuario:{
     '==': async(value) => {
       const users= await strapi.query('usuarios').model.find({nombre: value});

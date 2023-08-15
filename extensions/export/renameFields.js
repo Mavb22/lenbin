@@ -6,5 +6,13 @@ const rename=  {
     usuario: 'Nombre de usuario',
     credito: 'Intereses del Credito'
   },
+  camiones:{
+    niv: 'Numero de identificacion vehicular',
+    num_serie:"Numero de serie",
+    placa:"Placas",
+    estado:"Estado de la placa",
+    activa:"Placa aciva",
+    usuario:"Nombre de usuario"
+  }
 }
 module.exports = {rename}

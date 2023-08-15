@@ -77,3 +77,15 @@ Revisar que cada uno funcione corretamente
 Si no funciona uno copiar en este documento el error para correjirlo
 
 Nota se hizo un cambio en el archivo petition checalo y cambiolo en todos los campos o si puedes ver como modificarlo sin moverle mucho seria mejor
+
+
+En el archivo export/tableFile en donde dice placas sirve para os que sn arrays
+tablaPural: (field, key, filters) =>{
+  if(field.TablaPlural){
+    const nombreDeseado = field[key] o field.nombreCampo
+      .map(field => formatValue(field.campoRelacionado))
+      .filter(value => value !== null && value !== undefined && value !== '');
+    return nombreDeseado.join(', ');
+  }
+  return '';
+}
