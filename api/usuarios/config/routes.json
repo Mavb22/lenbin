@@ -112,6 +112,14 @@
       "config": {
         "policies": ["global::AuthenticationPermissions"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/usuarios/table/files",
+      "handler": "usuarios.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

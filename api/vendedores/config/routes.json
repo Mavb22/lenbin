@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/vendedores/table/files",
+      "handler": "vendedores.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

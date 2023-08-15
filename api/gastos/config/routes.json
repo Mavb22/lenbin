@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/gastos/table/files",
+      "handler": "gastos.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

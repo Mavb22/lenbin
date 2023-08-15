@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/dimensiones/table/files",
+      "handler": "dimensiones.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }

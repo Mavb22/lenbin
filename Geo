@@ -1,0 +1,79 @@
+Ruta de graphql
+http://localhost:1337/graphql
+1.- Iniciar session
+2.- Obtener el token
+3.- Query
+query {
+  paginationDataPayment(start:0,limit:20,
+  filters:[
+    {field:"cantidad_abono",operator:"==", value:"400"}
+  ]){
+    totalCount
+    edges{
+      node{
+        id
+        cantidad_abono
+        fecha_abono
+        estado_abono
+        usuario{
+          id
+          nombre
+        }
+        credito{
+          id
+          intereses
+        }
+      }
+    }
+  }
+}
+en la parte de abojo de graphql ahi un campo llamado HTTP HEADERS
+4.- Validar que cada campo funcion,copiar y pegar en un archivo txt o word
+
+Export file
+En petition ahi modificaciones, se puso un nuevo una nueva variable  llamda type en filter o pagination sera Filter en el file sera Export
+En el archivo routes que esta tabla/config/routes
+La tabla puede ser (abonos, camiones o carrito)
+Agrega un nueva peticion Post
+{
+      "method": "POST",
+      "path": "/abonos/table/files",
+      "handler": "abonos.file",
+      "config": {
+        "policies": []
+      }
+    }
+El path se cambia por el nombre de la tabla
+     "path": "/tablaName(abonos)/table/files",
+Checa si el ejemplo esta correcto en el archivo routes de abonos y añadir de las demas tablas
+Checa el codigo de file y el archivo controllers abonos(este archivo en todas las tablas)
+Codigo que se añadira en el controller abonos
+async file(ctx){
+    await fileUpload(ctx, 'abonos', 'abonos');
+  },
+ (ctx, models, table, Query={}) son los datos que estaran en la funcion de file
+ ctx: Es el valor  que viene del controller
+ models: Es el modelo de la tabla por decir abonos, camiones, carrito, este se puede ver en el archivi tabla/models/abonos.settings donde dice collectionName
+ table: El nombre de la tabla
+ Query: Se agrega si esta  el campo mostrar
+const renameMap = {
+      cantidad_abono: 'Cantidad de abono',
+      fecha_abono: 'Fecha de abono',
+      estado_abono: 'Estado de abono',
+      usuario: 'Nombre de usuario',
+      credito: 'Intereses del Credito'
+    };
+Con el codigo anterior hacer un nuevo archivo en la carpeta llamada graphql y poner primero export y despies un objeto con el nombre de la tabla y despues adentro un objeto con el nombre de cada campo de la tabla como se muestra en el objeto
+Revisar que cada uno funcione corretamente
+
+Si no funciona uno copiar en este documento el error para correjirlo
+
+----------------------------
+File
+abonos.js
+resolverfile
+txt
+tablefile
+placa.placa
+placa.estado
+placa.activa

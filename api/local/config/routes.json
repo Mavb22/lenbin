@@ -47,6 +47,14 @@
       "config": {
         "policies": ["global::Administrator","global::Manager","global::Access"]
       }
+    },
+    {
+      "method": "POST",
+      "path": "/locals/table/files",
+      "handler": "local.file",
+      "config": {
+        "policies": []
+      }
     }
   ]
 }
