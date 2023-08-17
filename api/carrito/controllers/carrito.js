@@ -6,4 +6,7 @@
  */
 
 module.exports = {
+    async file(ctx){
+        await fileUpload(ctx, 'carrito', 'carrito');
+      },
 };

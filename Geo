@@ -69,11 +69,3 @@ Revisar que cada uno funcione corretamente
 Si no funciona uno copiar en este documento el error para correjirlo
 
 ----------------------------
-File
-abonos.js
-resolverfile
-txt
-tablefile
-placa.placa
-placa.estado
-placa.activa
